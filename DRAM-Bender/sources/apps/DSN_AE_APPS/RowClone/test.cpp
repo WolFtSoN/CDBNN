@@ -100,7 +100,7 @@ Program test_prog(uint32_t r_first, uint32_t r_second, uint32_t t_12, uint32_t t
 
 }
 void receive_results(SoftMCPlatform &platform, uint32_t r_first, uint32_t r_second, uint32_t wr_pattern, std::ofstream &out_file)
-{
+{ // recieve an entier rowm and test wether it equals the pattern
   uint32_t test_pattern = wr_pattern; 
 
   int rc = 0;
@@ -123,7 +123,7 @@ void receive_results(SoftMCPlatform &platform, uint32_t r_first, uint32_t r_seco
       }
     }
   }
-  if(err_count == 128*64)
+  if(err_count == 128*64) //
   {
     out_file << r_first << ",";
     out_file << r_second;

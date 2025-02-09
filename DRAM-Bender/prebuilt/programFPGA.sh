@@ -8,6 +8,9 @@ allowed_dimm_type="UDIMM RDIMM SODIMM"
 allowed_rank="1R 2R"
 allowed_DQ="x4 x8 x16"
 
+# patch to avoid env variable
+VIVADO_EXEC="vivado"
+
 board=${1}
 slot=${2}
 dimm_type=${3}

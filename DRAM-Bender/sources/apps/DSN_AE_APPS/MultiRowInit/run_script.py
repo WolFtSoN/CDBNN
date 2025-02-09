@@ -15,11 +15,11 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 parser = argparse.ArgumentParser()
 #module type
 parser.add_argument('--module', type=str, required=True, help='Module type: hytgXX, hyttXX')
-parser.add_argument('--temperature', type=str, required=True, help='Temp: 50, 60, etc.')
+# parser.add_argument('--temperature', type=str, required=True, help='Temp: 50, 60, etc.')
 parser.add_argument('--apps_path', type=str, required=True, help='Path to the DSN_AE_APPS directory')
 args = parser.parse_args()
 module = args.module
-temperature = args.temperature
+# temperature = args.temperature
 apps_path = args.apps_path
 
 
@@ -29,7 +29,7 @@ exe_file ="find-open-rows-exe"
 open_rows_file_name = apps_path + exe_path + "open_rows.txt"
 
 out_file = apps_path + exe_path + 'multi_row.txt'
-csv_file = apps_path + exe_path + f'multirow_{temperature}.csv'
+csv_file = apps_path + exe_path + f'multirow.csv' # f'multirow_{temperature}.csv'
 os.system(f'rm {out_file}')
 os.system(f'rm {csv_file}')
 
@@ -43,20 +43,24 @@ end_time = time.time()
 os.system(f'{apps_path}../ResetBoard/full_reset.sh')
 num_iter = 1000
 for rows in [2,4,8,16,32]:
-    if temperature == '50':
-        t_12_lst = [0,10,20,30,40]
-        t_23_lst = [0,1,2,3]
-    else:
-        t_12_lst = [30]
-        t_23_lst = [1]
-    sample_csv = f'{apps_path}../../../../experimental_data/{module}/samples_{rows}.csv'
+    # if temperature == '50':
+    #     t_12_lst = [0,10,20,30,40]
+    #     t_23_lst = [0,1,2,3]
+    # else:
+    #     t_12_lst = [30]
+    #     t_23_lst = [1]
+    t_12_lst = [0,10,20,30,40]
+    t_23_lst = [0,1,2,3]
+    name_t12 = 1
+    name_t23 = 2
+    sample_csv = f'{apps_path}../../../../experimental_data/{module}/samples_{rows}_{name_t12}_{name_t23}.csv'
     if(os.path.isfile(sample_csv)):
         samples_df = pd.read_csv(sample_csv)
     else:
         samples_df = or_df.loc[or_df['total_open_row'] == rows]
         samples_df = samples_df.loc[samples_df['avg_success_rate'] == 1.0]
-        samples_df = samples_df.loc[samples_df['t_12'] == 0]
-        samples_df = samples_df.loc[samples_df['t_23'] == 1]        
+        samples_df = samples_df.loc[samples_df['t_12'] == name_t12]
+        samples_df = samples_df.loc[samples_df['t_23'] == name_t23]        
         if len(samples_df) > 100:
             samples_df = samples_df.sample(n=100).reset_index(drop=True)
         else:
@@ -65,9 +69,9 @@ for rows in [2,4,8,16,32]:
 
     
     lst = pd.DataFrame(columns=['t_12','t_23','bank_id','s_id','r_first','r_second','all_0','all_1','random'])
-    csv_file = f'multirow_{rows}_{temperature}.csv'
+    csv_file = f'multirow_{rows}_{name_t12}_{name_t23}.csv'
     lst.to_csv(csv_file)
-    print(f'Open Rows: {rows}, #Sample: {len(samples_df)}, Temp: {temperature}')
+    print(f'Open Rows: {rows}, #Sample: {len(samples_df)}')
     for sample_iter,e_idx in enumerate(samples_df.index):
         start_time = time.time()
         element     = samples_df.iloc[[e_idx]]

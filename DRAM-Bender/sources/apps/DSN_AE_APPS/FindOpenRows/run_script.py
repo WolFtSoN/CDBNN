@@ -7,15 +7,24 @@ import random
 import argparse
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
+# Rfirst            The first row activated in the ACT-PRE-ACT sequence.
+# Rsecond	        The second row activated in the sequence.
+# total_open_row	The number of rows that remained open after the sequence.
+# min_row_addr	    The lowest row index among open rows.
+# max_row_addr	    The highest row index among open rows.
+# all_open_indices	List of all open row indices after the sequence.
+# success_rates	    The probability of each row remaining open.
+# avg_success_rate	The average probability of success across all rows.
+# s_id	            The subarray ID in which the operation was performed.
+# t_12	            The delay between the first ACT and PRE command.
+# t_23	            The delay between the PRE and the second ACT command.
 
 parser = argparse.ArgumentParser()
 #module type
 parser.add_argument('--module', type=str, required=True, help='Module type: hytgXX, hyttXX')
-parser.add_argument('--temperature', type=str, required=True, help='Temp: 50, 60, etc.')
 parser.add_argument('--apps_path', type=str, required=True, help='Path to the DSN_AE_APPS directory')
 args = parser.parse_args()
 module = args.module
-temperature = args.temperature
 apps_path = args.apps_path
 
 
@@ -23,7 +32,7 @@ exe_path ="FindOpenRows/"
 exe_file ="find-open-rows-exe"
 
 add_voltage = 0
-voltage=2.500
+voltage=1.5 # Instead of: voltage=2.500
 
 
 
@@ -32,7 +41,8 @@ if add_voltage == '1':
     
     csv_file = apps_path + exe_path + f'open_rows_{voltage}.csv'
 else:
-    csv_file = apps_path + exe_path + f'open_rows_{temperature}.csv'
+    csv_file = apps_path + exe_path + f'open_rows.csv' # Instead of csv_file = apps_path + exe_path + f'open_rows_{temperature}.csv'
+
     
 os.system(f'rm {out_file}')
 os.system(f'rm {csv_file}')
@@ -58,17 +68,20 @@ if(os.path.isfile(random_subarray_csv)):
     random_subarray_df = pd.read_csv(random_subarray_csv)
     subarray_list = hf.create_subarray_list(random_subarray_df)
 else:
-    n_subarrays = 3
+    n_subarrays = 3 # Original value = chooses 3 random subarrays
     #randomly select n_subarrays subarrays and save their index to a list
-    s_ids = random.sample(range(0, len(s_df)), n_subarrays)
+    # s_ids = random.sample(range(0, len(s_df)), n_subarrays)
+    s_ids = [0] # Instead of choosing a random subarray -> We choose the first one
+    print(f's_ids = {s_ids}')
     subarray_list = [subarrays[s_id] for s_id in s_ids]
+    print(f'subarray_list lenth = {len(subarray_list)}')
     #save the subarrays to a csv file
     hf.create_random_subarray_csv(s_df, s_ids, random_subarray_csv)  
     
 
 os.system(f'{apps_path}../ResetBoard/full_reset.sh')
-t_12_lst = [0,1,2,3]
-t_23_lst = [0,1,2,3]
+t_12_lst = [0,1,2,3]  # instead of t_12_lst = [0,1,2,3] 
+t_23_lst = [0,1,2,3]  # instead of t_23_lst = [0,1,2,3] 
 for s_id,subarray in enumerate(subarray_list):
     first_subarray_addr = subarray[0]
     last_subarray_addr = subarray[-1]

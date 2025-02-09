@@ -10,11 +10,9 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 parser = argparse.ArgumentParser()
 #module type
 parser.add_argument('--module', type=str, required=True, help='Module codename, e.g., new_data_tested_module')
-parser.add_argument('--temperature', type=int, required=True, help='Temperature: 50, 60, 70, 80, 90')
 parser.add_argument('--apps_path', type=str, required=True, help='Path to the DSN_AE_APPS directory')
 args = parser.parse_args()
 module = args.module
-temperature = args.temperature
 apps_path = args.apps_path
 
 
@@ -34,11 +32,10 @@ csv_lst = []
 os.system(f'rm {out_file}')
 os.system(f'rm {rc_csv}')
 os.system(f'rm {sa_csv}')
-os.system(f'{apps_path}../ResetBoard/full_reset.sh')
-
+os.system(f'sudo {apps_path}../ResetBoard/full_reset.sh')
 
 csv_lst = []
-while r_first < 65000:
+while r_first < 1025:
     lst = pd.DataFrame(columns=['r_first','r_second','t_12','t_23'])
     lst.to_csv(rc_csv)
     print(f'Search in {r_first} - {r_first+num_rows}')

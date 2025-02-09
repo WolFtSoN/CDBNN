@@ -13,7 +13,7 @@ def inner(lst,search_start_addr,search_last_addr,r_first,r_second,range_low,rang
     for t_12 in range(30,31):
         for t_23 in range(1,5):
             os.system(f'touch {out_file}')
-            cmd = ( exe + " " + str(t_12) + " " + 
+            cmd = ( "sudo " + exe + " " + str(t_12) + " " + 
                         str(t_23)  + " " + str(r_first) + " " + 
                         str(r_second) + " " + str(search_start_addr) + " " + 
                         str(search_last_addr) + " " + str(out_file) 
