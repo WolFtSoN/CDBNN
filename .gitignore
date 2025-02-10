@@ -2,4 +2,5 @@
 experimental_data/new_data_tested_module/open_rows.csv
 experimental_data/new_data_tested_module/temp/open_rows.csv
 experimental_data/new_data_tested_module/temp/open_rows_[0,1].csv
+**/open_rows_*.csv
 

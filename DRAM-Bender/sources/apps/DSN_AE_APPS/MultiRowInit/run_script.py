@@ -35,7 +35,7 @@ os.system(f'rm {csv_file}')
 
 
 
-or_csv = f'{apps_path}../../../../experimental_data/{module}/open_rows_50.csv'
+or_csv = f'{apps_path}../../../../experimental_data/{module}/open_rows.csv'
 or_df = pd.read_csv(or_csv)
     
 start_time = time.time()
@@ -52,7 +52,7 @@ for rows in [2,4,8,16,32]:
     t_12_lst = [0,10,20,30,40]
     t_23_lst = [0,1,2,3]
     name_t12 = 1
-    name_t23 = 2
+    name_t23 = 3
     sample_csv = f'{apps_path}../../../../experimental_data/{module}/samples_{rows}_{name_t12}_{name_t23}.csv'
     if(os.path.isfile(sample_csv)):
         samples_df = pd.read_csv(sample_csv)
