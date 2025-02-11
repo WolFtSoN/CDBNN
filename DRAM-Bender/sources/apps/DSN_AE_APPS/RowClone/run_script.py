@@ -21,11 +21,11 @@ exe_file ="row-clone-exe"
 
 exe = apps_path + exe_path + exe_file
 out_file = apps_path + exe_path + "row_clone.txt"
-rc_csv = apps_path + exe_path + 'row-clone.csv'
+rc_csv = apps_path + exe_path + 'row-clone_{2}.csv'
 sa_csv = apps_path + exe_path+ 'all_subarrays.csv'
 
 r_first = 0
-num_rows = 1024
+num_rows = 831 # 1024
 counter = 0
 csv_lst = []
 
@@ -35,7 +35,7 @@ os.system(f'rm {sa_csv}')
 os.system(f'sudo {apps_path}../ResetBoard/full_reset.sh')
 
 csv_lst = []
-while r_first < 1025:
+while r_first < 832: # 1025
     lst = pd.DataFrame(columns=['r_first','r_second','t_12','t_23'])
     lst.to_csv(rc_csv)
     print(f'Search in {r_first} - {r_first+num_rows}')
@@ -43,6 +43,27 @@ while r_first < 1025:
     subarray_list = rf.subarray_list(r_first,rc_csv)
     csv_lst.append([len(subarray_list),counter,subarray_list])
     r_first = subarray_list[-1] + 1
+
+## My code: ##
+# processed_rows = set() # Track rows that have been used as r_first
+# print(f'processed_rows: {processed_rows}')
+
+# while r_first < 1025:
+#     if r_first in processed_rows:
+#         r_first += 1 # Ensure each row gets a chance to be first
+#         continue
+
+#     lst = pd.DataFrame(columns=['r_first','r_second','t_12','t_23'])
+#     lst.to_csv(rc_csv)
+#     print(f'Search in {r_first} - {r_first+num_rows}')
+#     subarray_list = rf.subarray_list(r_first,rc_csv)
+#     csv_lst.append([len(subarray_list), counter, subarray_list])
+#     processed_rows.add(r_first)  # Mark this row as checked
+
+#     if len(subarray_list) > 1:
+#         r_first = subarray_list[-1] + 1
+#     else:
+#         r_first += 1  # Move to the next row sequentially
     
 csv_lst = pd.DataFrame(csv_lst,columns=['n_rows','group','rows'])
 csv_lst.to_csv(sa_csv)

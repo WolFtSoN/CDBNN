@@ -4,3 +4,4 @@
 *.txt
 *.csv
 __pycache__/
+**/open_rows_*.csv

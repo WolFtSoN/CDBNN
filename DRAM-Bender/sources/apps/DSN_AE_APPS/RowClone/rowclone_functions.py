@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import warnings
 import time
+import numpy as np
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 main_dir_path = "/home/dsn_aevaluator2/dsn_artifact"
@@ -10,8 +11,8 @@ apps_path = f"{main_dir_path}/DRAM-Bender/sources/apps/DSN_AE_APPS/"
 exe_path ="RowClone/"
 
 def inner(lst,search_start_addr,search_last_addr,r_first,r_second,range_low,range_high,rc_csv,out_file,exe):
-    for t_12 in range(30,31):
-        for t_23 in range(1,5):
+    for t_12 in range(30,31): # Instead of range(30,31)
+        for t_23 in np.arange(1.5, 5, 0.5): # range(1,5): | Instead of range(1,5)
             os.system(f'touch {out_file}')
             cmd = ( "sudo " + exe + " " + str(t_12) + " " + 
                         str(t_23)  + " " + str(r_first) + " " + 

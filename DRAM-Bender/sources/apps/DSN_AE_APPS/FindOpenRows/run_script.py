@@ -32,11 +32,11 @@ exe_path ="FindOpenRows/"
 exe_file ="find-open-rows-exe"
 
 add_voltage = 0
-voltage=1.5 # Instead of: voltage=2.500
+voltage=2.5 # Instead of: voltage=2.500
 
 
 
-out_file = apps_path + exe_path + 'open_rows.txt'
+out_file = apps_path + exe_path + 'open_rows2.5.txt'
 if add_voltage == '1':
     
     csv_file = apps_path + exe_path + f'open_rows_{voltage}.csv'
@@ -80,8 +80,8 @@ else:
     
 
 os.system(f'{apps_path}../ResetBoard/full_reset.sh')
-t_12_lst = [0,1,2,3]  # instead of t_12_lst = [0,1,2,3] 
-t_23_lst = [0,1,2,3]  # instead of t_23_lst = [0,1,2,3] 
+t_12_lst = [0,1.5,2,2.5,3]  # instead of t_12_lst = [0,1,2,3] 
+t_23_lst = [0,1.5,2,2.5,3]  # instead of t_23_lst = [0,1,2,3] 
 for s_id,subarray in enumerate(subarray_list):
     first_subarray_addr = subarray[0]
     last_subarray_addr = subarray[-1]

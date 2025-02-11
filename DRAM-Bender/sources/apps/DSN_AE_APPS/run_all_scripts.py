@@ -5,11 +5,10 @@ import os
 apps_path = os.path.dirname(os.path.abspath(__file__)) + "/"
 reset_board = apps_path + "../ResetBoard/full_reset.sh"
 module = 'new_data_tested_module'
-# experiment_lst = ['RowClone']
-# experiment_lst = ['FindOpenRows']
+experiment_lst = ['FindOpenRows']
 # experiment_lst = ['MajOperations']
-experiment_lst = ['MultiRowInit']
-#experiment_lst = ['RowClone','MultiRowInit']
+# experiment_lst = ['MultiRowInit']
+# experiment_lst = ['RowClone']
 #If one of the experiments is gave an error and the last successfull experiment sent its output to experimental_data/new_data_tested_module, you can remove the error experiment from the experiment_lst and start from the last successfull experiment
 #As an example, RowClone experiment is successful and FindOpenRows experiment gave an error (and you fix the error):
 ## 1.Check whether the output (which is all_subarrays.csv for RowClone) is sent to experimental_data/new_data_tested_module
