@@ -36,12 +36,12 @@ voltage=2.5 # Instead of: voltage=2.500
 
 
 
-out_file = apps_path + exe_path + 'open_rows2.5.txt'
+out_file = apps_path + exe_path + 'open_rows_0_6.txt'
 if add_voltage == '1':
     
     csv_file = apps_path + exe_path + f'open_rows_{voltage}.csv'
 else:
-    csv_file = apps_path + exe_path + f'open_rows.csv' # Instead of csv_file = apps_path + exe_path + f'open_rows_{temperature}.csv'
+    csv_file = apps_path + exe_path + f'open_rows_0_6.csv' # Instead of csv_file = apps_path + exe_path + f'open_rows_{temperature}.csv'
 
     
 os.system(f'rm {out_file}')
@@ -68,7 +68,7 @@ if(os.path.isfile(random_subarray_csv)):
     random_subarray_df = pd.read_csv(random_subarray_csv)
     subarray_list = hf.create_subarray_list(random_subarray_df)
 else:
-    n_subarrays = 3 # Original value = chooses 3 random subarrays
+    #n_subarrays = 3 # Original value = chooses 3 random subarrays
     #randomly select n_subarrays subarrays and save their index to a list
     # s_ids = random.sample(range(0, len(s_df)), n_subarrays)
     s_ids = [0] # Instead of choosing a random subarray -> We choose the first one
@@ -80,8 +80,8 @@ else:
     
 
 os.system(f'{apps_path}../ResetBoard/full_reset.sh')
-t_12_lst = [0,1.5,2,2.5,3]  # instead of t_12_lst = [0,1,2,3] 
-t_23_lst = [0,1.5,2,2.5,3]  # instead of t_23_lst = [0,1,2,3] 
+t_12_lst = [0,1,2,3,4,5,6]  # instead of t_12_lst = [0,1,2,3] 
+t_23_lst = [0,1,2,3,4,5,6]  # instead of t_23_lst = [0,1,2,3] 
 for s_id,subarray in enumerate(subarray_list):
     first_subarray_addr = subarray[0]
     last_subarray_addr = subarray[-1]

@@ -41,11 +41,10 @@ os.system(f'{apps_path}../ResetBoard/full_reset.sh')
 
 
 stability_iter_count = 1000
-bank_id = 1
 n_frac_times = 3
 t_frac = 0
 
-for rows in [6,12,16]: # [4,8,16,32]
+for rows in [8,12,16]: # [4,8,16,32]
     # if temperature == '50':
     #     t_12_lst = [0,1,2,3]
     #     t_23_lst = [0,1,2,3]
@@ -55,23 +54,23 @@ for rows in [6,12,16]: # [4,8,16,32]
     #     t_12_lst = [0]
     #     t_23_lst = [1]
     #     bank_lst = [0,1,2,3]
-    t_12_lst = [0,1,2,3]
-    t_23_lst = [0,1,2,3]
+    t_12_lst = [0,1,2]#[0,1,2,3]
+    t_23_lst = [0,1,2]#[0,1,2,3]
     bank_lst = [0]
-    # name_t12 = t_12_lst[0]
-    # name_t23 = t_23_lst[0]
+    # t_12 = t_12_lst[0]
+    # t_23 = t_23_lst[0]
 
-    for name_t12 in t_12_lst:
-        for name_t23 in t_23_lst:
-            sample_csv = f'{apps_path}../../../../experimental_data/{module}/samples_{rows}_{name_t12}_{name_t23}.csv'
+    for t_12 in t_12_lst:
+        for t_23 in t_23_lst:
+            sample_csv = f'{apps_path}../../../../experimental_data/{module}/samples_{rows}_{t_12}_{t_23}.csv'
             samples_df = or_df.loc[or_df['total_open_row'] == rows]
             print(f"Samples after 'total_open_row' filter: {len(samples_df)}")
             samples_df = samples_df.loc[samples_df['avg_success_rate'] == 1.0]
             print(f"Samples after 'avg_success_rate' filter: {len(samples_df)}")
-            samples_df = samples_df.loc[samples_df['t_12'] == name_t12] # Instead of: samples_df = samples_df.loc[samples_df['t_12'] == 0]
-            print(f"Samples after 't_12 == {name_t12}' filter: {len(samples_df)}")
-            samples_df = samples_df.loc[samples_df['t_23'] == name_t23] # Instead of: samples_df = samples_df.loc[samples_df['t_23'] == 1]            
-            print(f"Samples after 't_23 == {name_t23}' filter: {len(samples_df)}")
+            samples_df = samples_df.loc[samples_df['t_12'] == t_12] # Instead of: samples_df = samples_df.loc[samples_df['t_12'] == 0]
+            print(f"Samples after 't_12 == {t_12}' filter: {len(samples_df)}")
+            samples_df = samples_df.loc[samples_df['t_23'] == t_23] # Instead of: samples_df = samples_df.loc[samples_df['t_23'] == 1]            
+            print(f"Samples after 't_23 == {t_23}' filter: {len(samples_df)}")
             if len(samples_df) > 100:
                 samples_df = samples_df.sample(n=100).reset_index(drop=True)
             else:
@@ -80,17 +79,15 @@ for rows in [6,12,16]: # [4,8,16,32]
             #send_cmd = f'cp {sample_csv} {main_dir_path}/experimental_data/{module}/'  
             #sp = subprocess.run([send_cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
             lst = pd.DataFrame(columns=['t_12','t_23','n_frac_times','t_frac','bank_id','r_first','r_second','s_id','majX','avg_coverage','full_coverage_cells','avg_stability','full_stable_cells'])
-            csv_file = f'maj_coverage_{rows}_{name_t12}_{name_t23}.csv'
+            csv_file = f'maj_coverage_{rows}_{t_12}_{t_23}.csv'
             lst.to_csv(csv_file)
             for majX in [3]: # Instead of checking for [3,5,7,9] we only need to check for 3
                 if (majX > rows):
                     break
                 r_frac_idx = [i for i in range(rows%majX)] # The index of the frac row
-                # r_frac_idx = [range(majX+1)] - Why this change? bug
                 os.system('rm ./patterns/*')
                 for i,pattern in enumerate(range(1,2**majX-1)):
                     wr_pattern = hf.maj_all_1_0_pattern_creator(rows,majX,r_frac_idx,pattern)
-                    #print(i,wr_pattern,majX,2**majX-1,rows)
                     pattern_file_name = apps_path + exe_path + f'./patterns/pattern_{i}.txt'
                     hf.write_to_file(wr_pattern,pattern_file_name)
                     current_time = time.time()
@@ -108,24 +105,22 @@ for rows in [6,12,16]: # [4,8,16,32]
                     open_rows   = [int(e) for e in element['all_open_indices'][e_idx][1:-1].split(',')]
                     hf.write_to_file(open_rows,open_rows_file_name)
                     hf.write_to_file(r_frac_idx,r_frac_idx_file_name)
-                    for t_12 in t_12_lst:
-                        for t_23 in t_23_lst:
-                            for bank_id in bank_lst:
-                                os.system(f'touch {out_file}')
-                                cmd = ( apps_path + exe_path + exe_file + " " + str(pattern_file_name) + " " + 
-                                        str(r_frac_idx_file_name) + " " + str(r_first)  + " " + str(r_second) + " " + 
-                                        str(min_row_idx) + " " + str(max_row_idx)  + " " + str(n_open_rows) + " " +
-                                        str(open_rows_file_name) + " " + str(1) + " " + str(bank_id) + " " + 
-                                        str(majX) + " " + str(t_12) + " " + str(t_23) + " " +
-                                        str(n_frac_times) + " " + str(t_frac) + " " +str(out_file) 
-                                )
-                                sp = subprocess.run([cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True) 
-                                if(os.stat(out_file).st_size != 0):
-                                    res_lst = (hf.read_result_file(out_file))
-                                    temp_data = [[t_12,t_23,n_frac_times,t_frac,bank_id, r_first, r_second, s_id, majX, res_lst[0], res_lst[1], res_lst[2], res_lst[3]]]
-                                    df = pd.DataFrame(temp_data, columns=['t_12','t_23','n_frac_times','t_frac','bank_id','r_first','r_second','s_id','majX','avg_coverage','full_coverage_cells','avg_stability','full_stable_cells'])
-                                    df.to_csv(csv_file, mode='a', header=False)
-                                    os.system(f'rm {out_file}')
+                    for bank_id in bank_lst:
+                        os.system(f'touch {out_file}')
+                        cmd = ( apps_path + exe_path + exe_file + " " + str(pattern_file_name) + " " + 
+                                str(r_frac_idx_file_name) + " " + str(r_first)  + " " + str(r_second) + " " + 
+                                str(min_row_idx) + " " + str(max_row_idx)  + " " + str(n_open_rows) + " " +
+                                str(open_rows_file_name) + " " + str(1) + " " + str(bank_id) + " " + 
+                                str(majX) + " " + str(t_12) + " " + str(t_23) + " " +
+                                str(n_frac_times) + " " + str(t_frac) + " " +str(out_file) 
+                        )
+                        sp = subprocess.run([cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True) 
+                        if(os.stat(out_file).st_size != 0):
+                            res_lst = (hf.read_result_file(out_file))
+                            temp_data = [[t_12,t_23,n_frac_times,t_frac,bank_id, r_first, r_second, s_id, majX, res_lst[0], res_lst[1], res_lst[2], res_lst[3]]]
+                            df = pd.DataFrame(temp_data, columns=['t_12','t_23','n_frac_times','t_frac','bank_id','r_first','r_second','s_id','majX','avg_coverage','full_coverage_cells','avg_stability','full_stable_cells'])
+                            df.to_csv(csv_file, mode='a', header=False)
+                            os.system(f'rm {out_file}')
                     end_time = time.time()
                     print(f'Open Rows: {rows}, Sample: {sample_iter}/{len(samples_df)} iter took {end_time-start_time} seconds')           
             send_path = apps_path + exe_path + csv_file

@@ -25,6 +25,7 @@ rc_csv = apps_path + exe_path + 'row-clone_{2}.csv'
 sa_csv = apps_path + exe_path+ 'all_subarrays.csv'
 
 r_first = 0
+# Maximal suspected sub-array size (maximal range to search from r_first):
 num_rows = 831 # 1024
 counter = 0
 csv_lst = []
@@ -35,13 +36,17 @@ os.system(f'rm {sa_csv}')
 os.system(f'sudo {apps_path}../ResetBoard/full_reset.sh')
 
 csv_lst = []
+# Maximum range in Bank(?) to search in.
 while r_first < 832: # 1025
     lst = pd.DataFrame(columns=['r_first','r_second','t_12','t_23'])
     lst.to_csv(rc_csv)
     print(f'Search in {r_first} - {r_first+num_rows}')
+    # This (should) check all pairs (r_first, i) in range:
     rf.first_search(lst,r_first,r_first+num_rows,r_first,num_rows,rc_csv,out_file,exe)
+    # This returns a list of rows participating in the same subarray as r_first:
     subarray_list = rf.subarray_list(r_first,rc_csv)
     csv_lst.append([len(subarray_list),counter,subarray_list])
+    # Start of new subarray is +1 of end of current subarray:
     r_first = subarray_list[-1] + 1
 
 ## My code: ##

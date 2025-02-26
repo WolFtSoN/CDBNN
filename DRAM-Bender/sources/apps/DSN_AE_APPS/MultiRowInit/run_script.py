@@ -26,7 +26,7 @@ apps_path = args.apps_path
 exe_path ="MultiRowInit/"
 exe_file ="find-open-rows-exe"
 
-open_rows_file_name = apps_path + exe_path + "open_rows.txt"
+open_rows_file_name = apps_path + exe_path + "open_rows_0-6.txt"
 
 out_file = apps_path + exe_path + 'multi_row.txt'
 csv_file = apps_path + exe_path + f'multirow.csv' # f'multirow_{temperature}.csv'
@@ -35,76 +35,79 @@ os.system(f'rm {csv_file}')
 
 
 
-or_csv = f'{apps_path}../../../../experimental_data/{module}/open_rows.csv'
+or_csv = f'{apps_path}../../../../experimental_data/{module}/open_rows_0-6.csv'
 or_df = pd.read_csv(or_csv)
     
 start_time = time.time()
 end_time = time.time()
 os.system(f'{apps_path}../ResetBoard/full_reset.sh')
 num_iter = 1000
-for rows in [2,4,8,16,32]:
+for rows in [2,4]: # 2,4,8,16,32
     # if temperature == '50':
     #     t_12_lst = [0,10,20,30,40]
     #     t_23_lst = [0,1,2,3]
     # else:
     #     t_12_lst = [30]
     #     t_23_lst = [1]
-    t_12_lst = [0,10,20,30,40]
-    t_23_lst = [0,1,2,3]
-    name_t12 = 1
-    name_t23 = 3
-    sample_csv = f'{apps_path}../../../../experimental_data/{module}/samples_{rows}_{name_t12}_{name_t23}.csv'
-    if(os.path.isfile(sample_csv)):
-        samples_df = pd.read_csv(sample_csv)
-    else:
-        samples_df = or_df.loc[or_df['total_open_row'] == rows]
-        samples_df = samples_df.loc[samples_df['avg_success_rate'] == 1.0]
-        samples_df = samples_df.loc[samples_df['t_12'] == name_t12]
-        samples_df = samples_df.loc[samples_df['t_23'] == name_t23]        
-        if len(samples_df) > 100:
-            samples_df = samples_df.sample(n=100).reset_index(drop=True)
-        else:
-            samples_df = samples_df.sample(n=len(samples_df)).reset_index(drop=True)
-        samples_df.to_csv(sample_csv)
+    t_12_lst = [0,10,20,30,40,50,60]
+    t_23_lst = [0,1,2,3,4,5,6]
+    # name_t12 = 1
+    # name_t23 = 3
+    for name_t12 in t_12_lst:
+        for name_t23 in t_23_lst:
+            n_t12 = name_t12/10
+            sample_csv = f'{apps_path}../../../../experimental_data/{module}/samples_{rows}_{n_t12}_{name_t23}.csv'
+            if(os.path.isfile(sample_csv)):
+                samples_df = pd.read_csv(sample_csv)
+            else:
+                samples_df = or_df.loc[or_df['total_open_row'] == rows]
+                samples_df = samples_df.loc[samples_df['avg_success_rate'] == 1.0]
+                samples_df = samples_df.loc[samples_df['t_12'] == n_t12]
+                samples_df = samples_df.loc[samples_df['t_23'] == name_t23]        
+                if len(samples_df) > 100:
+                    samples_df = samples_df.sample(n=100).reset_index(drop=True)
+                else:
+                    samples_df = samples_df.sample(n=len(samples_df)).reset_index(drop=True)
+                samples_df.to_csv(sample_csv)
 
-    
-    lst = pd.DataFrame(columns=['t_12','t_23','bank_id','s_id','r_first','r_second','all_0','all_1','random'])
-    csv_file = f'multirow_{rows}_{name_t12}_{name_t23}.csv'
-    lst.to_csv(csv_file)
-    print(f'Open Rows: {rows}, #Sample: {len(samples_df)}')
-    for sample_iter,e_idx in enumerate(samples_df.index):
-        start_time = time.time()
-        element     = samples_df.iloc[[e_idx]]
-        r_first     = element['Rfirst'][e_idx]
-        r_second    = element['Rsecond'][e_idx]
-        n_open_rows = element['total_open_row'][e_idx]
-        s_id = element['s_id'][e_idx]
-        open_rows   = [int(e) for e in element['all_open_indices'][e_idx][1:-1].split(',')]
-        hf.write_to_file(open_rows,open_rows_file_name)
-        for t_12 in t_12_lst:
-            for t_23 in t_23_lst:
-                for bank_id in range(0,4):
-                    os.system(f'touch {out_file}')
-                    cmd = ( apps_path + exe_path + exe_file + " " + 
-                            str(r_first)  + " " + str(r_second) + " " + 
-                            str(n_open_rows) + " " +
-                            str(open_rows_file_name) + " " + str(num_iter) + " " + 
-                            str(bank_id) + " " + 
-                            str(t_12) + " " + str(t_23) + " " +
-                            str(out_file) 
-                    )
-                    sp = subprocess.run([cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True) 
-                    if(os.stat(out_file).st_size != 0):
-                        res_lst = hf.read_result_file(out_file)
-                        temp_data = [[t_12,t_23,bank_id,s_id,r_first, r_second, res_lst[0], res_lst[1], res_lst[2]]]
-                        df = pd.DataFrame(temp_data, columns=['t_12','t_23','bank_id','s_id','r_first','r_second','all_0','all_1','random'])
-                        df.to_csv(csv_file, mode='a', header=False)
-                        os.system(f'rm {out_file}')
-            end_time = time.time()
-        print(f'Open Rows: {rows}, Sample: {sample_iter}/{len(samples_df)} iter took {end_time-start_time} seconds')      
-    send_path = apps_path + exe_path + csv_file
-    cp_path = f'{apps_path}../../../../experimental_data/{module}/'             
-    send_cmd = f'cp -r {send_path} {cp_path}'  
-    sp = subprocess.run([send_cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
-    
- 
+            
+            lst = pd.DataFrame(columns=['t_12','t_23','bank_id','s_id','r_first','r_second','all_0','all_1','random'])
+            csv_file = f'multirow_{rows}_{n_t12}_{name_t23}.csv'
+            lst.to_csv(csv_file)
+            print(f'Open Rows: {rows}, #Sample: {len(samples_df)}')
+            for sample_iter,e_idx in enumerate(samples_df.index):
+                start_time = time.time()
+                element     = samples_df.iloc[[e_idx]]
+                r_first     = element['Rfirst'][e_idx]
+                r_second    = element['Rsecond'][e_idx]
+                n_open_rows = element['total_open_row'][e_idx]
+                s_id = element['s_id'][e_idx]
+                open_rows   = [int(e) for e in element['all_open_indices'][e_idx][1:-1].split(',')]
+                hf.write_to_file(open_rows,open_rows_file_name)
+                for t_12 in t_12_lst:
+                    for t_23 in t_23_lst:
+                        for bank_id in range(0,4):
+                            os.system(f'touch {out_file}')
+                            cmd = ( apps_path + exe_path + exe_file + " " + 
+                                    str(r_first)  + " " + str(r_second) + " " + 
+                                    str(n_open_rows) + " " +
+                                    str(open_rows_file_name) + " " + str(num_iter) + " " + 
+                                    str(bank_id) + " " + 
+                                    str(t_12) + " " + str(t_23) + " " +
+                                    str(out_file) 
+                            )
+                            sp = subprocess.run([cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True) 
+                            if(os.stat(out_file).st_size != 0):
+                                res_lst = hf.read_result_file(out_file)
+                                temp_data = [[t_12,t_23,bank_id,s_id,r_first, r_second, res_lst[0], res_lst[1], res_lst[2]]]
+                                df = pd.DataFrame(temp_data, columns=['t_12','t_23','bank_id','s_id','r_first','r_second','all_0','all_1','random'])
+                                df.to_csv(csv_file, mode='a', header=False)
+                                os.system(f'rm {out_file}')
+                    end_time = time.time()
+                print(f'Open Rows: {rows}, Sample: {sample_iter}/{len(samples_df)} iter took {end_time-start_time} seconds')      
+            send_path = apps_path + exe_path + csv_file
+            cp_path = f'{apps_path}../../../../experimental_data/{module}/'             
+            send_cmd = f'cp -r {send_path} {cp_path}'  
+            sp = subprocess.run([send_cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
+            
+        

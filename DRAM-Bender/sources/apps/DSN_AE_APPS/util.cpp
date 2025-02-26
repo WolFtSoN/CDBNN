@@ -118,6 +118,8 @@ Program wrRow_immediate_label(int bank_reg, uint32_t row_immd, uint32_t wr_patte
   Program p;
   p.add_inst(SMC_LI(wr_pattern, PATTERN_REG)); // s
   for (int i = 0; i < 16; i++)
+    // We suspect this replicates PATTEN_REG contetns 16 times ot create 512b word
+    // we need to understant what is LDWD
     p.add_inst(SMC_LDWD(PATTERN_REG, i));
 
   p.add_inst(SMC_LI(row_immd, RAR));
@@ -145,6 +147,8 @@ Program rdRow_immediate(int bank_reg, uint32_t row_immd)
   p.add_below(PRE(bank_reg, 0, 0));
   p.add_below(ACT(bank_reg, 0, RAR, 0));
   p.add_inst(SMC_SLEEP(4));
+  // Why add 0 to the reg values, and moreover twice?
+  // Maybe this is like NOP or a mistake...
   p.add_inst(SMC_ADDI(LOOP_COLS, 0, LOOP_COLS));
   p.add_inst(SMC_ADDI(LOOP_COLS, 0, LOOP_COLS));
   p.add_label("READ_ROW_IMMD");
@@ -223,6 +227,11 @@ Program doubleACT(int t_12, int t_23, int r_first, int r_second)
   * Cmd:        ----|ACT R0|----| PRE |----|ACT R3|----FINISH
   * Time:     T0----|  T1  |----| T2  |----|  T3  |----------
   * Interval: -------------|t_12|-----|t_23|-----------------
+  
+  t_12​=0 in the code actually corresponds to tRP​=1.5ns in physical execution.
+  The DRAM Bender core runs at 666 MHz, so:
+  t_(cycle in ns) = 1/(666×10^6) = 1.5 ns --> I means 1 clock cycle is 1.5 ns
+  ##### t_12 and t_23 is measured in clock cycles (0 is one clock cycle, 1 it two clock cycles) ####
   */
 
   // act - pre - act -> 3

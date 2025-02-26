@@ -1,0 +1,6 @@
+*.o
+*-exe
+*.ipynb
+*.txt
+**/open_rows_*.csv
+__pycache__/

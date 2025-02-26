@@ -275,10 +275,10 @@ std::vector<uint32_t> random_pattern_creator(std::vector<uint32_t> r_frac_idx, u
   std::vector<uint32_t> patterns;
   parse_file("./patterns/pattern_0.txt", patterns);
   srand((time(NULL)+getpid()+seed));
-  for(int i = 0; i < maj_x; i++)
+  for(int i = 0; i < maj_x; i++) // MAJ3
   {
-    uint32_t wr_pattern = (uint32_t)rand();
-    wr_pattern = (wr_pattern & 0xffff) | (uint32_t)rand() << 16;
+    uint32_t wr_pattern = (uint32_t)rand(); // Random pattern 32bits in length
+    wr_pattern = (wr_pattern & 0xffff) | (uint32_t)rand() << 16; // The lower 16 bits remain the same as the original wr_pattern, The upper 16 bits are replaced by a new random value.
     pattern_maj.push_back(wr_pattern);
   }
   for(int i = 0; i < n_open_rows; i++)
@@ -333,6 +333,7 @@ int main(int argc, char*argv[])
     std::cout << "------------DEBUG------------" << std::endl;
     std::cout << "num_open_rows: " << n_open_rows << std::endl;
     std::cout << "maj_x: " << maj_x << std::endl;
+    std::cout << "frac_idx.size: " << r_frac_idx.size() << std::endl;
     std::cout << "frac idx: " << std::endl;
     for(auto frac_idx : r_frac_idx)
     {
@@ -385,13 +386,13 @@ int main(int argc, char*argv[])
   {
     if(coverage_result[j] == num_patterns)
     {
-      num_full_coverage_cells++;
+      num_full_coverage_cells++; // The cells that were perfect - matched the bit of the pattern
 
     }
     avg_coverage += (double)coverage_result[j]/(double)num_patterns;
     if(stability_result[j] == stability_iter_count)
     {
-      num_full_stable_cells++;
+      num_full_stable_cells++; // The success rate of the test
     }
     double stability = (double)stability_result[j]/(double)stability_iter_count;
     avg_stability += stability;
