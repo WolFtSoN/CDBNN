@@ -16,6 +16,7 @@ out_dim = 3
 
 #Generate input vector X, and wight matrix W. output y = W*x
 x = np.random.randint(0, 2, size=in_dim)
+# x = np.array([0, 1, 0])
 print("Random Bit Vector x:", x)
 # Expand and interleave negations
 x_comp = np.repeat(x, 2).reshape(-1, 2)
@@ -28,10 +29,9 @@ x_32b = x_comp * (2 ** 32 - 1)
 utl.write_to_file(x_32b, "input_layer.txt")
 
 W = np.random.randint(0, 2, size=(out_dim, in_dim))
+# W = np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
 print("Random Bit Matrix W:\n", W)
-
-for i in range(out_dim):
-    utl.write_to_file(W[i], f"weights_{i}.txt")
+utl.write_matrix_to_file(W, "weights_matrix.txt")
 
 # Golden model
 # Use 1, -1 weights, and compare to a threshold of 0
@@ -40,12 +40,7 @@ expected_result = (np.dot(2*W-1,2*x.T -1) > 0) * 1
 print("Multiplication result:")
 print(expected_result)
 
-# # send to DRAM Bender and check results
-# for i in range(out_dim):
-#     # call .cpp with input_layer.txt and "weights_{i}.txt"
-#     # retrieve output
-#     # compare output to expected_result[i]
-#     pass
+# send to DRAM Bender and check results
 
 # Run make file:
 print("Run make (compile CPP):")

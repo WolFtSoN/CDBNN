@@ -3,6 +3,7 @@
 #include "platform.h"
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <boost/filesystem.hpp>
 #include <stdio.h>
 #include <stdlib.h>
@@ -59,17 +60,20 @@ using namespace std;
 #define COMP_ROW_C2 665
 
 // Routing rows
-#define ROUT_ROW_1 24
-#define ROUT_ROW_2 25
-#define ROUT_ROW_3 536
+#define ROUT_ROW_0 24
+#define ROUT_ROW_1 25
+#define ROUT_ROW_2 536
 
-// Data rows - all conected currently to ROUT_ROW_1
+// Data rows - all conected currently to ROUT_ROW_0
 #define X0 0
 #define X0_NOT 8
 #define X1 16
-#define X1_NOT 344
-#define X2 472
-#define X2_NOT 280
+#define X1_NOT 26
+#define X2 28
+#define X2_NOT 30
+#define ASIDE_0 32
+#define ASIDE_1 40
+#define ASIDE_2 48
 
 #define ROW_COPY_T12 30
 #define ROW_COPY_T23 1
@@ -81,6 +85,8 @@ using namespace std;
 #define DEBUG 0
 
 uint32_t g_comp_rows[] = {COMP_ROW_A1 , COMP_ROW_A2, COMP_ROW_B1, COMP_ROW_B2, COMP_ROW_C1, COMP_ROW_C2};
+uint32_t g_route_rows[] = {ROUT_ROW_0 , ROUT_ROW_1, ROUT_ROW_2};
+uint32_t g_aside_rows[] = {ASIDE_0 , ASIDE_1, ASIDE_2};
 
 Program frac(int t_frac, int r_frac_addr){
   //this function assumes you precharge beforehand
@@ -147,36 +153,47 @@ Program row_copy(uint32_t r_first, uint32_t r_second)
   return program;
 }
 
+Program maj3()
+{
+  // Make sure r_first, r_second really can participate in row copy
+  // (maybe no rows, or more than 2 rows will open!)
+  // Assumes bank is precharged!
+  Program program;
+  // Copy from r_first into r_second
+  program.add_below(doubleACT(MAJ_T12, MAJ_T23, COMP_R1, COMP_R2));
+  // Double act has no "quite" time included at the end, so a conservative settle time here
+  program.add_inst(SMC_SLEEP(6));
+  // re-initialize with PRE + time for PRE to settle
+  program.add_below(PRE(BAR, 0, 0));
+  program.add_inst(SMC_SLEEP(6));
+
+  return program;
+}
+
 Program xnor_and_copy(uint32_t weight, uint32_t x_in_row, uint32_t x_in_bar_row, uint32_t comp_row_idx)
 {
   // subprogram assumes preinitialized precharge
   uint32_t final_route_row, first_comp_row, second_comp_row;
   Program program;
-  // we currently assume the data is stored in rows "behind" ROUT_ROW_1 exclusively
+  // we currently assume the data is stored in rows "behind" ROUT_ROW_0 exclusively
   // When extending - need to extend this code as well to support that
 
   // We perform XNOR by opening x / x_bar based on weight value
   if (weight == 1) {
-    program.add_below(row_copy(x_in_row, ROUT_ROW_1));
+    program.add_below(row_copy(x_in_row, ROUT_ROW_0));
   } else {
-    program.add_below(row_copy(x_in_bar_row, ROUT_ROW_1));
+    program.add_below(row_copy(x_in_bar_row, ROUT_ROW_0));
   }
 
-  // logic to identify relevant rows in each stage, currently hardocded - if needed can be "smarter"
+  // logic to identify relevant rows in each stage
   // This is highly dependant on the chosen routing, comp rows!!!
-  if (comp_row_idx == 0) {/* into COMP_A */
-    final_route_row = ROUT_ROW_1;
-  } else if (comp_row_idx == 1) {/* into COMP_B */
-    final_route_row = ROUT_ROW_2;
-  } else {/* into COMP_C */
-    final_route_row = ROUT_ROW_3;
-  }
+  final_route_row = g_route_rows[comp_row_idx];
   first_comp_row = g_comp_rows[comp_row_idx*2];
   second_comp_row = g_comp_rows[comp_row_idx*2+1];
 
   // Copy to adjacent routing row - only if needed
-  if (final_route_row != ROUT_ROW_1) {
-    program.add_below(row_copy(ROUT_ROW_1, final_route_row));
+  if (final_route_row != ROUT_ROW_0) {
+    program.add_below(row_copy(ROUT_ROW_0, final_route_row));
   }
   
   // Copy from routing row into computation row
@@ -189,7 +206,7 @@ Program xnor_and_copy(uint32_t weight, uint32_t x_in_row, uint32_t x_in_bar_row,
 }
 
 
-Program bnn_prog(uint32_t bank_id, std::vector<uint32_t> &x_in, std::vector<uint32_t> &weights)
+Program bnn_prog(uint32_t bank_id, std::vector<uint32_t> &x_in, std::vector<std::vector<uint32_t>> &weights)
 {
   uint32_t x_rows[] = {X0, X0_NOT, X1, X1_NOT, X2, X2_NOT};
   Program program;
@@ -201,12 +218,10 @@ Program bnn_prog(uint32_t bank_id, std::vector<uint32_t> &x_in, std::vector<uint
   program.add_inst(all_nops());
   program.add_below(PRE(BAR, 0, 0));
   // For testing only - fill checked rows with damka pattern:
-  // random = rand();
-  // program.add_below(wrRow_immediate_label(BAR, COMP_ROW_A1, ONE, random));
-  // random = rand();
-  // program.add_below(wrRow_immediate_label(BAR, COMP_ROW_A2, ONE, random));
-  // end of test logic
-
+  for (size_t i = 0; i < 3; i++)
+  {
+    program.add_below(wrRow_immediate_label(BAR, g_aside_rows[i], DAMKA, random));
+  }
   // Fill input-layer data into the data rows
   for(int i = 0; i < 6; i++)
   {
@@ -217,16 +232,24 @@ Program bnn_prog(uint32_t bank_id, std::vector<uint32_t> &x_in, std::vector<uint
   program.add_inst(SMC_SLEEP(6));
   program.add_below(PRE(BAR, 0, 0));
   program.add_inst(SMC_SLEEP(6));
-  for (int i = 0; i < 3; i++)
+
+  for (int row_i = 0; row_i < weights.size(); row_i++)
   {
-    program.add_below(xnor_and_copy(weights[i], x_rows[2*i], x_rows[2*i+1], i));
+    for (int col_i = 0; col_i < 3; col_i++)
+    {
+      program.add_below(xnor_and_copy(weights[row_i][col_i], x_rows[2*col_i], x_rows[2*col_i+1], col_i));
+    }
+  
+    program.add_below(maj3());
+  
+    program.add_below(row_copy(g_comp_rows[0], g_aside_rows[row_i]));
   }
   
-  // read out the comp rows for validation:
-  for (int i = 0; i < 6; i++)
+  // read out the aside rows for validation:
+  for (int i = 0; i < weights.size(); i++)
   {
     random = rand();
-    program.add_below(rdRow_immediate_label(BAR, g_comp_rows[i], random));
+    program.add_below(rdRow_immediate_label(BAR, g_aside_rows[i], random));
   }
 
   // Extra buffer time to be sure
@@ -248,6 +271,21 @@ void parse_file(std::string file_name, std::vector<uint32_t> &vec)
   while (std::getline(file, line))
   {
     vec.push_back(stol(line));
+  }
+  file.close();
+}
+
+void parse_matrix(const std::string& file_name, std::vector<std::vector<uint32_t>> &matrix) {
+  std::ifstream file(file_name);
+  std::string line;
+  while (std::getline(file, line)) {
+      std::vector<uint32_t> row;
+      std::stringstream ss(line);
+      std::string cell;
+      while (std::getline(ss, cell, ',')) { // Splitting by comma
+          row.push_back(std::stol(cell)); // Convert to unsigned integer
+      }
+      matrix.push_back(row);
   }
   file.close();
 }
@@ -310,24 +348,28 @@ int main(int argc, char*argv[])
   }
 */
 
-std::vector<uint32_t> weights;
+std::vector<std::vector<uint32_t>> weights_matrix;
 std::vector<uint32_t> x_in;
-parse_file("./weights_0.txt", weights); // Read from the single file
+parse_matrix("./weights_matrix.txt", weights_matrix); // Read from the single file
 parse_file("./input_layer.txt", x_in); // Read from the single file
 
 std::cout << "------------DEBUG------------" << std::endl;
-std::cout << "weights: " << weights[0] << "," << weights[1] << "," << weights[2] << std::endl;
+std::cout << "weights row 0: " << weights_matrix[0][0] << "," << weights_matrix[0][1] << "," << weights_matrix[0][2] << std::endl;
+std::cout << "weights row 1: " << weights_matrix[1][0] << "," << weights_matrix[1][1] << "," << weights_matrix[1][2] << std::endl;
+std::cout << "weights row 2: " << weights_matrix[2][0] << "," << weights_matrix[2][1] << "," << weights_matrix[2][2] << std::endl;
+
 std::cout << "x_in: "  << x_in[0] << "," << x_in[1] << "," << x_in[2] << "," << x_in[3] << "," << x_in[4] << "," << x_in[5] << std::endl;
 
 std::cout << "DEBUG: enter DRAM Bender program" << std::endl;
-Program program = bnn_prog(bank_id, x_in, weights);
+
+Program program = bnn_prog(bank_id, x_in, weights_matrix);
 platform.execute(program);
 std::cout << "DEBUG: exit DRAM Bender program" << std::endl;
 
 // Read out data
 uint8_t row[8192];  
 // Retrieve 8192 bytes from the FPGA buffer (which is filled with content read from DRAM
-for (int i = 0; i < 6; i++)
+for (int i = 0; i < weights_matrix.size(); i++)
 {
   std::cout << "DEBUG: start of ask data from FPGA" << std::endl;
   platform.receiveData((void*)row, 8192);
