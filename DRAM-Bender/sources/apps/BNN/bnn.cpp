@@ -80,6 +80,8 @@ using namespace std;
 #define HYTT_TIMING 1
 #define DEBUG 0
 
+uint32_t g_comp_rows[] = {COMP_ROW_A1 , COMP_ROW_A2, COMP_ROW_B1, COMP_ROW_B2, COMP_ROW_C1, COMP_ROW_C2};
+
 Program frac(int t_frac, int r_frac_addr){
   //this function assumes you precharge beforehand
   Program p;
@@ -128,24 +130,37 @@ Program _init(uint32_t bank_id)
 
 }
 
-Program xnor_and_copy(uint32_t weight, uint32_t x_in_row, uint32_t x_in_bar_row, uint32_t comp_row_idx, int label)
+Program row_copy(uint32_t r_first, uint32_t r_second)
 {
-  // subprogram assumes preinitialized precharge
-  uint32_t comp_rows[] = {COMP_ROW_A1 , COMP_ROW_A2, COMP_ROW_B1, COMP_ROW_B2, COMP_ROW_C1, COMP_ROW_C2};
-  uint32_t final_route_row, first_comp_row, second_comp_row;
+  // Make sure r_first, r_second really can participate in row copy
+  // (maybe no rows, or more than 2 rows will open!)
+  // Assumes bank is precharged!
   Program program;
-  // we currently assume the data is stored in rows "behind" ROUT_ROW_1 exclusively
-  // When extending - need to extend this code as well to support that
-  if (weight == 1) {
-    program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, x_in_row, ROUT_ROW_1));
-  } else {
-    program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, x_in_bar_row, ROUT_ROW_1));
-  }
+  // Copy from r_first into r_second
+  program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, r_first, r_second));
   // Double act has no "quite" time included at the end, so a conservative settle time here
   program.add_inst(SMC_SLEEP(6));
   // re-initialize with PRE + time for PRE to settle
   program.add_below(PRE(BAR, 0, 0));
   program.add_inst(SMC_SLEEP(6));
+
+  return program;
+}
+
+Program xnor_and_copy(uint32_t weight, uint32_t x_in_row, uint32_t x_in_bar_row, uint32_t comp_row_idx)
+{
+  // subprogram assumes preinitialized precharge
+  uint32_t final_route_row, first_comp_row, second_comp_row;
+  Program program;
+  // we currently assume the data is stored in rows "behind" ROUT_ROW_1 exclusively
+  // When extending - need to extend this code as well to support that
+
+  // We perform XNOR by opening x / x_bar based on weight value
+  if (weight == 1) {
+    program.add_below(row_copy(x_in_row, ROUT_ROW_1));
+  } else {
+    program.add_below(row_copy(x_in_bar_row, ROUT_ROW_1));
+  }
 
   // logic to identify relevant rows in each stage, currently hardocded - if needed can be "smarter"
   // This is highly dependant on the chosen routing, comp rows!!!
@@ -156,35 +171,19 @@ Program xnor_and_copy(uint32_t weight, uint32_t x_in_row, uint32_t x_in_bar_row,
   } else {/* into COMP_C */
     final_route_row = ROUT_ROW_3;
   }
-  first_comp_row = comp_rows[comp_row_idx*2];
-  second_comp_row = comp_rows[comp_row_idx*2+1];
+  first_comp_row = g_comp_rows[comp_row_idx*2];
+  second_comp_row = g_comp_rows[comp_row_idx*2+1];
 
   // Copy to adjacent routing row - only if needed
   if (final_route_row != ROUT_ROW_1) {
-    program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, ROUT_ROW_1, final_route_row));
-    // Double act has no "quite" time included at the end, so a conservative settle time here
-    program.add_inst(SMC_SLEEP(6));
-    // re-initialize with PRE + time for PRE to settle
-    program.add_below(PRE(BAR, 0, 0));
-    program.add_inst(SMC_SLEEP(6));
+    program.add_below(row_copy(ROUT_ROW_1, final_route_row));
   }
   
   // Copy from routing row into computation row
-  program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, final_route_row, first_comp_row));
-  // Double act has no "quite" time included at the end, so a conservative settle time here
-  program.add_inst(SMC_SLEEP(6));
-  // re-initialize with PRE + time for PRE to settle
-  program.add_below(PRE(BAR, 0, 0));
-  program.add_inst(SMC_SLEEP(6));
+  program.add_below(row_copy(final_route_row, first_comp_row));
 
-  // Copy from 1st computation row into 2nd computation row
-  program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, first_comp_row, second_comp_row));
-  program.add_inst(SMC_SLEEP(6)); // Settle time for write operation - check
-  // Double act has no "quite" time included at the end, so a conservative settle time here
-  program.add_inst(SMC_SLEEP(6));
-  // re-initialize with PRE + time for PRE to settle
-  program.add_below(PRE(BAR, 0, 0));
-  program.add_inst(SMC_SLEEP(6));
+  // Copy from routing row into computation row
+  program.add_below(row_copy(first_comp_row, second_comp_row));
 
   return program;
 }
@@ -218,41 +217,17 @@ Program bnn_prog(uint32_t bank_id, std::vector<uint32_t> &x_in, std::vector<uint
   program.add_inst(SMC_SLEEP(6));
   program.add_below(PRE(BAR, 0, 0));
   program.add_inst(SMC_SLEEP(6));
-
-  ////// Copy Xs/X_bars to comp rows
-  // Copy X0/not(X0) into 24 and then to A
-  if (weights[0] == 1)
+  for (int i = 0; i < 3; i++)
   {
-    program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, X0, ROUT_ROW_1));
-  } else {
-    program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, X0_NOT, ROUT_ROW_1));
+    program.add_below(xnor_and_copy(weights[i], x_rows[2*i], x_rows[2*i+1], i));
   }
-  program.add_inst(SMC_SLEEP(6)); // Settle time for write operation - check
-
-  // re-initialize with PRE + time for PRE to settle
-  program.add_below(PRE(BAR, 0, 0));
-  program.add_inst(SMC_SLEEP(6));
   
-  program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, ROUT_ROW_1, COMP_ROW_A1));
-  program.add_inst(SMC_SLEEP(6)); // Settle time for write operation - check
-
-  // re-initialize with PRE + time for PRE to settle
-  program.add_below(PRE(BAR, 0, 0));
-  program.add_inst(SMC_SLEEP(6));
-
-  program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, COMP_ROW_A1, COMP_ROW_A2));
-  program.add_inst(SMC_SLEEP(6)); // Settle time for write operation - check
-
-  // re-initialize with PRE + time for PRE to settle
-  program.add_inst(SMC_SLEEP(6));
-  program.add_below(PRE(BAR, 0, 0));
-  program.add_inst(SMC_SLEEP(6));
-
-  // read out A comp rows  for validation:
-  random = rand();
-  program.add_below(rdRow_immediate_label(BAR, COMP_ROW_A1, random));
-  random = rand();
-  program.add_below(rdRow_immediate_label(BAR, COMP_ROW_A2, random));
+  // read out the comp rows for validation:
+  for (int i = 0; i < 6; i++)
+  {
+    random = rand();
+    program.add_below(rdRow_immediate_label(BAR, g_comp_rows[i], random));
+  }
 
   // Extra buffer time to be sure
   program.add_inst(all_nops());
@@ -265,29 +240,6 @@ Program bnn_prog(uint32_t bank_id, std::vector<uint32_t> &x_in, std::vector<uint
   return program;
 }
 
-std::vector<uint8_t> maj_operation(std::vector<uint32_t> patterns, std::vector<uint32_t> r_frac_idx)
-{
-  //size of patterns
-  int n_patterns = patterns.size();
-  //majority operation
-  std::vector <uint8_t> bit_maj;
-  for(int j = 0; j < 32 ; j++)
-  { 
-    uint8_t temp = 0;
-    for(int i = 0; i < n_patterns; i++)
-    {
-    //get majority of each bit
-      temp += (patterns[i] >> j) & 0x1; 
-    }
-    for (int i = 0; i < r_frac_idx.size(); i++)
-    {
-      temp -= (patterns[r_frac_idx[i]] >> j) & 0x1;
-    }
-    int inp_size = n_patterns - r_frac_idx.size();
-    bit_maj.push_back(temp > inp_size/2 ? 1 : 0);
-  }
-  return bit_maj;
-}
 void parse_file(std::string file_name, std::vector<uint32_t> &vec)
 {
   std::ifstream file;
@@ -299,6 +251,7 @@ void parse_file(std::string file_name, std::vector<uint32_t> &vec)
   }
   file.close();
 }
+
 int read_args_n_parse(int argc, char* argv[], uint32_t *bank_id, std::ofstream &out_file)
 {
 
@@ -315,102 +268,13 @@ int read_args_n_parse(int argc, char* argv[], uint32_t *bank_id, std::ofstream &
 
   return 1;
 }
-void report_coverage_results(SoftMCPlatform &platform, std::vector<uint32_t> pattern, std::vector<uint32_t> r_frac_idx, uint32_t bank_id, uint32_t num_iter, uint32_t *maj_result, vector<uint32_t>& open_row_idx, bool is_stability)
-{
-  // CPU create expected output for the test vector
-  std::vector <uint8_t> expected_maj = maj_operation(pattern, r_frac_idx);
-  uint8_t row[8192];
-  
-  // Retrieve 8192 bytes from the FPGA buffer (which is filled with content read from DRAM)
-  platform.receiveData((void*)row, 8192);
-  if(is_stability && DEBUG){
-    std::cout << "Running test: " << std::endl;
-    for(int i = 0; i < pattern.size(); i++)
-    {
-      if(std::find(r_frac_idx.begin(), r_frac_idx.end(), i) != r_frac_idx.end()){
-        std::cout << std::setw(15) << open_row_idx[i] << ": ffffffffffffffffffffffffffffffff" << std::endl;
-      }else{
-        std::cout << std::setw(15) << open_row_idx[i] << ": " << std::bitset<32>(pattern[i]) << std::endl;
-      }
-    }
-  }
 
-  // pack expected results from bit-bit format into 32b format
-  uint32_t exp_maj_result = 0;
-  for(int i = 0; i < expected_maj.size(); i++)
-  {
-    exp_maj_result |= ((expected_maj[i] & 0x1) << i);
-  }
-
-  // 8192 bytes / 4 = num of 32b words 
-  for(int j = 0; j < 8192/4; j++)
-  {
-    // pack 4 bytes from recieved buffer into 32b word
-    // word = (MSB format) [byte 3, byte 2, byte 1, byte 0]
-    uint32_t read_maj_result = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
-    bitset<32> result(~(read_maj_result ^ exp_maj_result));
-    for (int i = 0; i < 32; i++)
-    {
-      maj_result[j*32 + i] += result.test(i) ? 1 : 0;
-    }
-    
-    if(is_stability && DEBUG){
-      std::cout << std::endl;
-      std::cout << "exp_maj_result:  " << std::bitset<32>(exp_maj_result) << std::endl;
-      std::cout << "read_maj_result: " << std::bitset<32>(read_maj_result) << std::endl;
-      std::cout << "correct_res_ctr: ";
-      for(int i = 31; i >= 0; i--)
-      {
-        std::cout << maj_result[j*32 + i];
-      }
-      std::cout << std::endl;
-      break;
-    }
-  }
-
-}
-std::vector<uint32_t> random_pattern_creator(std::vector<uint32_t> r_frac_idx, uint32_t n_open_rows, uint32_t maj_x,uint32_t seed)
-{
-  std::vector<uint32_t> pattern_maj;
-  std::vector<uint32_t> patterns;
-  parse_file("./patterns/pattern_0.txt", patterns);
-  srand((time(NULL)+getpid()+seed));
-  for(int i = 0; i < maj_x; i++)
-  {
-    uint32_t wr_pattern = (uint32_t)rand();
-    wr_pattern = (wr_pattern & 0xffff) | (uint32_t)rand() << 16;
-    pattern_maj.push_back(wr_pattern);
-  }
-  for(int i = 0; i < n_open_rows; i++)
-  {
-    patterns[i]=(pattern_maj[i%maj_x]);
-  }
-  for(int i = 0; i < r_frac_idx.size(); i++)
-  {
-    patterns[r_frac_idx[i]] = ONE;
-  }
-  return patterns;
-
-}
 int main(int argc, char*argv[])
 {
   SoftMCPlatform platform;
   int err;
-  // uint32_t r_first,r_second,min_row,max_row,n_open_rows;
-  // uint32_t num_iter;
   uint32_t bank_id;
-  // uint32_t maj_x;
-  // uint32_t t_12;
-  // uint32_t t_23;
-  // uint32_t n_frac_times;
-  // uint32_t t_frac;
-
-  // std::vector<uint32_t> r_frac_idx;
-  // std::vector<uint32_t> open_row_idx;
-  // std::vector<uint32_t> patterns_old;
   std::ofstream   out_file;
-
-
 
   if(!read_args_n_parse(argc, argv, &bank_id, out_file))
     exit(0);
@@ -446,23 +310,6 @@ int main(int argc, char*argv[])
   }
 */
 
-/*
-  uint32_t coverage_result[8192*8] {0}; // A single 64Kb row
-  std::vector<std::string> pattern_files;
-
-  uint32_t num_patterns = 0;
-  for (boost::filesystem::directory_entry& entry : boost::filesystem::directory_iterator("./patterns/"))
-  {
-    num_patterns++;
-    std::vector<uint32_t> patterns;
-    parse_file(entry.path().string(), patterns); // just take a bunch of uint32 nums from text file to vector
-    Program program = test_prog(num_iter,bank_id, n_open_rows, patterns, open_row_idx, r_first, r_second, r_frac_idx, t_12, t_23, n_frac_times, t_frac);
-    platform.execute(program);
-    report_coverage_results(platform, patterns, r_frac_idx, bank_id, num_iter, coverage_result, open_row_idx, false);
-  }
-*/
-uint32_t read_result[8192*8] {0}; // A single 64Kb row
-
 std::vector<uint32_t> weights;
 std::vector<uint32_t> x_in;
 parse_file("./weights_0.txt", weights); // Read from the single file
@@ -478,22 +325,19 @@ platform.execute(program);
 std::cout << "DEBUG: exit DRAM Bender program" << std::endl;
 
 // Read out data
-uint8_t two_rows[8192];  
-// Retrieve 8192 bytes from the FPGA buffer (which is filled with content read from DRAM)
-std::cout << "DEBUG: start of ask data from FPGA" << std::endl;
-platform.receiveData((void*)two_rows, 8192);
-std::cout << "DEBUG: end of ask data from FPGA" << std::endl;
-for (size_t i = 0; i < 8192; i++)
+uint8_t row[8192];  
+// Retrieve 8192 bytes from the FPGA buffer (which is filled with content read from DRAM
+for (int i = 0; i < 6; i++)
 {
-  out_file << std::to_string(two_rows[i]) << endl;
+  std::cout << "DEBUG: start of ask data from FPGA" << std::endl;
+  platform.receiveData((void*)row, 8192);
+  std::cout << "DEBUG: end of ask data from FPGA" << std::endl;
+  for (int j = 0; j < 8192; j++)
+  {
+    out_file << std::to_string(row[j]) << endl;
+  }
 }
-std::cout << "DEBUG: start of ask data from FPGA" << std::endl;
-platform.receiveData((void*)two_rows, 8192);
-std::cout << "DEBUG: end of ask data from FPGA" << std::endl;
-for (size_t i = 0; i < 8192; i++)
-{
-  out_file << std::to_string(two_rows[i]) << endl;
-}
+
 out_file.close();
 
 return 0;
