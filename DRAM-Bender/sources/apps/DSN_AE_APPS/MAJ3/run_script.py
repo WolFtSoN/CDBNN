@@ -52,9 +52,9 @@ n_frac_times = 3
 t_frac = 0 # consider t_frac = 1
 
 # Specify the rows you want to perform MAJ3 on manually
-r1, r2 = (246, 376) #Best 6 (408,665) # Best for 4 rows MAJ3 (540,544)
+r1, r2 = (408,665) # Best 8 (246, 376) #Best 6 (408,665) # Best for 4 rows MAJ3 (540,544)
 t12, t23 = (1, 0) # Best For 4 rows MAJ3: (1,0)
-selected_rows = [240, 246, 248, 254, 368, 374, 376, 382]#Best 6 [152, 153, 408, 409, 664, 665] # Best For 4 rows MAJ3:[536, 540, 544, 548]
+selected_rows = [152, 153, 408, 409, 664, 665] # Best 8: [240, 246, 248, 254, 368, 374, 376, 382] #Best 6 [152, 153, 408, 409, 664, 665] # Best For 4 rows MAJ3:[536, 540, 544, 548]
 hf.write_to_file(selected_rows, open_rows_file_name)
 
 # # Set up MAJ3 parameters - Ensure we are performing MAJ3
@@ -86,7 +86,8 @@ cmd = (
 )
 
 # Execute the command and capture output
-sp = subprocess.run([cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
+# sp = subprocess.run([cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
+sp = subprocess.run([cmd], shell=True, check=True)
 
 # Read and print results if output file is not empty
 # if os.stat(out_file).st_size != 0:

@@ -28,8 +28,10 @@ exe_file ="find-open-rows-exe"
 
 open_rows_file_name = apps_path + exe_path + "open_rows_0-6.txt"
 
-out_file = apps_path + exe_path + 'multi_row.txt'
-csv_file = apps_path + exe_path + f'multirow.csv' # f'multirow_{temperature}.csv'
+# out_file = apps_path + exe_path + 'multi_row.txt'
+out_file = apps_path + exe_path + 'size_test_DBG.txt'
+# csv_file = apps_path + exe_path + f'multirow.csv' # f'multirow_{temperature}.csv'
+csv_file = apps_path + exe_path + f'size_test_DBG.csv' # f'multirow_{temperature}.csv'
 os.system(f'rm {out_file}')
 os.system(f'rm {csv_file}')
 
@@ -64,11 +66,11 @@ for rows in [2,4]: # 2,4,8,16,32
                 samples_df = samples_df.loc[samples_df['avg_success_rate'] == 1.0]
                 samples_df = samples_df.loc[samples_df['t_12'] == n_t12]
                 samples_df = samples_df.loc[samples_df['t_23'] == name_t23]        
-                if len(samples_df) > 100:
-                    samples_df = samples_df.sample(n=100).reset_index(drop=True)
+                if len(samples_df) > 5: # 100, n=100
+                    samples_df = samples_df.sample(n=5).reset_index(drop=True)
                 else:
                     samples_df = samples_df.sample(n=len(samples_df)).reset_index(drop=True)
-                samples_df.to_csv(sample_csv)
+                # samples_df.to_csv(sample_csv)
 
             
             lst = pd.DataFrame(columns=['t_12','t_23','bank_id','s_id','r_first','r_second','all_0','all_1','random'])
@@ -96,7 +98,8 @@ for rows in [2,4]: # 2,4,8,16,32
                                     str(t_12) + " " + str(t_23) + " " +
                                     str(out_file) 
                             )
-                            sp = subprocess.run([cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True) 
+                            # sp = subprocess.run([cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True) 
+                            sp = subprocess.run([cmd], shell=True, check=True)
                             if(os.stat(out_file).st_size != 0):
                                 res_lst = hf.read_result_file(out_file)
                                 temp_data = [[t_12,t_23,bank_id,s_id,r_first, r_second, res_lst[0], res_lst[1], res_lst[2]]]
@@ -108,6 +111,6 @@ for rows in [2,4]: # 2,4,8,16,32
             send_path = apps_path + exe_path + csv_file
             cp_path = f'{apps_path}../../../../experimental_data/{module}/'             
             send_cmd = f'cp -r {send_path} {cp_path}'  
-            sp = subprocess.run([send_cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
+            # sp = subprocess.run([send_cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
             
         

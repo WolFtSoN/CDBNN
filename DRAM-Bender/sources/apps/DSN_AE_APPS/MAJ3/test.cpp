@@ -100,9 +100,12 @@ Program test_prog(uint32_t num_iter, uint32_t bank_id, uint32_t n_open_rows, std
                   uint32_t r_first, uint32_t r_second, std::vector<uint32_t> &r_frac_idx, 
                   uint32_t t_12, uint32_t t_23, uint32_t n_frac_times, uint32_t t_frac)
 {
-
   Program program;
   program.add_below(_init(bank_id,num_iter));
+  for(int i = 0; i < 2000; i++)
+  {
+    program.add_inst(all_nops());
+  }
   srand((unsigned) time(NULL));
   int random = rand();
   // Next 3 rows - some kind of initialization. Whe PRE needed?
@@ -387,7 +390,8 @@ int main(int argc, char*argv[])
     parse_file(entry.path().string(), patterns); // just take a bunch of uint32 nums from text file to vector
     Program program = test_prog(num_iter,bank_id, n_open_rows, patterns, open_row_idx, r_first, r_second, r_frac_idx, t_12, t_23, n_frac_times, t_frac);
     platform.execute(program);
-    report_coverage_results(platform, patterns, r_frac_idx, bank_id, num_iter, coverage_result, open_row_idx, false);
+    std::cout << "iter" << num_patterns << std::endl;
+    // report_coverage_results(platform, patterns, r_frac_idx, bank_id, num_iter, coverage_result, open_row_idx, false);
   }
 
   // This is stability test - unneeded

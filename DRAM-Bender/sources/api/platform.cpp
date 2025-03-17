@@ -97,7 +97,31 @@ void SoftMCPlatform::reset_fpga()
   }
 }
 
-void SoftMCPlatform::execute(Program &prog)
+void SoftMCPlatform::activate()
+{
+  if(is_dummy)
+  {
+    return;
+  }
+  else
+  {
+    // if(receiver.joinable())
+    // receiver.join();
+
+    // std::cout << "DEBUG: Starting execution thread..." << std::endl;
+    // receiver = std::thread(&SoftMCPlatform::consumeData, this);
+    ((uint8_t*) instr_buf)[8] = ((uint8_t) 1) << 4; /* bit 4 (counting from 0) is flag for activation*/
+    int sent = iface -> sendData(instr_buf, 32 /*in bytes*/);
+    // We do not need to zero out the whole buffer
+    memset(instr_buf, 0, 32);
+    if(sent)
+      std::cerr << "Could not activate the DRAM Bender!" << std::endl;
+    else
+      std::cout << "Successfully activated the DRAM Bender!" << std::endl;
+  }
+}
+
+void SoftMCPlatform::send_prog(Program &prog)
 {
   if(is_dummy)
   {
@@ -108,24 +132,147 @@ void SoftMCPlatform::execute(Program &prog)
   }
   else
   {
-    uint64_t* iseq     = (uint64_t*) prog.get_inst_array();
-    uint64_t* temp_ptr = (uint64_t*) instr_buf;
-    int bytes          = prog.size();
-    assert (bytes <= INSTR_BUF_SIZE/4 && " too many instructions in the buffer, the limit is 2048.");
+    int prog_size_bytes                = prog.size();
+    int prog_size_insts                = prog_size_bytes / 8;
+    int chunk_size_insts     = INSTR_BUF_SIZE/32; // /4 as we are sending 256 bits for each instruction. Then /8 to get the number of instruction
+    int chunk_size_bytes     = chunk_size_insts * 8;
+    std::cout << "DEBUG: chunk_size_insts, chunk_size_bytes: " << chunk_size_insts << ", " << chunk_size_bytes << std::endl;
+    std::cout << "DEBUG: prog_size_insts, prog_size_bytes: " << prog_size_insts << ", " << prog_size_bytes << std::endl;
+    for (size_t chunk_num = 0; chunk_num < (prog_size_insts / chunk_size_insts); chunk_num++)
+    {
+      std::cout << "DEBUG: Sending chunk " << chunk_num << " of " << (prog_size_insts / chunk_size_insts) << std::endl;
+      uint64_t* iseq     = (uint64_t*) prog.get_inst_chunk(chunk_num*chunk_size_insts, (chunk_num+1)*chunk_size_insts);
+      uint64_t* temp_ptr = (uint64_t*) instr_buf;
+      for(int i = 0 ; i < chunk_size_insts ; i++)
+        temp_ptr[i*4] = iseq[i];
+      if ((chunk_num == (prog_size_insts / chunk_size_insts) - 1) && (prog_size_insts % chunk_size_insts == 0))
+      { // Raise flag if this is the last chunk
+          if(receiver.joinable())
+            receiver.join();
 
-    for(int i = 0 ; i < bytes/8 ; i++)
-      temp_ptr[i*4] = iseq[i];
+        std::cout << "DEBUG: Starting execution thread..." << std::endl;
+        receiver = std::thread(&SoftMCPlatform::consumeData, this);
+        ((uint8_t*) instr_buf)[(chunk_size_insts-1)*64 + 8] = ((uint8_t) 1) << 4;
+      }
+      
+      int sent = iface -> sendData(instr_buf, chunk_size_bytes*4 /*in bytes*/);
+      std::cout << "DEBUG: Sent " << chunk_size_bytes*4 << " bytes to FPGA." << std::endl;
 
-    if(receiver.joinable())
-      receiver.join();
+      memset(instr_buf, 0, chunk_size_bytes*4);
+      free(iseq);
+    }
+    if (prog_size_insts % chunk_size_insts != 0)
+    {
+      chunk_size_insts = prog_size_insts % chunk_size_insts;
+      chunk_size_bytes = chunk_size_insts * 8;
+      std::cout << "DEBUG: Sending last chunk" << std::endl;
+      uint64_t* iseq     = (uint64_t*) prog.get_inst_chunk(prog_size_insts - chunk_size_insts, prog_size_insts);
+      uint64_t* temp_ptr = (uint64_t*) instr_buf;
+      for(int i = 0 ; i < prog_size_insts ; i++)
+        temp_ptr[i*4] = iseq[i];
 
-    receiver = std::thread(&SoftMCPlatform::consumeData, this);
-    int sent = iface -> sendData(instr_buf, bytes*4 /*in bytes*/);
-    memset(instr_buf, 0, bytes*4);
-    free(iseq);
-    assert(!sent && "could not send instructions");
+      if(receiver.joinable())
+        receiver.join();
+
+      std::cout << "DEBUG: Starting execution thread..." << std::endl;
+      receiver = std::thread(&SoftMCPlatform::consumeData, this);
+      ((uint8_t*) instr_buf)[(chunk_size_insts-1)*64 + 8] = ((uint8_t) 1) << 4; // Raise flag if this is the last chunk
+      int sent = iface -> sendData(instr_buf, chunk_size_bytes*4 /*in bytes*/);
+      std::cout << "DEBUG: Sent " << chunk_size_bytes*4 << " bytes to FPGA." << std::endl;
+
+      memset(instr_buf, 0, chunk_size_bytes*4);
+      free(iseq);
+      assert(!sent && "could not send instructions");
+    }
   }
 }
+
+
+// void SoftMCPlatform::execute(Program &prog)
+// {
+//   if(is_dummy)
+//   {
+//     [[maybe_unused]] uint64_t* iseq     = (uint64_t*) prog.get_inst_array();
+//     int bytes          = prog.size();
+//     assert (bytes <= INSTR_BUF_SIZE/4 && " too many instructions in the buffer, the limit is 2048.");
+//     return;
+//   }
+//   else
+//   {
+//     uint64_t* iseq     = (uint64_t*) prog.get_inst_array();
+//     uint64_t* temp_ptr = (uint64_t*) instr_buf;
+//     int bytes          = prog.size();
+//     assert (bytes <= INSTR_BUF_SIZE/4 && " too many instructions in the buffer, the limit is 2048.");
+
+//     for(int i = 0 ; i < bytes/8 ; i++)
+//       temp_ptr[i*4] = iseq[i];
+
+//     if(receiver.joinable())
+//       receiver.join();
+
+//     std::cout << "DEBUG: Starting execution thread..." << std::endl;
+//     receiver = std::thread(&SoftMCPlatform::consumeData, this);
+
+//     int sent = iface -> sendData(instr_buf, bytes*4 /*in bytes*/);
+//     std::cout << "DEBUG: Sent " << bytes*4 << " bytes to FPGA." << std::endl;
+
+//     memset(instr_buf, 0, bytes*4);
+//     free(iseq);
+//     assert(!sent && "could not send instructions");
+//   }
+// }
+
+#define CHUNK_SIZE 2048   // Adjust as needed
+
+void SoftMCPlatform::execute(Program &prog)
+{
+  if(is_dummy)
+  {
+    // In dummy mode, you might still use the entire memory.
+    uint64_t* iseq = (uint64_t*) prog.get_inst_array();
+    int bytes = prog.size();
+    assert(bytes <= INSTR_BUF_SIZE/4 && "Too many instructions in the buffer");
+    return;
+  }
+  else
+  {
+    // Get program data and total size in bytes (if prog.size() returns words, adjust accordingly)
+    uint64_t* program_data = (uint64_t*) prog.get_inst_array();
+    int total_insts = prog.size() / 8;
+    int offset = 0;
+    
+    // Make sure receiver thread is joined before starting a new transfer
+    if(receiver.joinable())
+      receiver.join();
+    
+    // Start the receiver thread before sending (if required by your logic)
+    receiver = std::thread(&SoftMCPlatform::consumeData, this);
+    
+    uint64_t* temp_ptr = (uint64_t*) instr_buf;
+    // Send the program in CHUNK_SIZE pieces
+    while(offset < total_insts) {
+      int to_send = (total_insts - offset) < CHUNK_SIZE ? (total_insts - offset) : CHUNK_SIZE;
+      // Copy a chunk into the instruction buffer (which is now used as a temporary chunk buffer)
+      for (int i = 0; i < to_send; i++)
+        temp_ptr[4*i] = program_data[offset + i];
+      
+      // Send the chunk over PCIe
+      int sent = iface->sendData(instr_buf, to_send * 32);
+      assert(!sent && "Could not send instruction chunk");
+      
+      offset += to_send;
+    }
+    
+    // Free the original program buffer if it was allocated on the heap
+    free(program_data);
+    memset(instr_buf, 0, CHUNK_SIZE * 32); // * 8 to convert insts to bytes, * 4 for padding
+    
+    // After all chunks are sent, you may call activate() to signal the FPGA
+    // Note: Depending on your design, this could be called externally or here.
+  }
+}
+
+
 
 void SoftMCPlatform::consumeData()
 {
@@ -133,9 +280,11 @@ void SoftMCPlatform::consumeData()
   {
     int xdma_read_intent = 32*1024;
     int xdma_read_size = xdma_read_intent;
+    std::cout << "Comsume Data 1" << std::endl;
     int recvd = iface -> recvData((void*)xdma_recv_buf, xdma_read_size);
     if(recvd == 0)
       break;
+    std::cout << "Received " << recvd << " bytes from FPGA" << std::endl;
     // xdma read size in words
     // If we did not read 32KBs then the program probably ended
     // and the last transfer is trash so we discard it
@@ -183,9 +332,13 @@ int SoftMCPlatform::receiveData(void* recv_buf, int size){
 
     size /= 4;
     int total_size = size;
+    std::cout << "Test 1" << std::endl;
     int rdsz = api_recv_buf.pop((int*) recv_buf, size);
+    std::cout << "Test 2" << std::endl;
+    std::cout << "rdsz: " << rdsz << std::endl;
     while (rdsz < total_size)
       rdsz += api_recv_buf.pop(((int*) recv_buf) + rdsz, size = (total_size-rdsz));
+      std::cout << "rdsz: " << rdsz << std::endl;
 
     assert(rdsz == total_size && "Unexpected amount of data popped from spsc\n");
     return total_size*4;

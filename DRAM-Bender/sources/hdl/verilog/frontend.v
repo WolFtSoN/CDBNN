@@ -55,6 +55,8 @@ module frontend#(parameter SIM_MEM = "false")(
   wire [`IMEM_ADDR_WIDTH-1:0] imem_addr;
   wire [`INSTR_WIDTH-1:0]     imem_wr_data, imem_rd_data;
 
+  // instantiate instruction memory
+  // instr_blk_mem/instr_blk_mem_sim is a Block RAM(BRAM), we can increase the size of BRAM by changing the value of `IMEM_ADDR_WIDTH - located in parameters.vh
   generate
     if(SIM_MEM == "true") begin
       instr_blk_mem_sim imem(
@@ -130,7 +132,7 @@ module frontend#(parameter SIM_MEM = "false")(
   // imem <-> xdma interface
   // TODO do we need tkeep?
   assign h2c_tready_0 = state_r == INIT_MEM_S;
-  assign imem_wr_en   = h2c_tvalid_0 && (state_r == INIT_MEM_S);
+  assign imem_wr_en   = h2c_tvalid_0 && (state_r == INIT_MEM_S); /*add a condition on the new flag */
   assign imem_wr_data = h2c_tdata_0[`INSTR_WIDTH-1:0];
   assign imem_addr    = state_r == INIT_MEM_S ? xfer_ctr_r : addr_in;
   // imem <-> pipeline interface 
@@ -181,13 +183,17 @@ module frontend#(parameter SIM_MEM = "false")(
             aref_en_valid = `HIGH;
             aref_en       = h2c_tdata_0[0];
             state_ns      = IDLE_S;
-          end
-          else begin
+          end else if(h2c_tdata_0[`INSTR_WIDTH+4]) begin // activate program
+              state_ns    = EXECUTE_S;
+              xfer_ctr_ns = {`IMEM_ADDR_WIDTH{`LOW}};
+          end else begin
             xfer_ctr_ns = xfer_ctr_r + 1;
+            /*
             if(h2c_tlast_0) begin
               state_ns    = EXECUTE_S;
               xfer_ctr_ns = {`IMEM_ADDR_WIDTH{`LOW}}; 
             end
+            */
           end
         end
       end

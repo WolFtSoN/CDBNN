@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Tue Mar 11 12:27:58 2025
+# Process ID: 59521
+# Current directory: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/axis_clock_converter_synth_1
+# Command line: vivado -log axis_clock_converter.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source axis_clock_converter.tcl
+# Log file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/axis_clock_converter_synth_1/axis_clock_converter.vds
+# Journal file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/axis_clock_converter_synth_1/vivado.jou
+#-----------------------------------------------------------
+source axis_clock_converter.tcl -notrace

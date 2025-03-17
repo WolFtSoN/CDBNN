@@ -366,7 +366,7 @@ int main(int argc, char*argv[])
     platform.execute(program);
     report_coverage_results(platform, patterns, r_frac_idx, bank_id, num_iter, coverage_result, open_row_idx, false);
   }
-  int stability_iter_count = 1000;
+  int stability_iter_count = 100; // Was 1000
   uint32_t stability_result[8192*8] {0};
   for(int ii = 0; ii < stability_iter_count; ii++)
   {

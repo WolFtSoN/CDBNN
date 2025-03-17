@@ -2,12 +2,12 @@ import pandas as pd
 import os
 
 clk_ns = 1.5
-rows = 8#4
-t_12 = 1#
+rows = 32#4
+t_12 = 2#
 t_23 = 0#
-best_rows_id = 39#94 # use avg.py to find best rows for maj - argmax
+best_rows_id = 69#94 # use avg.py to find best rows for maj - argmax
 
-maj_cov_csv = f"maj_coverage_{rows}_{t_12}_{t_23}.csv"
+maj_cov_csv = f"maj9_strong_coverage_{rows}_{t_12}_{t_23}.csv"
 or_csv = "open_rows_0-6.csv"#"open_rows_0-6.csv"
 
 # Retrieve best MAJ rows parameters

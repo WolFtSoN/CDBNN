@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="54" Path="C:/Users/Ataberk/Desktop/DRAM-Bender/projects/U200/U200.xpr">
+<Project Version="7" Minor="54" Path="/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="8a2defedc3d04a619da01e12b0113d95"/>
@@ -51,13 +51,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="60"/>
-    <Option Name="WTModelSimExportSim" Val="60"/>
-    <Option Name="WTQuestaExportSim" Val="60"/>
-    <Option Name="WTIesExportSim" Val="60"/>
-    <Option Name="WTVcsExportSim" Val="60"/>
-    <Option Name="WTRivieraExportSim" Val="60"/>
-    <Option Name="WTActivehdlExportSim" Val="60"/>
+    <Option Name="WTXSimExportSim" Val="64"/>
+    <Option Name="WTModelSimExportSim" Val="64"/>
+    <Option Name="WTQuestaExportSim" Val="64"/>
+    <Option Name="WTIesExportSim" Val="64"/>
+    <Option Name="WTVcsExportSim" Val="64"/>
+    <Option Name="WTRivieraExportSim" Val="64"/>
+    <Option Name="WTActivehdlExportSim" Val="64"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -235,6 +235,18 @@
         </FileInfo>
       </File>
       <File Path="$PPRDIR/custom_parts_ddr4_2016_4_and_above.csv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../../sources/apps/BNN/memory_init.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../../sources/apps/read_write/program.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -481,78 +493,101 @@
     <Simulator Name="Questa">
       <Option Name="Description" Val="Questa Advanced Simulator"/>
     </Simulator>
+    <Simulator Name="IES">
+      <Option Name="Description" Val="Incisive Enterprise Simulator (IES)"/>
+    </Simulator>
+    <Simulator Name="Xcelium">
+      <Option Name="Description" Val="Xcelium Parallel Simulator"/>
+    </Simulator>
+    <Simulator Name="VCS">
+      <Option Name="Description" Val="Verilog Compiler Simulator (VCS)"/>
+    </Simulator>
     <Simulator Name="Riviera">
       <Option Name="Description" Val="Riviera-PRO Simulator"/>
     </Simulator>
-    <Simulator Name="ActiveHDL">
-      <Option Name="Description" Val="Active-HDL Simulator"/>
-    </Simulator>
   </Simulators>
   <Runs Version="1" Minor="15">
-    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xcu200-fsgd2104-2-e" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/synth_1">
+    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xcu200-fsgd2104-2-e" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2019"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="instr_blk_mem_sim_synth_1" Type="Ft3:Synth" SrcSet="instr_blk_mem_sim" Part="xcu200-fsgd2104-2-e" ConstrsSet="instr_blk_mem_sim" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/instr_blk_mem_sim_synth_1">
+    <Run Id="instr_blk_mem_sim_synth_1" Type="Ft3:Synth" SrcSet="instr_blk_mem_sim" Part="xcu200-fsgd2104-2-e" ConstrsSet="instr_blk_mem_sim" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/instr_blk_mem_sim_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/instr_blk_mem_sim_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2019"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="pr_read_mem_synth_1" Type="Ft3:Synth" SrcSet="pr_read_mem" Part="xcu200-fsgd2104-2-e" ConstrsSet="pr_read_mem" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/pr_read_mem_synth_1">
+    <Run Id="pr_read_mem_synth_1" Type="Ft3:Synth" SrcSet="pr_read_mem" Part="xcu200-fsgd2104-2-e" ConstrsSet="pr_read_mem" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/pr_read_mem_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/pr_read_mem_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2019"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="zq_calib_mem_synth_1" Type="Ft3:Synth" SrcSet="zq_calib_mem" Part="xcu200-fsgd2104-2-e" ConstrsSet="zq_calib_mem" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/zq_calib_mem_synth_1">
+    <Run Id="zq_calib_mem_synth_1" Type="Ft3:Synth" SrcSet="zq_calib_mem" Part="xcu200-fsgd2104-2-e" ConstrsSet="zq_calib_mem" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/zq_calib_mem_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/zq_calib_mem_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2019"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="instr_blk_mem_synth_1" Type="Ft3:Synth" SrcSet="instr_blk_mem" Part="xcu200-fsgd2104-2-e" ConstrsSet="instr_blk_mem" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/instr_blk_mem_synth_1">
+    <Run Id="instr_blk_mem_synth_1" Type="Ft3:Synth" SrcSet="instr_blk_mem" Part="xcu200-fsgd2104-2-e" ConstrsSet="instr_blk_mem" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/instr_blk_mem_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/instr_blk_mem_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2019"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="pr_ref_mem_synth_1" Type="Ft3:Synth" SrcSet="pr_ref_mem" Part="xcu200-fsgd2104-2-e" ConstrsSet="pr_ref_mem" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/pr_ref_mem_synth_1">
+    <Run Id="pr_ref_mem_synth_1" Type="Ft3:Synth" SrcSet="pr_ref_mem" Part="xcu200-fsgd2104-2-e" ConstrsSet="pr_ref_mem" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/pr_ref_mem_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/pr_ref_mem_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2019"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="scratchpad_synth_1" Type="Ft3:Synth" SrcSet="scratchpad" Part="xcu200-fsgd2104-2-e" ConstrsSet="scratchpad" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/scratchpad_synth_1">
+    <Run Id="scratchpad_synth_1" Type="Ft3:Synth" SrcSet="scratchpad" Part="xcu200-fsgd2104-2-e" ConstrsSet="scratchpad" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/scratchpad_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/scratchpad_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2019"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="axis_clock_converter_synth_1" Type="Ft3:Synth" SrcSet="axis_clock_converter" Part="xcu200-fsgd2104-2-e" ConstrsSet="axis_clock_converter" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/axis_clock_converter_synth_1">
+    <Run Id="axis_clock_converter_synth_1" Type="Ft3:Synth" SrcSet="axis_clock_converter" Part="xcu200-fsgd2104-2-e" ConstrsSet="axis_clock_converter" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/axis_clock_converter_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/axis_clock_converter_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="phy_ddr4_synth_1" Type="Ft3:Synth" SrcSet="phy_ddr4" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_ddr4" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_ddr4_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design"/>
@@ -561,7 +596,27 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="phy_ddr4_synth_1" Type="Ft3:Synth" SrcSet="phy_ddr4" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_ddr4" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_ddr4_synth_1">
+    <Run Id="rdback_fifo_synth_1" Type="Ft3:Synth" SrcSet="rdback_fifo" Part="xcu200-fsgd2104-2-e" ConstrsSet="rdback_fifo" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/rdback_fifo_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/rdback_fifo_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="phy_ddr4_udimm_synth_1" Type="Ft3:Synth" SrcSet="phy_ddr4_udimm" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_ddr4_udimm" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/phy_ddr4_udimm_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_ddr4_udimm_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="phy_rdimm_x8_dual_synth_1" Type="Ft3:Synth" SrcSet="phy_rdimm_x8_dual" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_rdimm_x8_dual" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_rdimm_x8_dual_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design"/>
@@ -570,43 +625,35 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="rdback_fifo_synth_1" Type="Ft3:Synth" SrcSet="rdback_fifo" Part="xcu200-fsgd2104-2-e" ConstrsSet="rdback_fifo" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/rdback_fifo_synth_1">
+    <Run Id="xdma_synth_1" Type="Ft3:Synth" SrcSet="xdma" Part="xcu200-fsgd2104-2-e" ConstrsSet="xdma" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/xdma_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/xdma_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design"/>
       </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="phy_ddr4_udimm_synth_1" Type="Ft3:Synth" SrcSet="phy_ddr4_udimm" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_ddr4_udimm" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_ddr4_udimm_synth_1">
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
-        <Step Id="synth_design"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design" EnableStepBool="1"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2019"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="phy_rdimm_x8_dual_synth_1" Type="Ft3:Synth" SrcSet="phy_rdimm_x8_dual" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_rdimm_x8_dual" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_rdimm_x8_dual_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="xdma_synth_1" Type="Ft3:Synth" SrcSet="xdma" Part="xcu200-fsgd2104-2-e" ConstrsSet="xdma" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/xdma_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" SynthRun="synth_1" IncludeInArchive="true" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/impl_1">
+    <Run Id="instr_blk_mem_sim_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="instr_blk_mem_sim" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="instr_blk_mem_sim_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/instr_blk_mem_sim_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
@@ -623,7 +670,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="instr_blk_mem_sim_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="instr_blk_mem_sim" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="instr_blk_mem_sim_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/instr_blk_mem_sim_impl_1">
+    <Run Id="pr_read_mem_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="pr_read_mem" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="pr_read_mem_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/pr_read_mem_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
@@ -640,7 +687,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="pr_read_mem_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="pr_read_mem" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="pr_read_mem_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/pr_read_mem_impl_1">
+    <Run Id="zq_calib_mem_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="zq_calib_mem" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="zq_calib_mem_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/zq_calib_mem_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
@@ -657,7 +704,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="zq_calib_mem_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="zq_calib_mem" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="zq_calib_mem_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/zq_calib_mem_impl_1">
+    <Run Id="instr_blk_mem_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="instr_blk_mem" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="instr_blk_mem_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/instr_blk_mem_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
@@ -674,7 +721,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="instr_blk_mem_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="instr_blk_mem" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="instr_blk_mem_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/instr_blk_mem_impl_1">
+    <Run Id="pr_ref_mem_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="pr_ref_mem" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="pr_ref_mem_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/pr_ref_mem_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
@@ -691,7 +738,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="pr_ref_mem_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="pr_ref_mem" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="pr_ref_mem_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/pr_ref_mem_impl_1">
+    <Run Id="scratchpad_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="scratchpad" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="scratchpad_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/scratchpad_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
@@ -708,24 +755,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="scratchpad_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="scratchpad" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="scratchpad_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/scratchpad_impl_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design" EnableStepBool="1"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2019"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="axis_clock_converter_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="axis_clock_converter" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="axis_clock_converter_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/axis_clock_converter_impl_1">
+    <Run Id="axis_clock_converter_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="axis_clock_converter" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="axis_clock_converter_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/hasan/git/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/axis_clock_converter_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
         <Step Id="init_design"/>
@@ -742,7 +772,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="phy_ddr4_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_ddr4" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="phy_ddr4_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_ddr4_impl_1">
+    <Run Id="phy_ddr4_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_ddr4" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="phy_ddr4_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_ddr4_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
         <Step Id="init_design"/>
@@ -759,7 +789,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="rdback_fifo_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="rdback_fifo" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="rdback_fifo_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/rdback_fifo_impl_1">
+    <Run Id="rdback_fifo_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="rdback_fifo" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="rdback_fifo_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/rdback_fifo_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
         <Step Id="init_design"/>
@@ -776,7 +806,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="phy_ddr4_udimm_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_ddr4_udimm" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="phy_ddr4_udimm_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_ddr4_udimm_impl_1">
+    <Run Id="phy_ddr4_udimm_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_ddr4_udimm" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="phy_ddr4_udimm_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_ddr4_udimm_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
         <Step Id="init_design"/>
@@ -793,7 +823,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="phy_rdimm_x8_dual_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_rdimm_x8_dual" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="phy_rdimm_x8_dual_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_rdimm_x8_dual_impl_1">
+    <Run Id="phy_rdimm_x8_dual_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="phy_rdimm_x8_dual" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="phy_rdimm_x8_dual_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/phy_rdimm_x8_dual_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
         <Step Id="init_design"/>
@@ -810,7 +840,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="xdma_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="xdma" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="xdma_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/xdma_impl_1">
+    <Run Id="xdma_impl_1" Type="Ft2:EntireDesign" Part="xcu200-fsgd2104-2-e" ConstrsSet="xdma" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="xdma_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../C:/home/ataberk/C:/Users/aolgu/Desktop/SoftMC_DDR4/projects/U200/U200.srcs/utils_1/imports/xdma_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
         <Step Id="init_design"/>

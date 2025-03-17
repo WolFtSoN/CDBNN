@@ -1,0 +1,856 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Mon Mar 17 11:54:51 2025
+# Process ID: 39731
+# Current directory: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1
+# Command line: vivado -log softmc_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source softmc_top.tcl
+# Log file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/softmc_top.vds
+# Journal file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/vivado.jou
+#-----------------------------------------------------------
+source softmc_top.tcl -notrace
+WARNING: [Common 17-1361] You have specified a new message control rule that is equivalent to an existing rule with attributes ' -id {[BD 41-1306]}  -suppress '. The existing rule will be replaced.
+WARNING: [Common 17-1361] You have specified a new message control rule that is equivalent to an existing rule with attributes ' -id {[BD 41-1271]}  -suppress '. The existing rule will be replaced.
+WARNING: [Common 17-1361] You have specified a new message control rule that is equivalent to an existing rule with attributes ' -id {[BD 41-1306]}  -suppress '. The existing rule will be replaced.
+WARNING: [Common 17-1361] You have specified a new message control rule that is equivalent to an existing rule with attributes ' -id {[BD 41-1271]}  -suppress '. The existing rule will be replaced.
+Command: synth_design -top softmc_top -part xcu200-fsgd2104-2-e
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xcu200'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xcu200'
+INFO: [Device 21-403] Loading part xcu200-fsgd2104-2-e
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 39792
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:02 . Memory (MB): peak = 2782.191 ; gain = 213.688 ; free physical = 16038 ; free virtual = 33066
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'softmc_top' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:4]
+	Parameter tCK bound to: 1500 - type: integer 
+	Parameter SIM bound to: false - type: string 
+	Parameter ODTWRDEL bound to: 5'b01001 
+	Parameter ODTWRDUR bound to: 4'b0110 
+	Parameter ODTWRODEL bound to: 5'b01001 
+	Parameter ODTWRODUR bound to: 4'b0110 
+	Parameter ODTRDDEL bound to: 5'b01010 
+	Parameter ODTRDDUR bound to: 4'b0110 
+	Parameter ODTRDODEL bound to: 5'b01001 
+	Parameter ODTRDODUR bound to: 4'b0110 
+	Parameter ODTNOP bound to: 16'b0000000000000000 
+	Parameter ODTWR bound to: 16'b0000000000000001 
+	Parameter ODTRD bound to: 16'b0000000000000000 
+INFO: [Synth 8-6157] synthesizing module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/phy_ddr4_udimm_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'phy_ddr4_udimm' (1#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/phy_ddr4_udimm_stub.v:6]
+WARNING: [Synth 8-689] width (2) of port connection 'c0_ddr4_cke' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:285]
+WARNING: [Synth 8-689] width (2) of port connection 'c0_ddr4_odt' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:286]
+WARNING: [Synth 8-689] width (2) of port connection 'c0_ddr4_cs_n' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:287]
+WARNING: [Synth 8-689] width (16) of port connection 'mc_CS_n' does not match port width (8) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:315]
+WARNING: [Synth 8-689] width (16) of port connection 'mc_ODT' does not match port width (8) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:316]
+WARNING: [Synth 8-689] width (32) of port connection 'mcCasSlot' does not match port width (2) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:318]
+WARNING: [Synth 8-689] width (32) of port connection 'mcCasSlot2' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:321]
+WARNING: [Synth 8-689] width (32) of port connection 'mcRdCAS' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:322]
+WARNING: [Synth 8-689] width (32) of port connection 'mcWrCAS' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:323]
+INFO: [Synth 8-6157] synthesizing module 'softmc_pipeline' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/softmc_pipeline.v:3]
+INFO: [Synth 8-6157] synthesizing module 'fetch_stage' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/fetch_stage.v:3]
+	Parameter WAIT_RESOLVE_S bound to: 0 - type: integer 
+	Parameter FETCH_NEXT_LINE_S bound to: 1 - type: integer 
+	Parameter WAIT_BUFFER_SPACE_S bound to: 2 - type: integer 
+	Parameter WAIT_SLEEP_S bound to: 3 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'pre_decode' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/pre_decode.v:9]
+INFO: [Synth 8-6155] done synthesizing module 'pre_decode' (2#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/pre_decode.v:9]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/fetch_stage.v:85]
+INFO: [Synth 8-6155] done synthesizing module 'fetch_stage' (3#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/fetch_stage.v:3]
+INFO: [Synth 8-6157] synthesizing module 'decode_stage' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:4]
+	Parameter div bound to: 16 - type: integer 
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:71]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:71]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:71]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:71]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:136]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:160]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:180]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:203]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:296]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:296]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:296]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:296]
+INFO: [Synth 8-6155] done synthesizing module 'decode_stage' (4#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/decode_stage.v:4]
+INFO: [Synth 8-6157] synthesizing module 'execute_stage' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/execute_stage.v:3]
+INFO: [Synth 8-6157] synthesizing module 'ddr_pipeline' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/ddr_pipeline.v:4]
+INFO: [Synth 8-6155] done synthesizing module 'ddr_pipeline' (5#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/ddr_pipeline.v:4]
+INFO: [Synth 8-6157] synthesizing module 'exe_pipeline' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/exe_pipeline.v:4]
+INFO: [Synth 8-6155] done synthesizing module 'exe_pipeline' (6#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/exe_pipeline.v:4]
+INFO: [Synth 8-6157] synthesizing module 'scratchpad' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/scratchpad_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'scratchpad' (7#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/scratchpad_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'execute_stage' (8#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/execute_stage.v:3]
+INFO: [Synth 8-6157] synthesizing module 'register_file' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/register_file.v:7]
+
+Warning: Trying to implement RAM in registers. Block RAM or DRAM implementation is not possible for one or more of the following reasons :
+	1: RAM has multiple writes via different ports in same process. If RAM inferencing intended, write to one port per process. 
+	2: Unable to determine number of words or word size in RAM. 
+	3: No valid read/write found for RAM. 
+RAM dissolved into registers
+
+Warning: Trying to implement RAM in registers. Block RAM or DRAM implementation is not possible for one or more of the following reasons :
+	1: RAM has multiple writes via different ports in same process. If RAM inferencing intended, write to one port per process. 
+	2: Unable to determine number of words or word size in RAM. 
+	3: No valid read/write found for RAM. 
+RAM dissolved into registers
+
+Warning: Trying to implement RAM in registers. Block RAM or DRAM implementation is not possible for one or more of the following reasons :
+	1: RAM has multiple writes via different ports in same process. If RAM inferencing intended, write to one port per process. 
+	2: Unable to determine number of words or word size in RAM. 
+	3: No valid read/write found for RAM. 
+RAM dissolved into registers
+Reason is one or more of the following :
+	1: RAM has multiple writes via different ports in same process. If RAM inferencing intended, write to one port per process. 
+	2: Unable to determine number of words or word size in RAM. 
+	3: No valid read/write found for RAM. 
+RAM "reg_file_reg" dissolved into registers
+INFO: [Synth 8-6155] done synthesizing module 'register_file' (9#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/register_file.v:7]
+INFO: [Synth 8-6155] done synthesizing module 'softmc_pipeline' (10#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/softmc_pipeline.v:3]
+WARNING: [Synth 8-7071] port 'ddr_sre' of module 'softmc_pipeline' is unconnected for instance 'pipeline' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:413]
+WARNING: [Synth 8-7071] port 'ddr_srx' of module 'softmc_pipeline' is unconnected for instance 'pipeline' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:413]
+WARNING: [Synth 8-7023] instance 'pipeline' of module 'softmc_pipeline' has 29 connections declared, but only 27 given [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:413]
+INFO: [Synth 8-6157] synthesizing module 'frontend' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/frontend.v:8]
+	Parameter SIM_MEM bound to: false - type: string 
+	Parameter IDLE_S bound to: 2'b00 
+	Parameter INIT_MEM_S bound to: 2'b01 
+	Parameter EXECUTE_S bound to: 2'b10 
+INFO: [Synth 8-6157] synthesizing module 'instr_blk_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/instr_blk_mem_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'instr_blk_mem' (11#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/instr_blk_mem_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'maintenance_controller' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/maintenance_controller.v:3]
+	Parameter tCK bound to: 1500 - type: integer 
+	Parameter MAINT_PRESCALER_PERIOD bound to: 500000 - type: integer 
+	Parameter MAINT_PRESCALER_DIV bound to: 83 - type: integer 
+	Parameter MAINT_PRESCALER_WIDTH bound to: 7 - type: integer 
+	Parameter ONE bound to: 1 - type: integer 
+	Parameter tPRDI bound to: 1000000 - type: integer 
+	Parameter PERIODIC_RD_TIMER_DIV bound to: 2 - type: integer 
+	Parameter PERIODIC_RD_TIMER_WIDTH bound to: 2 - type: integer 
+	Parameter MAINT_PRESCALER_PERIOD_NS bound to: 500 - type: integer 
+	Parameter tZQI bound to: 128000000 - type: integer 
+	Parameter ZQ_TIMER_DIV bound to: 256000 - type: integer 
+	Parameter ZQ_TIMER_WIDTH bound to: 18 - type: integer 
+	Parameter tAREF bound to: 7800 - type: integer 
+	Parameter PERIODIC_REF_TIMER_DIV bound to: 15 - type: integer 
+	Parameter PERIODIC_REF_TIMER_WIDTH bound to: 4 - type: integer 
+WARNING: [Synth 8-567] referenced signal 'zq_cntrl.zq_tick' should be on the sensitivity list [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/maintenance_controller.v:200]
+INFO: [Synth 8-6157] synthesizing module 'pr_read_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/pr_read_mem_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'pr_read_mem' (12#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/pr_read_mem_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'zq_calib_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/zq_calib_mem_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'zq_calib_mem' (13#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/zq_calib_mem_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'pr_ref_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/pr_ref_mem_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'pr_ref_mem' (14#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/pr_ref_mem_stub.v:6]
+WARNING: [Synth 8-689] width (7) of port connection 'addra' does not match port width (6) of module 'pr_ref_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/maintenance_controller.v:71]
+INFO: [Synth 8-6155] done synthesizing module 'maintenance_controller' (15#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/maintenance_controller.v:3]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/frontend.v:161]
+INFO: [Synth 8-6155] done synthesizing module 'frontend' (16#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/frontend.v:8]
+INFO: [Synth 8-6157] synthesizing module 'ddr4_adapter' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/ddr4_adapter.v:11]
+	Parameter CKE_WIDTH bound to: 1 - type: integer 
+	Parameter RANK_WIDTH bound to: 1 - type: integer 
+	Parameter DQ_WIDTH bound to: 64 - type: integer 
+	Parameter DRAM_CMD_SLOTS bound to: 4 - type: integer 
+	Parameter DATA_BUF_ADDR_WIDTH bound to: 5 - type: integer 
+	Parameter DBUF_WIDTH bound to: 4 - type: integer 
+	Parameter DQ_BURST bound to: 8 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'ddr4_adapter' (17#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/ddr4_adapter.v:11]
+WARNING: [Synth 8-7071] port 'iss_dummy_read' of module 'ddr4_adapter' is unconnected for instance 'ddr4_adapter' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:499]
+WARNING: [Synth 8-7023] instance 'ddr4_adapter' of module 'ddr4_adapter' has 38 connections declared, but only 37 given [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:499]
+INFO: [Synth 8-6157] synthesizing module 'ddr4_mc_odt' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/ddr4_mc_odt.v:3]
+	Parameter ODTWR bound to: 16'b0000000000000001 
+	Parameter ODTWRDEL bound to: 5'b01001 
+	Parameter ODTWRDUR bound to: 4'b0110 
+	Parameter ODTWRODEL bound to: 5'b01001 
+	Parameter ODTWRODUR bound to: 4'b0110 
+	Parameter ODTRD bound to: 16'b0000000000000000 
+	Parameter ODTRDDEL bound to: 5'b01010 
+	Parameter ODTRDDUR bound to: 4'b0110 
+	Parameter ODTRDODEL bound to: 5'b01001 
+	Parameter ODTRDODUR bound to: 4'b0110 
+	Parameter ODTBITS bound to: 2 - type: integer 
+	Parameter ODTNOP bound to: 16'b0000000000000000 
+	Parameter TCQ bound to: 0.100000 - type: double 
+INFO: [Synth 8-6155] done synthesizing module 'ddr4_mc_odt' (18#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/ddr4_mc_odt.v:3]
+INFO: [Synth 8-6157] synthesizing module 'IBUFDS_GTE4' [/home/user/Xilinx/Vivado/2020.2/scripts/rt/data/unisim_comp.v:33175]
+	Parameter REFCLK_EN_TX_PATH bound to: 1'b0 
+	Parameter REFCLK_HROW_CK_SEL bound to: 2'b00 
+	Parameter REFCLK_ICNTL_RX bound to: 2'b00 
+INFO: [Synth 8-6155] done synthesizing module 'IBUFDS_GTE4' (19#1) [/home/user/Xilinx/Vivado/2020.2/scripts/rt/data/unisim_comp.v:33175]
+INFO: [Synth 8-6157] synthesizing module 'xdma' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/xdma_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'xdma' (20#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/xdma_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'axis_clock_converter' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/axis_clock_converter_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'axis_clock_converter' (21#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/axis_clock_converter_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'readback_engine' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/readback_engine.v:4]
+	Parameter READ_MODE bound to: 0 - type: integer 
+	Parameter DIFF_MODE bound to: 1 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'pop_count4' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/pop_count4.v:23]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/pop_count4.v:32]
+INFO: [Synth 8-6155] done synthesizing module 'pop_count4' (22#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/pop_count4.v:23]
+INFO: [Synth 8-6157] synthesizing module 'diff_shift_reg' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/diff_shift_reg.v:23]
+INFO: [Synth 8-6155] done synthesizing module 'diff_shift_reg' (23#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/diff_shift_reg.v:23]
+INFO: [Synth 8-6157] synthesizing module 'rdback_fifo' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/rdback_fifo_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'rdback_fifo' (24#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-39731-u200-station/realtime/rdback_fifo_stub.v:6]
+WARNING: [Synth 8-7071] port 'prog_empty' of module 'rdback_fifo' is unconnected for instance 'rbf' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/readback_engine.v:137]
+WARNING: [Synth 8-7071] port 'wr_rst_busy' of module 'rdback_fifo' is unconnected for instance 'rbf' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/readback_engine.v:137]
+WARNING: [Synth 8-7071] port 'rd_rst_busy' of module 'rdback_fifo' is unconnected for instance 'rbf' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/readback_engine.v:137]
+WARNING: [Synth 8-7023] instance 'rbf' of module 'rdback_fifo' has 13 connections declared, but only 10 given [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/readback_engine.v:137]
+INFO: [Synth 8-6155] done synthesizing module 'readback_engine' (25#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/readback_engine.v:4]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v-4.7 with 1st driver pin 'GND' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:4]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v-4.7 with 2nd driver pin 'VCC' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:4]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v-4.7 is connected to at least one constant driver which has been preserved, other driver is ignored [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:4]
+INFO: [Synth 8-6155] done synthesizing module 'softmc_top' (26#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:4]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 2868.098 ; gain = 299.594 ; free physical = 16783 ; free virtual = 33812
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 2881.973 ; gain = 313.469 ; free physical = 16790 ; free virtual = 33820
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 2881.973 ; gain = 313.469 ; free physical = 16790 ; free virtual = 33820
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00.06 ; elapsed = 00:00:00.07 . Memory (MB): peak = 2893.879 ; gain = 0.000 ; free physical = 16773 ; free virtual = 33802
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/pr_read_mem/pr_read_mem/pr_read_mem_in_context.xdc] for cell 'frontend/maint_ctrl/prm'
+Finished Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/pr_read_mem/pr_read_mem/pr_read_mem_in_context.xdc] for cell 'frontend/maint_ctrl/prm'
+Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/zq_calib_mem/zq_calib_mem/zq_calib_mem_in_context.xdc] for cell 'frontend/maint_ctrl/pzm'
+Finished Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/zq_calib_mem/zq_calib_mem/zq_calib_mem_in_context.xdc] for cell 'frontend/maint_ctrl/pzm'
+Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/instr_blk_mem/instr_blk_mem/instr_blk_mem_in_context.xdc] for cell 'frontend/imem'
+Finished Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/instr_blk_mem/instr_blk_mem/instr_blk_mem_in_context.xdc] for cell 'frontend/imem'
+Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/pr_ref_mem/pr_ref_mem/pr_ref_mem_in_context.xdc] for cell 'frontend/maint_ctrl/prefm'
+Finished Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/pr_ref_mem/pr_ref_mem/pr_ref_mem_in_context.xdc] for cell 'frontend/maint_ctrl/prefm'
+Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/scratchpad/scratchpad/scratchpad_in_context.xdc] for cell 'pipeline/es/data_mem'
+Finished Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/scratchpad/scratchpad/scratchpad_in_context.xdc] for cell 'pipeline/es/data_mem'
+Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/axis_clock_converter_1/axis_clock_converter/axis_clock_converter_in_context.xdc] for cell 'axis_clk_conv_i0'
+Finished Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/axis_clock_converter_1/axis_clock_converter/axis_clock_converter_in_context.xdc] for cell 'axis_clk_conv_i0'
+Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/axis_clock_converter_1/axis_clock_converter/axis_clock_converter_in_context.xdc] for cell 'axis_clk_conv_i1'
+Finished Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/axis_clock_converter_1/axis_clock_converter/axis_clock_converter_in_context.xdc] for cell 'axis_clk_conv_i1'
+Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/rdback_fifo/rdback_fifo/rdback_fifo_in_context.xdc] for cell 'rbe/rbf'
+Finished Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/rdback_fifo/rdback_fifo/rdback_fifo_in_context.xdc] for cell 'rbe/rbf'
+Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc] for cell 'phy_ddr4_i'
+Finished Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc] for cell 'phy_ddr4_i'
+Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc] for cell 'xdma_i'
+Finished Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc] for cell 'xdma_i'
+Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/constraints/U200_C1_UDIMM.xdc]
+WARNING: [Constraints 18-619] A clock with name 'c0_sys_clk_p' already exists, overwriting the previous clock with the same name. [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/constraints/U200_C1_UDIMM.xdc:2]
+Finished Parsing XDC File [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/constraints/U200_C1_UDIMM.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/constraints/U200_C1_UDIMM.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/softmc_top_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/softmc_top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 3098.316 ; gain = 0.000 ; free physical = 16624 ; free virtual = 33655
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 3098.316 ; gain = 0.000 ; free physical = 16624 ; free virtual = 33655
+WARNING: [Timing 38-316] Clock period '100.000' specified during out-of-context synthesis of instance 'axis_clk_conv_i0' at clock pin 'm_axis_aclk' is different from the actual clock period '4.000', this can lead to different synthesis results.
+WARNING: [Timing 38-316] Clock period '100.000' specified during out-of-context synthesis of instance 'axis_clk_conv_i1' at clock pin 'm_axis_aclk' is different from the actual clock period '5.999', this can lead to different synthesis results.
+WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'frontend/imem' at clock pin 'clka' is different from the actual clock period '5.999', this can lead to different synthesis results.
+WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'frontend/maint_ctrl/prefm' at clock pin 'clka' is different from the actual clock period '5.999', this can lead to different synthesis results.
+WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'frontend/maint_ctrl/prm' at clock pin 'clka' is different from the actual clock period '5.999', this can lead to different synthesis results.
+WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'frontend/maint_ctrl/pzm' at clock pin 'clka' is different from the actual clock period '5.999', this can lead to different synthesis results.
+WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'pipeline/es/data_mem' at clock pin 'clka' is different from the actual clock period '5.999', this can lead to different synthesis results.
+WARNING: [Timing 38-316] Clock period '10.000' specified during out-of-context synthesis of instance 'rbe/rbf' at clock pin 'clk' is different from the actual clock period '5.999', this can lead to different synthesis results.
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 3101.285 ; gain = 532.781 ; free physical = 16760 ; free virtual = 33791
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xcu200-fsgd2104-2-e
+INFO: [Synth 8-6742] Reading net delay rules and data
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 3101.285 ; gain = 532.781 ; free physical = 16760 ; free virtual = 33791
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_act_n. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 4).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_act_n. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 5).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 6).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 7).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[10]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 8).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[10]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 9).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[11]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 10).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[11]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 11).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[12]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 12).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[12]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 13).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[13]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 14).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[13]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 15).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[14]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 16).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[14]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 17).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[15]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 18).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[15]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 19).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[16]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 20).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[16]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 21).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 22).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 23).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 24).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 25).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 26).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 27).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 28).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 29).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 30).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 31).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 32).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 33).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 34).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 35).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[8]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 36).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[8]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 37).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_adr[9]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 38).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_adr[9]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 39).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_ba[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 40).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_ba[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 41).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_ba[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 42).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_ba[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 43).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_bg[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 44).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_bg[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 45).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_bg[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 46).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_bg[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 47).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_ck_c[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 48).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_ck_c[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 49).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_ck_t[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 50).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_ck_t[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 51).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_cke[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 52).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_cke[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 53).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_cs_n[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 54).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_cs_n[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 55).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 56).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 57).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 58).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 59).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 60).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 61).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 62).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 63).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 64).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 65).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 66).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 67).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 68).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 69).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 70).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dm_dbi_n[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 71).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 72).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 73).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[10]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 74).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[10]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 75).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[11]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 76).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[11]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 77).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[12]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 78).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[12]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 79).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[13]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 80).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[13]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 81).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[14]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 82).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[14]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 83).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[15]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 84).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[15]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 85).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[16]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 86).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[16]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 87).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[17]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 88).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[17]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 89).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[18]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 90).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[18]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 91).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[19]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 92).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[19]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 93).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 94).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 95).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[20]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 96).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[20]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 97).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[21]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 98).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[21]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 99).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[22]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 100).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[22]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 101).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[23]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 102).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[23]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 103).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[24]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 104).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[24]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 105).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[25]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 106).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[25]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 107).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[26]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 108).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[26]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 109).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[27]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 110).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[27]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 111).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[28]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 112).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[28]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 113).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[29]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 114).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[29]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 115).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 116).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 117).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[30]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 118).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[30]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 119).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[31]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 120).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[31]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 121).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[32]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 122).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[32]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 123).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[33]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 124).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[33]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 125).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[34]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 126).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[34]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 127).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[35]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 128).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[35]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 129).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[36]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 130).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[36]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 131).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[37]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 132).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[37]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 133).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[38]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 134).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[38]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 135).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[39]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 136).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[39]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 137).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 138).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 139).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[40]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 140).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[40]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 141).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[41]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 142).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[41]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 143).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[42]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 144).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[42]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 145).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[43]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 146).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[43]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 147).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[44]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 148).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[44]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 149).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[45]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 150).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[45]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 151).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[46]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 152).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[46]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 153).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[47]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 154).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[47]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 155).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[48]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 156).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[48]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 157).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[49]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 158).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[49]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 159).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 160).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 161).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[50]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 162).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[50]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 163).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[51]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 164).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[51]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 165).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[52]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 166).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[52]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 167).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[53]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 168).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[53]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 169).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[54]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 170).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[54]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 171).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[55]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 172).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[55]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 173).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[56]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 174).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[56]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 175).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[57]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 176).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[57]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 177).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[58]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 178).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[58]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 179).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[59]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 180).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[59]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 181).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 182).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 183).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[60]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 184).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[60]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 185).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[61]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 186).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[61]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 187).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[62]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 188).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[62]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 189).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[63]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 190).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[63]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 191).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 192).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 193).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 194).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 195).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[8]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 196).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[8]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 197).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dq[9]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 198).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dq[9]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 199).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 200).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 201).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 202).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 203).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 204).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 205).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 206).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 207).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 208).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 209).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 210).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 211).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 212).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 213).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 214).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_c[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 215).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 216).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 217).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 218).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 219).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 220).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 221).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 222).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 223).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 224).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 225).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 226).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 227).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 228).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 229).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 230).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_dqs_t[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 231).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_odt[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 232).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_odt[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 233).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_ddr4_reset_n. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 234).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_ddr4_reset_n. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 235).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_sys_clk_n. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 236).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_sys_clk_n. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 237).
+Applied set_property IO_BUFFER_TYPE = NONE for c0_sys_clk_p. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 238).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for c0_sys_clk_p. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm/phy_ddr4_udimm_in_context.xdc, line 239).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxn[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 2).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxn[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 3).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxn[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 4).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxn[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 5).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxn[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 6).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxn[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 7).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxn[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 8).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxn[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 9).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxn[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 10).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxn[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 11).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxn[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 12).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxn[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 13).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxn[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 14).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxn[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 15).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxn[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 16).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxn[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 17).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxp[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 18).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxp[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 19).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxp[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 20).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxp[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 21).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxp[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 22).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxp[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 23).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxp[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 24).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxp[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 25).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxp[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 26).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxp[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 27).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxp[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 28).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxp[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 29).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxp[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 30).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxp[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 31).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_rxp[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 32).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_rxp[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 33).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txn[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 34).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txn[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 35).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txn[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 36).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txn[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 37).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txn[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 38).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txn[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 39).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txn[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 40).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txn[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 41).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txn[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 42).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txn[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 43).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txn[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 44).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txn[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 45).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txn[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 46).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txn[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 47).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txn[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 48).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txn[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 49).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txp[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 50).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txp[0]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 51).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txp[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 52).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txp[1]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 53).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txp[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 54).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txp[2]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 55).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txp[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 56).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txp[3]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 57).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txp[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 58).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txp[4]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 59).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txp[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 60).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txp[5]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 61).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txp[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 62).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txp[6]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 63).
+Applied set_property IO_BUFFER_TYPE = NONE for pci_exp_txp[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 64).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for pci_exp_txp[7]. (constraint file  /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/xdma/xdma/xdma_in_context.xdc, line 65).
+Applied set_property KEEP_HIERARCHY = SOFT for frontend/maint_ctrl/prm. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for frontend/maint_ctrl/pzm. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for frontend/imem. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for frontend/maint_ctrl/prefm. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for pipeline/es/data_mem. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for axis_clk_conv_i0. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for axis_clk_conv_i1. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for rbe/rbf. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for phy_ddr4_i. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for xdma_i. (constraint file  auto generated constraint).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 3101.285 ; gain = 532.781 ; free physical = 16760 ; free virtual = 33790
+---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'state_r_reg' in module 'fetch_stage'
+INFO: [Synth 8-802] inferred FSM for state register 'state_r_reg' in module 'frontend'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+       FETCH_NEXT_LINE_S |                               00 |                              001
+          WAIT_RESOLVE_S |                               01 |                              000
+            WAIT_SLEEP_S |                               10 |                              011
+     WAIT_BUFFER_SPACE_S |                               11 |                              010
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_r_reg' using encoding 'sequential' in module 'fetch_stage'
+WARNING: [Synth 8-327] inferring latch for variable 's2_mem_wdata_reg' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/exe_pipeline.v:76]
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  IDLE_S |                              010 |                               00
+              INIT_MEM_S |                              100 |                               01
+               EXECUTE_S |                              001 |                               10
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_r_reg' using encoding 'one-hot' in module 'frontend'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 3101.285 ; gain = 532.781 ; free physical = 16747 ; free virtual = 33779
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   32 Bit       Adders := 1     
+	   3 Input   32 Bit       Adders := 1     
+	   2 Input   20 Bit       Adders := 1     
+	   2 Input   18 Bit       Adders := 4     
+	   2 Input   16 Bit       Adders := 3     
+	   3 Input   12 Bit       Adders := 2     
+	   2 Input   12 Bit       Adders := 1     
+	   2 Input   11 Bit       Adders := 4     
+	   2 Input   10 Bit       Adders := 2     
+	 128 Input   10 Bit       Adders := 1     
+	   2 Input    7 Bit       Adders := 1     
+	   2 Input    5 Bit       Adders := 6     
+	   2 Input    4 Bit       Adders := 1     
+	   2 Input    2 Bit       Adders := 1     
++---XORs : 
+	   2 Input    512 Bit         XORs := 1     
+	   2 Input     32 Bit         XORs := 1     
++---Registers : 
+	             1024 Bit    Registers := 1     
+	              512 Bit    Registers := 4     
+	              136 Bit    Registers := 1     
+	               68 Bit    Registers := 1     
+	               64 Bit    Registers := 1     
+	               62 Bit    Registers := 2     
+	               40 Bit    Registers := 1     
+	               32 Bit    Registers := 23    
+	               27 Bit    Registers := 8     
+	               24 Bit    Registers := 2     
+	               20 Bit    Registers := 1     
+	               16 Bit    Registers := 10    
+	               12 Bit    Registers := 1     
+	               10 Bit    Registers := 2     
+	                8 Bit    Registers := 3     
+	                7 Bit    Registers := 1     
+	                5 Bit    Registers := 2     
+	                4 Bit    Registers := 17    
+	                2 Bit    Registers := 2     
+	                1 Bit    Registers := 38    
++---Muxes : 
+	   4 Input 1024 Bit        Muxes := 1     
+	   2 Input 1024 Bit        Muxes := 7     
+	   2 Input  512 Bit        Muxes := 10    
+	   2 Input  256 Bit        Muxes := 1     
+	   2 Input  136 Bit        Muxes := 5     
+	   2 Input   64 Bit        Muxes := 4     
+	   4 Input   62 Bit        Muxes := 2     
+	   2 Input   62 Bit        Muxes := 8     
+	   4 Input   32 Bit        Muxes := 1     
+	   2 Input   32 Bit        Muxes := 174   
+	  19 Input   32 Bit        Muxes := 8     
+	   3 Input   32 Bit        Muxes := 1     
+	   2 Input   30 Bit        Muxes := 1     
+	   3 Input   28 Bit        Muxes := 1     
+	   6 Input   27 Bit        Muxes := 1     
+	   2 Input   27 Bit        Muxes := 10    
+	   4 Input   27 Bit        Muxes := 1     
+	   2 Input   26 Bit        Muxes := 1     
+	   2 Input   16 Bit        Muxes := 15    
+	   4 Input   16 Bit        Muxes := 2     
+	   7 Input   16 Bit        Muxes := 1     
+	   2 Input   12 Bit        Muxes := 2     
+	   2 Input    8 Bit        Muxes := 12    
+	   3 Input    8 Bit        Muxes := 1     
+	  19 Input    5 Bit        Muxes := 8     
+	   3 Input    5 Bit        Muxes := 1     
+	   2 Input    5 Bit        Muxes := 1     
+	   2 Input    4 Bit        Muxes := 12    
+	   4 Input    4 Bit        Muxes := 1     
+	   3 Input    3 Bit        Muxes := 1     
+	   2 Input    3 Bit        Muxes := 2     
+	  16 Input    3 Bit        Muxes := 128   
+	   4 Input    2 Bit        Muxes := 2     
+	   2 Input    2 Bit        Muxes := 67    
+	   3 Input    2 Bit        Muxes := 1     
+	   6 Input    2 Bit        Muxes := 7     
+	   2 Input    1 Bit        Muxes := 96    
+	   4 Input    1 Bit        Muxes := 6     
+	   7 Input    1 Bit        Muxes := 24    
+	   3 Input    1 Bit        Muxes := 7     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 6840 (col length:120)
+BRAMs: 4320 (col length: RAMB18 360 RAMB36 180)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:37 ; elapsed = 00:00:38 . Memory (MB): peak = 3230.270 ; gain = 661.766 ; free physical = 16596 ; free virtual = 33657
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-565] redefining clock 'c0_sys_clk_p'
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:44 ; elapsed = 00:00:49 . Memory (MB): peak = 3321.582 ; gain = 753.078 ; free physical = 16166 ; free virtual = 33230
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:44 ; elapsed = 00:00:49 . Memory (MB): peak = 3330.582 ; gain = 762.078 ; free physical = 16155 ; free virtual = 33220
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:47 ; elapsed = 00:00:52 . Memory (MB): peak = 3536.645 ; gain = 968.141 ; free physical = 16139 ; free virtual = 33202
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:48 ; elapsed = 00:00:53 . Memory (MB): peak = 3536.645 ; gain = 968.141 ; free physical = 16140 ; free virtual = 33203
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:48 ; elapsed = 00:00:53 . Memory (MB): peak = 3536.645 ; gain = 968.141 ; free physical = 16140 ; free virtual = 33203
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:49 ; elapsed = 00:00:54 . Memory (MB): peak = 3536.645 ; gain = 968.141 ; free physical = 16140 ; free virtual = 33203
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:49 ; elapsed = 00:00:54 . Memory (MB): peak = 3536.645 ; gain = 968.141 ; free physical = 16140 ; free virtual = 33203
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:49 ; elapsed = 00:00:54 . Memory (MB): peak = 3536.645 ; gain = 968.141 ; free physical = 16138 ; free virtual = 33201
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:49 ; elapsed = 00:00:54 . Memory (MB): peak = 3536.645 ; gain = 968.141 ; free physical = 16138 ; free virtual = 33201
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++------+---------------------+----------+
+|      |BlackBox name        |Instances |
++------+---------------------+----------+
+|1     |phy_ddr4_udimm       |         1|
+|2     |xdma                 |         1|
+|3     |axis_clock_converter |         2|
+|4     |instr_blk_mem        |         1|
+|5     |pr_read_mem          |         1|
+|6     |zq_calib_mem         |         1|
+|7     |pr_ref_mem           |         1|
+|8     |scratchpad           |         1|
+|9     |rdback_fifo          |         1|
++------+---------------------+----------+
+
+Report Cell Usage: 
++------+----------------------+------+
+|      |Cell                  |Count |
++------+----------------------+------+
+|1     |axis_clock_converter  |     1|
+|2     |axis_clock_converter_ |     1|
+|3     |instr_blk_mem         |     1|
+|4     |phy_ddr4_udimm        |     1|
+|5     |pr_read_mem           |     1|
+|6     |pr_ref_mem            |     1|
+|7     |rdback_fifo           |     1|
+|8     |scratchpad            |     1|
+|9     |xdma                  |     1|
+|10    |zq_calib_mem          |     1|
+|11    |BUFG                  |     1|
+|12    |CARRY8                |    76|
+|13    |IBUFDS_GTE4           |     1|
+|14    |LUT1                  |    71|
+|15    |LUT2                  |   919|
+|16    |LUT3                  |   948|
+|17    |LUT4                  |   939|
+|18    |LUT5                  |  1605|
+|19    |LUT6                  |  3752|
+|20    |MUXF7                 |   432|
+|21    |MUXF8                 |   198|
+|22    |FDRE                  |  5029|
+|23    |FDSE                  |   104|
+|24    |LD                    |    32|
+|25    |IBUF                  |     2|
+|26    |OBUF                  |     1|
++------+----------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:49 ; elapsed = 00:00:54 . Memory (MB): peak = 3536.645 ; gain = 968.141 ; free physical = 16138 ; free virtual = 33201
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 2 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:46 ; elapsed = 00:00:51 . Memory (MB): peak = 3536.645 ; gain = 748.828 ; free physical = 16163 ; free virtual = 33227
+Synthesis Optimization Complete : Time (s): cpu = 00:00:49 ; elapsed = 00:00:54 . Memory (MB): peak = 3536.652 ; gain = 968.141 ; free physical = 16163 ; free virtual = 33227
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00.05 ; elapsed = 00:00:00.06 . Memory (MB): peak = 3536.652 ; gain = 0.000 ; free physical = 16247 ; free virtual = 33310
+INFO: [Netlist 29-17] Analyzing 741 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-141] Inserted 3 OBUFs to IO ports without IO buffers.
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 3582.973 ; gain = 0.000 ; free physical = 16160 ; free virtual = 33224
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 35 instances were transformed.
+  BUFG => BUFGCE: 1 instance 
+  IBUF => IBUF (IBUFCTRL, INBUF): 2 instances
+  LD => LDCE: 32 instances
+
+INFO: [Common 17-83] Releasing license: Synthesis
+88 Infos, 35 Warnings, 3 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:57 ; elapsed = 00:01:02 . Memory (MB): peak = 3582.973 ; gain = 1223.469 ; free physical = 16303 ; free virtual = 33368
+INFO: [runtcl-6] Synthesis results are not added to the cache due to CRITICAL_WARNING
+INFO: [Common 17-1381] The checkpoint '/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/softmc_top.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file softmc_top_utilization_synth.rpt -pb softmc_top_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Mon Mar 17 11:55:59 2025...

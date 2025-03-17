@@ -45,10 +45,11 @@ for _, df_row in samples_df.iterrows():
 # Get all data rows #
 #####################
 
+all_data_rows = []
 computation_rows = [152, 153, 408, 409, 664, 665] # From previous MAJ test
 # routing_rows = [24, 25, 536] # From inspection - might have better candidates / can enlarge this
 routing_groups = [[24, 25, 536], [88, 89, 600], [136, 137, 648]]
-routing_rows = [24, 25, 536, 88, 89, 600, 136, 137, 648]
+# routing_rows = [24, 25, 536, 88, 89, 600, 136, 137, 648]
 # (24 <-> 152, 408) (25 <-> 153, 409) (536<->664,665) (24<-> 25, 536)
 # (88 <-> 152) (89 <-> 153) (600<->664) (88<-> 89, 600)
 # (136 <-> 152) (137 <-> 153) (648<->664) (136<-> 137, 648)
@@ -56,32 +57,37 @@ routing_rows = [24, 25, 536, 88, 89, 600, 136, 137, 648]
 # for computation_row in computation_rows:
 #     routing_rows = routing_rows | set(G.neighbors(computation_row))
 # routing_rows = routing_rows - set(computation_rows)
-print ("Routing rows:")
-print(routing_groups)
+for routing_rows in routing_groups:
+    print ("====================================================================================================")
+    print ("Routing rows:")
+    print(routing_rows)
 
-routing_rows_lvl_2 = set()
-for routing_row in routing_rows:
-    routing_rows_lvl_2 = routing_rows_lvl_2 | set(G.neighbors(routing_row))
-routing_rows_lvl_2 = routing_rows_lvl_2 - set(computation_rows) - set(routing_rows)
+    routing_rows_lvl_2 = set()
+    for routing_row in routing_rows:
+        routing_rows_lvl_2 = routing_rows_lvl_2 | set(G.neighbors(routing_row))
+    routing_rows_lvl_2 = routing_rows_lvl_2 - set(computation_rows) - set(routing_rows)
 
-# data rows = unique neighbors of routing rows that aren't computation rows:
-data_rows = set()
+    # data rows = unique neighbors of routing rows that aren't computation rows:
+    data_rows = set()
 
-# Union of all neighbors of routing rows
-# for routing_row in routing_rows:
-    # data_rows = data_rows | set(G.neighbors(routing_row))
+    # Union of all neighbors of routing rows
+    # for routing_row in routing_rows:
+        # data_rows = data_rows | set(G.neighbors(routing_row))
 
-for routing_row in routing_rows_lvl_2:
-    data_rows = data_rows | set(G.neighbors(routing_row))
+    for routing_row in routing_rows_lvl_2:
+        data_rows = data_rows | set(G.neighbors(routing_row))
 
-# Leave out computation rows, routing rows
-# data_rows = data_rows - set(computation_rows) - set(routing_rows)
-data_rows = data_rows - set(computation_rows) - set(routing_rows) - set(routing_rows_lvl_2)
+    # Leave out computation rows, routing rows
+    # data_rows = data_rows - set(computation_rows) - set(routing_rows)
+    data_rows = data_rows - set(computation_rows) - set(routing_rows) - set(routing_rows_lvl_2)
 
-print("Eligible data rows:")
-print(data_rows)
-print(f"Amount of data rows: {len(data_rows)}")
+    print("Eligible data rows:")
+    print(data_rows)
+    all_data_rows.append(data_rows)
+    print(f"Amount of data rows: {len(data_rows)}")
 
+print("All data rows:")
+print(all_data_rows)
 ######################
 # Check timing param #
 ######################

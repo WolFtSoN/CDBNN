@@ -70,6 +70,11 @@ public:
    */
   void parse_from_file(std::string fname);
 
+  /**
+   * Get a chunk of instructions from the program
+   */
+  Inst* get_inst_chunk(size_t start, size_t end);
+
   Inst* get_inst_array();
 
   /**
@@ -91,7 +96,7 @@ public:
    * @param fname name of the file
    */
   void save_bin(const std::string &fname);
-  void save_coe_here(const std::string &prj_dir);
+  void save_coe_here();
   void save_coe(const std::string &prj_dir);
   void debug(const std::string &prj_dir, bool first);  
   void debug(const std::string &prj_dir, const std::string &filename);

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="phy_ddr4_udimm_synth_1" LaunchPart="xcu200-fsgd2104-2-e" LaunchTime="1741688874">
+  <File Type="REPORTS-TCL" Name="phy_ddr4_udimm_reports.tcl"/>
+  <File Type="PA-TCL" Name="phy_ddr4_udimm.tcl"/>
+  <File Type="RDS-DCP" Name="phy_ddr4_udimm.dcp"/>
+  <File Type="RDS-RDS" Name="phy_ddr4_udimm.vds"/>
+  <File Type="RDS-UTIL" Name="phy_ddr4_udimm_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="phy_ddr4_udimm_utilization_synth.pb"/>
+  <FileSet Name="sources" Type="BlockSrcs" RelSrcDir="$PSRCDIR/phy_ddr4_udimm">
+    <File Path="$PSRCDIR/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm.xci">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="TopModule" Val="phy_ddr4_udimm"/>
+      <Option Name="UseBlackboxStub" Val="1"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="BlockSrcs" RelSrcDir="$PSRCDIR/phy_ddr4_udimm">
+    <File Path="$PSRCDIR/sources_1/ip/phy_ddr4_udimm/phy_ddr4_udimm.xci">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="TopModule" Val="phy_ddr4_udimm"/>
+      <Option Name="UseBlackboxStub" Val="1"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="utils" Type="Utils" RelSrcDir="$PSRCDIR/utils_1">
+    <Filter Type="Utils"/>
+    <Config>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+    <Step Id="synth_design"/>
+  </Strategy>
+</GenRun>

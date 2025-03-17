@@ -116,12 +116,14 @@ Program wrRow_immediate(int bank_reg, uint32_t row_immd, uint32_t wr_pattern)
 Program wrRow_immediate_label(int bank_reg, uint32_t row_immd, uint32_t wr_pattern,int label)
 {
   Program p;
-  p.add_inst(SMC_LI(wr_pattern, PATTERN_REG)); // s
+  
   for (int i = 0; i < 16; i++)
-    // We suspect this replicates PATTEN_REG contetns 16 times ot create 512b word
+  {
+    // We suspect this replicates PATTEN_REG contetns 16 times it create 512b word
     // we need to understant what is LDWD
+    p.add_inst(SMC_LI(wr_pattern, PATTERN_REG)); // s
     p.add_inst(SMC_LDWD(PATTERN_REG, i));
-
+  }
   p.add_inst(SMC_LI(row_immd, RAR));
   p.add_inst(SMC_LI(0, CAR));
   p.add_inst(SMC_LI(0, LOOP_COLS));

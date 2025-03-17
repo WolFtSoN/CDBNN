@@ -182,6 +182,21 @@ void Program::add_below(const Program &p)
   this -> spc += p.spc;
 }
 
+Inst* Program::get_inst_chunk(size_t start, size_t end)
+{
+  if (start == 0) {
+    // All of these run only once, at the beggining of "getting" a program
+    linear_analysis();
+    insert_generated();
+    preprocess_branches();
+  }
+  Inst* arr = (Inst*) malloc((end-start) * 8);
+  int ind = 0;
+  for (size_t i = start ; i < end ; i++)
+    arr[ind++] = program[i];
+  return arr;
+}
+
 Inst* Program::get_inst_array()
 {
   linear_analysis();
@@ -393,10 +408,12 @@ void Program::save_bin(const std::string &fname)
   metaFile.close();
 }
 
-void Program::save_coe_here(const std::string &prj_dir)
+void Program::save_coe_here()
 {
   std::ofstream coeFile ("program.coe", std::ios::out | std::ios::binary);
+  // std::cout << "------------DEBUG 4------------" << std::endl;
   uint64_t* insts = (uint64_t*) this -> get_inst_array();
+  // std::cout << "------------DEBUG 5------------" << std::endl;
   coeFile << "memory_initialization_radix=2;\n";
   coeFile << "memory_initialization_vector=\n";
   for(uint i = 0 ; i < program.size() ; i++){

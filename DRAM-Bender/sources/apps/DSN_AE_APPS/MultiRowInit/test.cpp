@@ -74,6 +74,11 @@ Program test_prog(uint32_t num_iter, uint32_t bank_id,
   int random = rand();
   program.add_inst(all_nops());
   program.add_inst(all_nops());
+  for(int i = 0; i < 2000; i++)
+  {
+    program.add_inst(all_nops());
+  }
+  program.add_inst(all_nops());
   program.add_below(PRE(BAR, 0, 0));
   program.add_inst(SMC_LI(0, LOOP_ITER));
   program.add_label("ITER_LOOP");

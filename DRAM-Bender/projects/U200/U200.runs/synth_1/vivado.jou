@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Mon Mar 17 11:54:51 2025
+# Process ID: 39731
+# Current directory: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1
+# Command line: vivado -log softmc_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source softmc_top.tcl
+# Log file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/softmc_top.vds
+# Journal file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/vivado.jou
+#-----------------------------------------------------------
+source softmc_top.tcl -notrace

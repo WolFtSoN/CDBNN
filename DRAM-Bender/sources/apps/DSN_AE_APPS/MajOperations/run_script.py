@@ -44,7 +44,7 @@ stability_iter_count = 1000
 n_frac_times = 3
 t_frac = 0
 
-for rows in [8,12,16]: # [4,8,16,32]
+for rows in [12,16,24,32]: # [4,8,16,32]
     # if temperature == '50':
     #     t_12_lst = [0,1,2,3]
     #     t_23_lst = [0,1,2,3]
@@ -79,9 +79,9 @@ for rows in [8,12,16]: # [4,8,16,32]
             #send_cmd = f'cp {sample_csv} {main_dir_path}/experimental_data/{module}/'  
             #sp = subprocess.run([send_cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
             lst = pd.DataFrame(columns=['t_12','t_23','n_frac_times','t_frac','bank_id','r_first','r_second','s_id','majX','avg_coverage','full_coverage_cells','avg_stability','full_stable_cells'])
-            csv_file = f'maj_coverage_{rows}_{t_12}_{t_23}.csv'
+            csv_file = f'maj9_strong_coverage_{rows}_{t_12}_{t_23}.csv'
             lst.to_csv(csv_file)
-            for majX in [3]: # Instead of checking for [3,5,7,9] we only need to check for 3
+            for majX in [9]: # Instead of checking for [3,5,7,9] we only need to check for 3
                 if (majX > rows):
                     break
                 r_frac_idx = [i for i in range(rows%majX)] # The index of the frac row
@@ -130,3 +130,14 @@ for rows in [8,12,16]: # [4,8,16,32]
             
     
 
+# maj9_strong_coverage_12_1_0.csv | Rows open: 12 | Tras: 3.0 ns, Trp: 1.5 ns | Average-Stab: 70.4965% | Max-Stab: 77.2020% | Argmax-Stab: 15 | Average-cov: 72.6917% | Max-Cov: 78.5351 | Argmax-Cov: 30
+# | R1: 436, R2: 744 | Rows in group: [232, 236, 240, 244, 424, 428, 432, 436, 744, 748, 752, 756]
+
+# maj9_strong_coverage_16_2_0.csv | Rows open: 16 | Tras: 4.5 ns, Trp: 1.5 ns | Average-Stab: 59.9909% | Max-Stab: 69.5867% | Argmax-Stab: 27 | Average-cov: 58.3895% | Max-Cov: 69.8810 | Argmax-Cov: 27
+# | R1: 629, R2: 704 | Rows in group: [576, 577, 580, 581, 624, 625, 628, 629, 704, 705, 708, 709, 752, 753, 756, 757] 
+
+# maj9_strong_coverage_24_2_0.csv | Rows open: 24 | Tras: 4.5 ns, Trp: 1.5 ns | Average-Stab: 73.7798% | Max-Stab: 81.9397% | Argmax-Stab: 77 | Average-cov: 74.5424% | Max-Cov: 81.9801 | Argmax-Cov: 77
+# | R1: 372, R2: 779 | Rows in group: [266, 267, 268, 269, 306, 307, 308, 309, 330, 331, 332, 333, 370, 371, 372, 373, 778, 779, 780, 781, 818, 819, 820, 821] 
+
+# maj9_strong_coverage_32_2_0.csv | Rows open: 32 | Tras: 4.5 ns, Trp: 1.5 ns | Average-Stab: 76.7083% | Max-Stab: 83.6645% | Argmax-Stab: 69 | Average-cov: 77.8610% | Max-Cov: 84.3199 | Argmax-Cov: 54
+# | R1: 234, R2: 805 | Rows in group: [226, 227, 228, 229, 234, 235, 236, 237, 290, 291, 292, 293, 298, 299, 300, 301, 738, 739, 740, 741, 746, 747, 748, 749, 802, 803, 804, 805, 810, 811, 812, 813]

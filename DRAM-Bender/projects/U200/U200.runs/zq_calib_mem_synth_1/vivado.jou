@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Tue Mar 11 12:27:58 2025
+# Process ID: 59524
+# Current directory: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/zq_calib_mem_synth_1
+# Command line: vivado -log zq_calib_mem.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source zq_calib_mem.tcl
+# Log file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/zq_calib_mem_synth_1/zq_calib_mem.vds
+# Journal file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/zq_calib_mem_synth_1/vivado.jou
+#-----------------------------------------------------------
+source zq_calib_mem.tcl -notrace

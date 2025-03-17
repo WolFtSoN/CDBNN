@@ -36,12 +36,14 @@ voltage=2.5 # Instead of: voltage=2.500
 
 
 
-out_file = apps_path + exe_path + 'open_rows_0_6.txt'
+# out_file = apps_path + exe_path + 'open_rows_0_6.txt'
+out_file = apps_path + exe_path + 'open_rows_t1_10_t2_0_10.txt'
 if add_voltage == '1':
     
     csv_file = apps_path + exe_path + f'open_rows_{voltage}.csv'
 else:
-    csv_file = apps_path + exe_path + f'open_rows_0_6.csv' # Instead of csv_file = apps_path + exe_path + f'open_rows_{temperature}.csv'
+    # csv_file = apps_path + exe_path + f'open_rows_0_6.csv' # Instead of csv_file = apps_path + exe_path + f'open_rows_{temperature}.csv'
+    csv_file = apps_path + exe_path + f'open_rows_t1_10_t2_0_10.csv' # Instead of csv_file = apps_path + exe_path + f'open_rows_{temperature}.csv'
 
     
 os.system(f'rm {out_file}')
@@ -80,8 +82,8 @@ else:
     
 
 os.system(f'{apps_path}../ResetBoard/full_reset.sh')
-t_12_lst = [0,1,2,3,4,5,6]  # instead of t_12_lst = [0,1,2,3] 
-t_23_lst = [0,1,2,3,4,5,6]  # instead of t_23_lst = [0,1,2,3] 
+t_12_lst = [10]  # instead of t_12_lst = [0,1,2,3] 
+t_23_lst = [i for i in range(11)]  # instead of t_23_lst = [0,1,2,3] 
 for s_id,subarray in enumerate(subarray_list):
     first_subarray_addr = subarray[0]
     last_subarray_addr = subarray[-1]

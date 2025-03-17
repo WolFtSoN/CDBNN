@@ -8,7 +8,7 @@ module readback_engine(
   input     rst,
   
   // other control signals
-  input         flush,
+  input         flush,             // Clears internal buffers when asserted.
   input         read_seq_incoming, // next few instructions will read from DRAM
   input [11:0]  incoming_reads,    // how many reads next few instructions will issue
   output[11:0]  buffer_space,      // remaining buffer size
@@ -16,7 +16,7 @@ module readback_engine(
   
   // DRAM <-> engine if
   input [511:0] rd_data,
-  input         rd_valid,
+  input         rd_valid,   // indicates that DRAM data is available
   
   input         per_rd_init,
   input         per_zq_init,
@@ -35,8 +35,8 @@ module readback_engine(
   );
   
   
-  localparam READ_MODE = 0;
-  localparam DIFF_MODE = 1;
+  localparam READ_MODE = 0;   // Simply forwards DRAM data
+  localparam DIFF_MODE = 1;   // Computes XOR between read data (rd_data) and expected data (ddr_wdata), then counts differing bits (popcount).
   reg mode_r, mode_ns; // Switch between diff count and read modes
   
   reg rd_valid_r;

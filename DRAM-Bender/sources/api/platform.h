@@ -32,6 +32,16 @@ class SoftMCPlatform{
      */
     void reset_fpga();
     /**
+     * Make SoftMC start execution of (pre-loaded) i-memory
+     */
+    void activate();
+    /**
+     * Sends SoftMC program to the FPGA board over PCI-E
+     * @param prog reference to the program object to send
+     * SoftMC won't start until activate (with new bitstream) is called
+     */
+    void send_prog(Program & prog);
+    /**
      * Sends SoftMC program to the FPGA board over PCI-E
      * @param prog reference to the program object to send
      */
