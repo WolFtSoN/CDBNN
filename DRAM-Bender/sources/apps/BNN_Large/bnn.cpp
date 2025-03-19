@@ -9,7 +9,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <cstring>
+#include <cstdint>
+#include <string>
 #include <list>
+#include <vector>
 #include <cstdlib>
 #include <bitset>
 #include <math.h> 
@@ -17,6 +20,12 @@
 #include "../DSN_AE_APPS/util.h"
 using namespace std;
 
+enum OperandType {
+    OPERAND_A = 0,
+    OPERAND_B = 1,
+    OPERAND_C = 2,
+    OPERANDS  = 3
+};
 
 #define NUM_BANKS 1
 #define NUM_ROWS 2048 //32768
@@ -144,6 +153,12 @@ Program row_copy(uint32_t r_first, uint32_t r_second)
   // (maybe no rows, or more than 2 rows will open!)
   // Assumes bank is precharged!
   Program program;
+
+  // Precharge
+  program.add_inst(SMC_SLEEP(6));
+  program.add_below(PRE(BAR, 0, 0));
+  program.add_inst(SMC_SLEEP(6));
+
   // Copy from r_first into r_second
   program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, r_first, r_second));
   // Double act has no "quite" time included at the end, so a conservative settle time here
@@ -161,6 +176,12 @@ Program maj3()
   // (maybe no rows, or more than 2 rows will open!)
   // Assumes bank is precharged!
   Program program;
+
+  // Precharge
+  program.add_inst(SMC_SLEEP(6));
+  program.add_below(PRE(BAR, 0, 0));
+  program.add_inst(SMC_SLEEP(6));
+
   // Copy from r_first into r_second
   program.add_below(doubleACT(MAJ_T12, MAJ_T23, COMP_R1, COMP_R2));
   // Double act has no "quite" time included at the end, so a conservative settle time here
@@ -177,6 +198,12 @@ Program xnor_and_copy(uint32_t weight, uint32_t x_in_row, uint32_t x_in_bar_row,
   // subprogram assumes preinitialized precharge
   uint32_t final_route_row, first_comp_row, second_comp_row;
   Program program;
+
+  // Precharge
+  program.add_inst(SMC_SLEEP(6));
+  program.add_below(PRE(BAR, 0, 0));
+  program.add_inst(SMC_SLEEP(6));
+
   // we currently assume the data is stored in rows "behind" ROUT_ROW_0 exclusively
   // When extending - need to extend this code as well to support that
 
@@ -207,10 +234,10 @@ Program xnor_and_copy(uint32_t weight, uint32_t x_in_row, uint32_t x_in_bar_row,
   return program;
 }
 
-
-Program bnn_prog(uint32_t bank_id, std::vector<uint32_t> &x_in, std::vector<std::vector<uint32_t>> &weights)
+Program bnn_prog(uint32_t bank_id, std::vector<uint32_t> &x_in, std::vector<std::vector<uint32_t>> &weights, 
+                 const std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS], int &num_reads)
 {
-  uint32_t x_rows[] = {X0, X0_NOT, X1, X1_NOT, X2, X2_NOT};
+  num_reads = 0;
   Program program;
   program.add_below(_init(bank_id));
   srand((unsigned) time(NULL));
@@ -219,40 +246,113 @@ Program bnn_prog(uint32_t bank_id, std::vector<uint32_t> &x_in, std::vector<std:
   program.add_inst(all_nops());
   program.add_inst(all_nops());
   program.add_below(PRE(BAR, 0, 0));
-  // For testing only - fill checked rows with damka pattern:
-  for (size_t i = 0; i < 3; i++)
-  {
-    program.add_below(wrRow_immediate_label(BAR, g_aside_rows[i], DAMKA, random));
-  }
-  // Fill input-layer data into the data rows
-  for(int i = 0; i < 6; i++)
+
+  // 0. Fill input-layer data into the data rows
+  for(int i = 0; i < x_in.size(); i++)
   {
     random = rand();
-    program.add_below(wrRow_immediate_label(BAR, x_rows[i], x_in[i],random)); //  (bank_reg, row_immd, wr_pattern, label)
+    program.add_below(wrRow_immediate_label(BAR, data_to_operand[OPERAND_A][i][0], x_in[i],random)); //  (bank_reg, row_immd, wr_pattern, label)
+    program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][i][0], random));
+    num_reads++;
   }
+  ////// 18 reads ///////
+  // std::cout << "DEBUG: 1" << std::endl;
+  const int input_size = x_in.size() / 2; // x_in is given as x and x_bar
+  const int aside_offset = x_in.size();
   // Next 3 lines - initialization and some "quite" time to settle I guess
   program.add_inst(SMC_SLEEP(6));
   program.add_below(PRE(BAR, 0, 0));
   program.add_inst(SMC_SLEEP(6));
 
-  for (int row_i = 0; row_i < weights.size(); row_i++)
-  {
-    for (int col_i = 0; col_i < 3; col_i++)
-    {
-      program.add_below(xnor_and_copy(weights[row_i][col_i], x_rows[2*col_i], x_rows[2*col_i+1], col_i));
+  // 1. XNOR and COPY into MAJ3
+  for (int col_i = 0; col_i < input_size; col_i++)
+  { 
+    // XNOR by taking x or x_bar based on the weight value
+    int x_in_index;
+    if (weights[0][col_i] == 1) {
+      x_in_index = col_i*2;
+    } else {
+      x_in_index =  col_i*2 + 1;
     }
-  
-    program.add_below(maj3());
-  
-    program.add_below(row_copy(g_comp_rows[0], g_aside_rows[row_i]));
+
+    int operand_idx = col_i % 3;
+
+    // Copy the data from the data rows to the computation rows
+    std::cout << "column: " << col_i << " " << "w[i]: " << weights[0][col_i] << " " << "operand_idx: " << operand_idx << " ";
+    std::cout << "x == w[i]: " << (weights[0][col_i] == 1? x_in[2*col_i] : x_in[2*col_i+1]) << std::endl;
+    for (size_t hop = 0; hop < data_to_operand[operand_idx][x_in_index].size() - 1; hop++) {
+      std::cout << "hop no.: " << hop << " " << "from row: " << data_to_operand[operand_idx][x_in_index][hop] << 
+      " " << "to row: " << data_to_operand[operand_idx][x_in_index][hop+1] << std::endl;
+      // program.add_inst(SMC_SLEEP(6));
+      // program.add_below(PRE(BAR, 0, 0));
+      // program.add_inst(SMC_SLEEP(6));    
+      program.add_below(row_copy(data_to_operand[operand_idx][x_in_index][hop], data_to_operand[operand_idx][x_in_index][hop+1]));
+      // read out the result after each row copy
+      random = rand();
+      program.add_below(rdRow_immediate_label(BAR, data_to_operand[operand_idx][x_in_index][hop+1], random));
+      num_reads++;
+    }
+    // std::cout << "DEBUG: 3" << std::endl;
+    // MAJ3 operation + save aside - once in 3
+    if (operand_idx == 2) {
+      // program.add_inst(SMC_SLEEP(6));
+      // program.add_below(PRE(BAR, 0, 0));
+      // program.add_inst(SMC_SLEEP(6));    
+      program.add_below(maj3());
+      std::cout << "maj3 performed" << std::endl;
+      int aside_row_i = aside_offset + (col_i / 3);
+      int comp_row = data_to_operand[OPERAND_A][aside_row_i][data_to_operand[OPERAND_A][aside_row_i].size() - 2];
+      std::cout << "comp row: " << comp_row << std::endl;
+      // Read out the result from the comp row
+      random = rand();
+      program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][aside_row_i][data_to_operand[OPERAND_A][aside_row_i].size() - 2], random));
+      num_reads++;
+      for (size_t hop = data_to_operand[OPERAND_A][aside_row_i].size() - 2; hop > 0; hop--) {
+        std::cout << "aside row copy" << std::endl;
+        std::cout << "hop no.: " << hop << " " << "from row: " << data_to_operand[OPERAND_A][aside_row_i][hop] << 
+        " " << "to row: " << data_to_operand[OPERAND_A][aside_row_i][hop-1] << std::endl;
+        // program.add_inst(SMC_SLEEP(6));
+        // program.add_below(PRE(BAR, 0, 0));
+        // program.add_inst(SMC_SLEEP(6));      
+        program.add_below(row_copy(data_to_operand[OPERAND_A][aside_row_i][hop], data_to_operand[OPERAND_A][aside_row_i][hop-1]));
+      // read out the result after each row copy
+      random = rand();
+      program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][aside_row_i][hop-1], random));
+      num_reads++;
+      }
+      
+      // // read out the aside rows for validation:
+      // random = rand();
+      // program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][aside_row_i][0], random));
+    }
   }
-  
+/*
+  // 2. Iterate MAJ3(MAJ3) until aside is exhausted
+  int aside_size = input_size / 3;
+  while (aside_size != 1) {
+    for (int i = 0; i < aside_size; i++)
+    {
+      int operand_idx = i % 3;
+      int aside_idx = aside_offset + i;
+      // Copy the data from the data rows to the computation rows
+      for (size_t hop = 0; hop < data_to_operand[operand_idx][aside_idx].size() - 1; hop++) {
+        program.add_below(row_copy(data_to_operand[operand_idx][aside_idx][hop], data_to_operand[operand_idx][aside_idx][hop+1]));
+      }
+      // MAJ3 operation + save aside - once in 3
+      if (operand_idx == 2) {
+        program.add_below(maj3());
+        int aside_result_row_i = aside_offset + (i / 3);
+        for (size_t hop = data_to_operand[OPERAND_A][aside_result_row_i].size() - 2; hop > 0; hop--) {
+          program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1]));
+        }
+      }
+    }
+    aside_size = aside_size / 3;
+  }
+*/
   // read out the aside rows for validation:
-  for (int i = 0; i < weights.size(); i++)
-  {
-    random = rand();
-    program.add_below(rdRow_immediate_label(BAR, g_aside_rows[i], random));
-  }
+  // random = rand();
+  // program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][aside_offset][0], random));
 
   // Extra buffer time to be sure
   program.add_inst(all_nops());
@@ -267,6 +367,23 @@ Program bnn_prog(uint32_t bank_id, std::vector<uint32_t> &x_in, std::vector<std:
 
 Program dummy_prog(uint32_t bank_id, uint32_t in_dim, uint32_t out_dim)
 {
+
+// std::vector<std::vector<uint32_t>> routing_to_operand(DATA_ROWS_SIZE); // size can be dyamic
+/*
+  linkedlist[# DATA_ROWS] = 
+  {
+    ROW_ADDRESS
+  }
+  ... Routing Row
+
+  linkedlist[# Routing Row][# Operands]
+  {
+    ROW_ADDRESS
+  }
+  ... Till the operand rows are filled.
+
+  */
+
   std::cout << "enter dummy" << endl;
   // uint32_t x_rows[] = {X0, X0_NOT, X1, X1_NOT, X2, X2_NOT};
   Program program;
@@ -363,6 +480,51 @@ Program dummy_prog(uint32_t bank_id, uint32_t in_dim, uint32_t out_dim)
   return program;
 }
 
+
+Program test_row_copy(uint32_t bank_id){
+  Program program;
+  program.add_below(_init(bank_id));
+  srand((unsigned) time(NULL));
+  int random = rand();
+  program.add_inst(SMC_SLEEP(6));
+  program.add_below(PRE(BAR, 0, 0));
+  program.add_inst(SMC_SLEEP(6));
+
+  random = rand();
+  program.add_below(wrRow_immediate_label(BAR, 0, DAMKA, random));
+  random = rand();
+  program.add_below(wrRow_immediate_label(BAR, 2, DAMKA_BAR, random));
+
+  // program.add_inst(SMC_SLEEP(6));
+  // program.add_below(PRE(BAR, 0, 0));
+  // program.add_inst(SMC_SLEEP(6));
+
+  program.add_below(row_copy(0, 2));
+
+  random = rand();
+  program.add_below(rdRow_immediate_label(BAR, 0, random));
+  random = rand();
+  program.add_below(rdRow_immediate_label(BAR, 2, random));
+
+  random = rand();
+  program.add_below(wrRow_immediate_label(BAR, 2, DAMKA_BAR, random));
+  random = rand();
+  program.add_below(wrRow_immediate_label(BAR, 0, DAMKA, random));
+
+  // program.add_inst(SMC_SLEEP(6));
+  // program.add_below(PRE(BAR, 0, 0));
+  // program.add_inst(SMC_SLEEP(6));
+
+  program.add_below(row_copy(2, 0));
+
+  random = rand();
+  program.add_below(rdRow_immediate_label(BAR, 0, random));
+  random = rand();
+  program.add_below(rdRow_immediate_label(BAR, 2, random));
+
+  return program;
+
+}
 void parse_file(std::string file_name, std::vector<uint32_t> &vec)
 {
   std::ifstream file;
@@ -388,6 +550,32 @@ void parse_matrix(const std::string& file_name, std::vector<std::vector<uint32_t
       matrix.push_back(row);
   }
   file.close();
+}
+
+void parse_path_map(const std::string& filename, std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS]) {
+  std::ifstream infile(filename);
+  if (!infile.is_open()) {
+      std::cerr << "Failed to open file: " << filename << std::endl;
+      return;
+  }
+
+  std::string line;
+  int line_num = 0;
+  while (std::getline(infile, line)) {
+      std::istringstream ss(line);
+      std::string token;
+      std::vector<uint32_t> values;
+
+      while (std::getline(ss, token, ',')) {
+          values.push_back(static_cast<uint32_t>(std::stoul(token)));
+      }
+
+      int operand_index = line_num % OPERANDS;
+      data_to_operand[operand_index].push_back(values);
+      ++line_num;
+  }
+
+  infile.close();
 }
 
 int read_args_n_parse(int argc, char* argv[], uint32_t *bank_id, std::ofstream &out_file)
@@ -422,65 +610,74 @@ int main(int argc, char*argv[])
     cerr << "Could not initialize SoftMC Platform: " << err << endl;
   }
   platform.reset_fpga();
+
   std::cout << "------------DEBUG------------" << std::endl;
   std::cout << "bank_id: " << bank_id << std::endl;
   std::cout << "out_file: " << std::string(argv[2]) << std::endl;
+
+std::vector<std::vector<uint32_t>> weights_matrix;
+std::vector<uint32_t> x_in;
+std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS];
+parse_matrix("./weights_matrix.txt", weights_matrix); // Read from the single file
+parse_file("./input_layer.txt", x_in); // Read from the single file
+parse_path_map("./data_to_operand.txt", data_to_operand); // Read from the single file
   /*
-  if(DEBUG){
-    std::cout << "------------DEBUG------------" << std::endl;
-    std::cout << "num_open_rows: " << n_open_rows << std::endl;
-    std::cout << "maj_x: " << maj_x << std::endl;
-    std::cout << "frac idx: " << std::endl;
-    for(auto frac_idx : r_frac_idx)
+std::cout << "------------DEBUG------------" << std::endl;
+std::cout << "weights row 0: ";
+for (size_t i = 0; i < weights_matrix[0].size(); i++)
+{
+  std::cout << weights_matrix[0][i] << " ";
+}
+std::cout << std::endl;
+
+std::cout << "x_in: ";
+for (size_t i = 0; i < x_in.size(); i++)
+{
+  std::cout << x_in[i] << " ";
+}
+std::cout << std::endl;
+
+std::cout << "paths: ";
+for (size_t i = 0; i < 9; i++)
+{
+  for (size_t operand = 0; operand < OPERANDS; operand++)
+  {
+    std::cout << "Operand " << operand << ":" << std::endl;
+    for (size_t j = 0; j < data_to_operand[operand][i].size(); j++)
     {
-      std::cout << frac_idx << ", ";
+      std::cout << data_to_operand[operand][i][j] << " ";
     }
     std::cout << std::endl;
-    std::cout << "open row idx: " << std::endl;
-    for(auto open_row : open_row_idx)
-    {
-      std::cout << open_row << ", ";
-    }
-    std::cout << std::endl;
-    std::cout << "r_first: " << r_first << std::endl;
-    std::cout << "r_second: " << r_second << std::endl;
-    std::cout << "-----------------------------" << std::endl;
   }
+}
 */
+std::cout << "DEBUG: enter DRAM Bender program" << std::endl;
+int num_reads;
+Program program = bnn_prog(bank_id, x_in, weights_matrix, data_to_operand, num_reads);
+// platform.send_prog(program);
+// platform.activate();
+// Program program = test_row_copy(bank_id);
+platform.execute(program);
+// std::cout << "DEBUG: program size is " << (program.size() / 8) << std::endl;
 
-// std::vector<std::vector<uint32_t>> weights_matrix;
-// std::vector<uint32_t> x_in;
-// parse_matrix("./weights_matrix.txt", weights_matrix); // Read from the single file
-// parse_file("./input_layer.txt", x_in); // Read from the single file
-
-// std::cout << "------------DEBUG------------" << std::endl;
-// std::cout << "weights row 0: " << weights_matrix[0][0] << "," << weights_matrix[0][1] << "," << weights_matrix[0][2] << std::endl;
-// std::cout << "weights row 1: " << weights_matrix[1][0] << "," << weights_matrix[1][1] << "," << weights_matrix[1][2] << std::endl;
-// std::cout << "weights row 2: " << weights_matrix[2][0] << "," << weights_matrix[2][1] << "," << weights_matrix[2][2] << std::endl;
-
-// std::cout << "x_in: "  << x_in[0] << "," << x_in[1] << "," << x_in[2] << "," << x_in[3] << "," << x_in[4] << "," << x_in[5] << std::endl;
-
-// std::cout << "DEBUG: enter DRAM Bender program" << std::endl;
-
-Program program = dummy_prog(bank_id, 128, 1);
-// platform.execute(program);
-std::cout << "DEBUG: program size is " << (program.size() / 8) << std::endl;
-
+// /*
 // Read out data
-// uint8_t row[8192];  
+uint8_t row[8192];
 // Retrieve 8192 bytes from the FPGA buffer (which is filled with content read from DRAM
-// for (int i = 0; i < weights_matrix.size(); i++)
-// {
-//   std::cout << "DEBUG: start of ask data from FPGA" << std::endl;
-//   platform.receiveData((void*)row, 8192);
-//   std::cout << "DEBUG: end of ask data from FPGA" << std::endl;
-//   for (int j = 0; j < 8192; j++)
-//   {
-//     out_file << std::to_string(row[j]) << endl;
-//   }
-// }
+for (int i = 0; i < num_reads; i++)
+// for (int i = 0; i < 4; i++)
+{
+  // std::cout << "DEBUG: start of ask data from FPGA" << std::endl;
+  platform.receiveData((void*)row, 8192);
+  // std::cout << "DEBUG: end of ask data from FPGA" << std::endl;
+  // for (int j = 0; j < 8192; j++)
+  // {
+  //   out_file << std::to_string(row[j]) << endl;
+  // }
+  out_file << std::to_string(row[0]) << endl;
+}
 
-// out_file.close();
-
+out_file.close();
+// */
 return 0;
 }

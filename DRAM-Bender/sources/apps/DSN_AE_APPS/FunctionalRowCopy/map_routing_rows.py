@@ -31,12 +31,13 @@ computation_rows = {152, 153, 408, 409, 664, 665}  # From previous tests
 routing_groups = [[24, 25, 536], [88, 89, 600], [136, 137, 648]]
 routing_rows = {24, 25, 536, 88, 89, 600, 136, 137, 648}
 
-# Identify eligible data rows
+# Identify eligible Level 2 routing rows
 routing_rows_lvl2 = dict()
 for routing_group in routing_groups:
     for routing_row in routing_group:
         neighbors = set(G.neighbors(routing_row))
-        neighbors = neighbors - computation_rows - routing_rows - routing_rows_lvl2.keys()
+        neighbors -= computation_rows | routing_rows | set(routing_rows_lvl2.keys()) 
+        # neighbors = neighbors - computation_rows - routing_rows - routing_rows_lvl2.keys()
         for neighbor in neighbors:
             routing_rows_lvl2[neighbor] = routing_row
         # routing_rows_lvl2.update((neighbors - computation_rows - routing_rows))
@@ -44,11 +45,14 @@ for routing_group in routing_groups:
 # print("routing_rows_lvl2:")
 # print(routing_rows_lvl2)
 
-
+# Ensure Level 2 Routing Rows don't appear in the Main Routing Rows 
 data_rows = dict()
+excluded_rows = computation_rows | routing_rows | routing_rows_lvl2.keys() # Exclude Level 2 routing rows
+
 for row in routing_rows_lvl2.keys():
     neighbors = set(G.neighbors(row))
-    neighbors = neighbors - computation_rows - routing_rows - data_rows.keys()
+    neighbors -= excluded_rows | set(data_rows.keys()) # Ensure unique data rows
+    # neighbors = neighbors - computation_rows - routing_rows - data_rows.keys()
     for neighbor in neighbors:
         data_rows[neighbor] = row
 
@@ -59,8 +63,9 @@ for row in routing_rows_lvl2.keys():
 routing_map = dict()
 
 for data_row, routing_row in data_rows.items():
-    comp_row = routing_rows_lvl2[routing_row]
-    routing_map[data_row] = (routing_row, comp_row)
+    if routing_row in routing_rows_lvl2:
+        comp_row = routing_rows_lvl2[routing_row]
+        routing_map[data_row] = (routing_row, comp_row)
 
 print("Routing map:")
 print(routing_map)
@@ -70,7 +75,7 @@ print(len(routing_map))
 # Write mapping to file
 with open("map_routing_rows.txt", "w") as f:
     for data_row, (routing_row, comp_row) in routing_map.items():
-        f.write(f"Data Row: {data_row} -> Routing Row: {routing_row} -> Computation Row: {comp_row}\n")
+        f.write(f"Data Row: {data_row} -> Level 2 Routing Row: {routing_row} -> Main Routing Row: {comp_row}\n")
 
 
 print("Done!!")

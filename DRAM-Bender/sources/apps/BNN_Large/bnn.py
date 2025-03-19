@@ -11,12 +11,12 @@ import os
 ## Stage 2: denser format (32b words?) for better space efficiency - if needed
 
 # Dimnesions of input layer, output layer
-in_dim = 3
-out_dim = 3
+in_dim = 9
+out_dim = 1
 
 #Generate input vector X, and wight matrix W. output y = W*x
-x = np.random.randint(0, 2, size=in_dim)
-# x = np.array([0, 1, 0])
+# x = np.random.randint(0, 2, size=in_dim)
+x = np.array([1, 1, 0, 1, 1, 1, 0, 0, 1])
 print("Random Bit Vector x:", x)
 # Expand and interleave negations
 x_comp = np.repeat(x, 2).reshape(-1, 2)
@@ -28,8 +28,8 @@ x_32b = x_comp * (2 ** 32 - 1)
 
 utl.write_to_file(x_32b, "input_layer.txt")
 
-W = np.random.randint(0, 2, size=(out_dim, in_dim))
-# W = np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+# W = np.random.randint(0, 2, size=(out_dim, in_dim))
+W = np.array([[0, 1, 0, 0, 1, 0, 0, 0, 1]])
 print("Random Bit Matrix W:\n", W)
 utl.write_matrix_to_file(W, "weights_matrix.txt")
 
