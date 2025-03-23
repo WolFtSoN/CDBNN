@@ -1,5 +1,5 @@
 program_NAME := bnn-exe
-program_CXX_SRCS := bnn.cpp ../DSN_AE_APPS/util.cpp $(wildcard ../../api/*.c) $(wildcard ../../api/*.cpp)
+program_CXX_SRCS := bnn.cpp util.cpp $(wildcard ../../api/*.c) $(wildcard ../../api/*.cpp)
 program_CXX_OBJS := ${program_CXX_SRCS:.cpp=.o}
 program_CXX_OBJS := ${program_CXX_OBJS:.c=.o}
 program_OBJS := $(program_CXX_OBJS)
