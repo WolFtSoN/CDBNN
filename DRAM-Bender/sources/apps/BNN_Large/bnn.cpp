@@ -95,6 +95,17 @@ enum OperandType {
 #define HYTT_TIMING 1
 #define DEBUG 0
 
+// ACT and PRE array for VAMPIRE
+struct Command {
+  std::string name;
+  bool has_value;
+  unsigned int value;
+};
+
+std::vector<Command> act_pre_arr;
+// std::vector<std::pair<std::string, std::optional<unsigned int>>> act_pre_arr;
+
+
 uint32_t g_comp_rows[] = {COMP_ROW_A1 , COMP_ROW_A2, COMP_ROW_B1, COMP_ROW_B2, COMP_ROW_C1, COMP_ROW_C2};
 uint32_t g_route_rows[] = {ROUT_ROW_0 , ROUT_ROW_1, ROUT_ROW_2};
 uint32_t g_aside_rows[] = {ASIDE_0 , ASIDE_1, ASIDE_2};
@@ -162,14 +173,19 @@ Program row_copy(uint32_t r_first, uint32_t r_second)
   // Precharge
   program.add_inst(SMC_SLEEP(6));
   program.add_below(PRE(BAR, 0, 0));
+  act_pre_arr.push_back({"PRE", false, 0});
   program.add_inst(SMC_SLEEP(6));
 
   // Copy from r_first into r_second
   program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, r_first, r_second));
+  act_pre_arr.push_back({"ACT", true, r_first});
+  act_pre_arr.push_back({"PRE", false, 0});
+  act_pre_arr.push_back({"ACT", true, r_second});
   // Double act has no "quite" time included at the end, so a conservative settle time here
   program.add_inst(SMC_SLEEP(6));
   // re-initialize with PRE + time for PRE to settle
   program.add_below(PRE(BAR, 0, 0));
+  act_pre_arr.push_back({"PRE", false, 0});
   program.add_inst(SMC_SLEEP(6));
 
   return program;
@@ -185,14 +201,19 @@ Program maj3()
   // Precharge
   program.add_inst(SMC_SLEEP(6));
   program.add_below(PRE(BAR, 0, 0));
+  act_pre_arr.push_back({"PRE", false, 0});
   program.add_inst(SMC_SLEEP(6));
 
   // Copy from r_first into r_second
   program.add_below(doubleACT(MAJ_T12, MAJ_T23, COMP_R1, COMP_R2));
+  act_pre_arr.push_back({"ACT", true, COMP_R1});
+  act_pre_arr.push_back({"PRE", false, 0});
+  act_pre_arr.push_back({"ACT", true, COMP_R2});
   // Double act has no "quite" time included at the end, so a conservative settle time here
   program.add_inst(SMC_SLEEP(6));
   // re-initialize with PRE + time for PRE to settle
   program.add_below(PRE(BAR, 0, 0));
+  act_pre_arr.push_back({"PRE", false, 0});
   program.add_inst(SMC_SLEEP(6));
 
   return program;
@@ -240,6 +261,7 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
   // PRECHARGE
   program.add_inst(SMC_SLEEP(6));
   program.add_below(PRE(BAR, 0, 0));
+  act_pre_arr.push_back({"PRE", false, 0});
   program.add_inst(SMC_SLEEP(6));
 
   // --------------------- Step 1 ---------------------
@@ -510,6 +532,25 @@ void save_matrix(const std::string& file_name, std::vector<std::vector<uint32_t>
   std::cout << "Done! Output saved to " << file_name << "\n";
 }
 
+void save_pre_act(const std::string& file_name, const std::vector<Command> &matrix) {
+  std::ofstream file(file_name);
+  if (!file.is_open()) {
+      std::cerr << "Error: Could not open file " << file_name << " for writing.\n";
+      return;
+  }
+
+  for (const auto& row : matrix) {
+      file << row.name;
+      if (row.has_value) {
+          file << " " << row.value;
+      }
+      file << "\n";
+  }
+
+  file.close();
+  std::cout << "Done! Output saved to " << file_name << "\n";
+}
+
 void parse_path_map(const std::string& filename, std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS]) {
   std::ifstream infile(filename);
   if (!infile.is_open()) {
@@ -647,6 +688,8 @@ auto x_augmented = augment_flip(x_bin, 32, 0.35);
 
 save_matrix("augmented_input.txt", x_augmented);
 
+std::cout << "DEBUG: pre_act size is " << act_pre_arr.size() << std::endl;
+
 // std::cout << "DEBUG: x_augmented size is " << x_augmented.size() << std::endl;
 // std::cout << "DEBUG: x_in size is " << x_in.size() << std::endl;
 // std::cout << "========================================================================================= "<< std::endl;
@@ -657,7 +700,7 @@ Program program;
 
 // platform.execute(program);
 
-  const int runs = 100000;
+  const int runs = 1; //100000;
   std::vector<double> timings_ms;
   int amount = 8*1024; //amount of cachelines read
   for (int i = 0; i < runs; ++i) {
@@ -671,6 +714,8 @@ Program program;
     std::chrono::duration<double, std::milli> elapsed = end - start;
     timings_ms.push_back(elapsed.count());
   }
+  std::cout << "Size of act_pre_arr = " << act_pre_arr.size() << "\n";
+  save_pre_act("pre_act.txt", act_pre_arr);
 
   // Calculate average
   double sum = std::accumulate(timings_ms.begin(), timings_ms.end(), 0.0);
