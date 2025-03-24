@@ -50,3 +50,67 @@ We found out several bugs in our scripts, mainly:
 
 Results are much better and in line with manual testing. 
 We still suspect FRAC parameters might be suboptimal, as MAJ3 using 6,12 rows is far superior to 8,16 rows
+
+-----------------------------------------
+4.3.2025
+-----------------------------------------
+We've found out not every pair of rows R1 R2 can participate in RowCopy.
+We hypothesize this is due to the hierirchical row decoder design Ismail talks about in PULSAR
+(They do infact open, but other rows open as well)
+
+We verfied this is the case by trying t12 = 10, t23 = [0,..,10] - no new pairs of rows approached
+ - Interestingly, not all pairs support the same timing params. No additional rows are opened for t23 > 4
+
+We found out manually and some simple graph analysis (see FunctionalRowCopy directory) that we still can connect many rows into
+our desired computation rows (best that were found in testing), using a small amount of "routing rows"
+
+We currently use:
+ - 24 as a gate into 152, 408
+ - 25 as a gate into 153, 409
+ - 536 as a gate into 664, 665
+ - 24 is connceted to 25, and 536
+
+Thus, every row that is connected to either 24, 25, or 536 can be connceted to all of the computation rows
+
+Compute rows fill was changed - instead of ABCABC as Ismail tested, we preferred either AABBCC or ABABCC
+to allow 2-row activation between rows of the same value (say A and A).
+Reteseting with these patterns, we've seen error rates varies slightly (99.7% ABABCC, ~96% AABBCC).
+Hence we've chosen the better ABABCC.
+
+We then implemnted a 3x3 BNN using DRAM Bender. No error where observed (though we did not test this throughly)
+
+
+-----------------------------------------
+15.03.2025
+-----------------------------------------
+We need to answer these 3 following questions:
+1. Check that our imem after enlargement fits all the instructions
+2. Check if we can make a coe file in Vivado and initialize the DIMM with bypassing the PCIE 
+3. Does using coe is equivalent to flahsing through the PCIE, and does the DRAM will work as expected after reseting
+
+-----------------------------------------
+19.03.2025
+-----------------------------------------
+1. The RowCopy works both ways
+2. API change to "execute" function
+
+What's left:
+    1. To finish debugging power of 3 networks 
+    2. Add padding for networks that not power of 3 
+    3. Time analysis:
+        1. Minimize precharge and SLEEP timings
+        2. Approximate the timings for PCIE and the writing the inputs into the DRAM
+        3. Calculate the timings we readback to the CPU for inverse the new X data 
+
+    4. Get ACT-PRE txt file -> for VAMPIRE
+    5. CPU computations -> MAJ(MAJ) from several subarrays
+    6. MAJ(MAJ) in the last layer 
+    7. Bit flips 
+
+-----------------------------------------
+20.03.2025
+-----------------------------------------
+Done:
+    1. The network works for every power of 3 size inputs
+    2. Add padding for networks that not power of 3
+    3. Add batches 

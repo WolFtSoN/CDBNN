@@ -28,11 +28,11 @@ def load_data_rows(d_file):
 
     with open(d_file, "r") as f:
         for line in f:
-            if "Computation Row: 24" in line or "Computation Row: 88" in line or "Computation Row: 136" in line or "Computation Row: 25" in line or "Computation Row: 89" in line:
+            if "Main Routing Row: 24" in line or "Main Routing Row: 88" in line or "Main Routing Row: 136" in line or "Main Routing Row: 25" in line or "Main Routing Row: 89" in line:
                 parts = line.split("->")  # Split by "->"
                 data_part = parts[0].strip()  # Extract "Data Row: X"
-                routing_part = parts[1].strip()  # Extract "Routing Row: Y"
-                # comp_part = parts[2].strip()  # Extract "Computation Row: Z"
+                routing_part = parts[1].strip()  # Extract "Level 2 Routing Row: Y"
+                # comp_part = parts[2].strip()  # Extract "Main Routing Row: Z"
 
                 # Extract the numeric value after "Data Row:"
                 data_value = int(data_part.split(":")[1].strip())
@@ -44,7 +44,7 @@ def load_data_rows(d_file):
                 # comp_row.append(comp_value)
                 # print(f"line: {line}")
                 # print(f"data_value: {data_value} | routing_value: {routing_value} | comp_row: {comp_row}")
-                print(f"data_value: {data_value} | routing_value: {routing_value}")
+                print(f"data_value: {data_value} | routing_lvl2_value: {routing_value}")
 
     return (data_rows, routing_rows)
 

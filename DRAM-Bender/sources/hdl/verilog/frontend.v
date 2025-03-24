@@ -120,6 +120,12 @@ module frontend#(parameter SIM_MEM = "false")(
   localparam INIT_MEM_S = 2'd1;
   localparam EXECUTE_S  = 2'd2;
 
+  localparam RST_FLAG = `INSTR_WIDTH;
+  localparam RB_MODE_FLAG = `INSTR_WIDTH+1;
+  localparam DLL_TOG_FLAG = `INSTR_WIDTH+2;
+  localparam AUTO_REF_FLAG = `INSTR_WIDTH+3;
+  localparam ACTIVATE_FLAG = `INSTR_WIDTH+4;
+
   reg [1:0] state_r, state_ns;
 
   reg [4:0]                  rst_ctr_ns, rst_ctr_r;
@@ -132,7 +138,8 @@ module frontend#(parameter SIM_MEM = "false")(
   // imem <-> xdma interface
   // TODO do we need tkeep?
   assign h2c_tready_0 = state_r == INIT_MEM_S;
-  assign imem_wr_en   = h2c_tvalid_0 && (state_r == INIT_MEM_S); /*add a condition on the new flag */
+  // use model differs - activate flag sent seperately. ignore data that comes with it.
+  assign imem_wr_en   = h2c_tvalid_0 && (state_r == INIT_MEM_S) && (~h2c_tdata_0[ACTIVATE_FLAG]);
   assign imem_wr_data = h2c_tdata_0[`INSTR_WIDTH-1:0];
   assign imem_addr    = state_r == INIT_MEM_S ? xfer_ctr_r : addr_in;
   // imem <-> pipeline interface 

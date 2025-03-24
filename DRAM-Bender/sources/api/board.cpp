@@ -122,13 +122,8 @@ int BoardInterface::xdma_recv(void* buf, const uint size)
   int fd = from_card;
   uint64_t count = 0;
   // Try to read from the card.
-  std::cout << "xdma_recv 1" << std::endl;
   count = read(fd, (char*) recv_buf, size);
-  std::cout << "xdma_recv 2" << std::endl;
-
-  std::cout << "count: " << count << std::endl;
-  std::cout << "size: " << size << std::endl;
-
+  
   // We read more than we were supposed to
   assert(count <= size);// || rc == 0);
 

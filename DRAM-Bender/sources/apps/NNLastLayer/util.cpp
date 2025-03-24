@@ -116,7 +116,7 @@ Program wrRow_immediate(int bank_reg, uint32_t row_immd, uint32_t wr_pattern)
 Program wrRow_immediate_label(int bank_reg, uint32_t row_immd, uint32_t wr_pattern,int label)
 {
   Program p;
-  p.add_inst(SMC_LI(wr_pattern, PATTERN_REG)); // s
+  p.add_inst(SMC_LI(wr_pattern, PATTERN_REG));
   for (int i = 0; i < 16; i++)
     // We suspect this replicates PATTEN_REG contetns 16 times it create 512b word
     // we need to understant what is LDWD
@@ -136,6 +136,8 @@ Program wrRow_immediate_label(int bank_reg, uint32_t row_immd, uint32_t wr_patte
 
   return p;
 }
+
+
 
 Program wrRow_reg_label(int bank_reg, uint32_t row_immd, int reg_pattern,int label)
 {
