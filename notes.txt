@@ -114,3 +114,13 @@ Done:
     1. The network works for every power of 3 size inputs
     2. Add padding for networks that not power of 3
     3. Add batches 
+
+
+---------
+24.3
+---------
+DRAM Bender:
+1. Evaluate percision against Zuher's - 
+2. Evaluate timing:
+    2.1. Minimize intervals as much as Possible
+    2.2. Run timing 
