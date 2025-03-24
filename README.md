@@ -1,4 +1,4 @@
-# Simultaneous Many-Row Activation in Off-the-Shelf DRAM Chips: Experimental Characterization and Analysis
+# CDBNN: Commodity Off-The-Shelf DRAM based Binary Neural Network Accelerator
 
 
 <p align=center>
