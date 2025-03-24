@@ -27,7 +27,7 @@ print(f'x.T: {x_mat.shape}')
 
 
 # Dimnesions of input layer, output layer
-in_dim = x_mat.shape[1]
+in_dim = x_mat.shape[0]
 out_dim = 1
 batch_size = 512
 
@@ -35,15 +35,29 @@ batch_size = 512
 n_duplicated = 32
 flip_prob = 0.3
 
+# We need the inverse of x_mat, for every x_mat element we need the inverse of it
+x_mat_inv = 1 - x_mat
 
-utl.write_matrix_to_file(x_mat, "input.txt")
+# Combine the original and inverted x_mat to create the final x_mat
+# One row from original and one row from inverted and so on
+# x_mat_fin = np.empty((0, x_mat.shape[0]*2), int)
+x_mat_fin =[]
+for i in range(in_dim):
+    x_mat_fin.append(x_mat[i])
+    x_mat_fin.append(x_mat_inv[i])
+
+# print(f'x_mat_inv: {x_mat_fin}')
+
+
+
+utl.write_matrix_to_file(x_mat_fin, "input.txt")
 
 # Write w as matrix to file
 utl.write_matrix_to_file(w_mat, "weights.txt")
 
 
 # Run on each row of the weights matrix 
-for r in range(w_mat.shape[0]):
+for r in range(1,2): # w_mat.shape[0]
 
     # Write the first row of the weights matrix to a file
     w_row = w_mat[r]
@@ -121,7 +135,6 @@ for r in range(w_mat.shape[0]):
     os.system(f'touch {out_file}')
     bank_id = 0
     cmd = ("./bnn-exe" + " " + str(bank_id) + " " + str(out_file))
-    # sp = subprocess.run([cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
     sp = subprocess.run([cmd], shell=True, check=True)
 
 
