@@ -70,6 +70,7 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "instr_blk_mem_synth_1" START { ROLLUP_AUTO }
+set_param xicom.use_bs_reader 1
 set_msg_config  -id {[BD 41-1306]}  -suppress 
 set_msg_config  -id {[BD 41-1271]}  -suppress 
 set_msg_config  -id {[BD 41-1306]}  -suppress 

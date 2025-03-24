@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="instr_blk_mem_synth_1" LaunchPart="xcu200-fsgd2104-2-e" LaunchTime="1742205226">
+<GenRun Id="instr_blk_mem_synth_1" LaunchPart="xcu200-fsgd2104-2-e" LaunchTime="1742807784">
+  <File Type="VDS-TIMING-PB" Name="instr_blk_mem_timing_summary_synth.pb"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="instr_blk_mem_timing_summary_synth.rpt"/>
+  <File Type="RDS-DCP" Name="instr_blk_mem.dcp"/>
+  <File Type="RDS-UTIL-PB" Name="instr_blk_mem_utilization_synth.pb"/>
+  <File Type="RDS-UTIL" Name="instr_blk_mem_utilization_synth.rpt"/>
+  <File Type="RDS-PROPCONSTRS" Name="instr_blk_mem_drc_synth.rpt"/>
+  <File Type="RDS-RDS" Name="instr_blk_mem.vds"/>
   <File Type="REPORTS-TCL" Name="instr_blk_mem_reports.tcl"/>
   <File Type="PA-TCL" Name="instr_blk_mem.tcl"/>
-  <File Type="RDS-DCP" Name="instr_blk_mem.dcp"/>
-  <File Type="RDS-RDS" Name="instr_blk_mem.vds"/>
-  <File Type="RDS-UTIL" Name="instr_blk_mem_utilization_synth.rpt"/>
-  <File Type="RDS-UTIL-PB" Name="instr_blk_mem_utilization_synth.pb"/>
   <FileSet Name="sources" Type="BlockSrcs" RelSrcDir="$PSRCDIR/instr_blk_mem">
     <File Path="$PSRCDIR/sources_1/ip/instr_blk_mem/instr_blk_mem.xci">
       <FileInfo>

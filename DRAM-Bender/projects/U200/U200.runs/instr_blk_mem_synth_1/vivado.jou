@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Mon Mar 17 11:53:47 2025
-# Process ID: 39315
+# Start of session at: Mon Mar 24 11:16:25 2025
+# Process ID: 15820
 # Current directory: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/instr_blk_mem_synth_1
 # Command line: vivado -log instr_blk_mem.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source instr_blk_mem.tcl
 # Log file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/instr_blk_mem_synth_1/instr_blk_mem.vds

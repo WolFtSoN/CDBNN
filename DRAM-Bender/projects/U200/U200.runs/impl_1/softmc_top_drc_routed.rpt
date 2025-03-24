@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date         : Sun Mar 23 15:54:28 2025
+| Date         : Mon Mar 24 11:25:15 2025
 | Host         : u200-station running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_drc -file softmc_top_drc_routed.rpt -pb softmc_top_drc_routed.pb -rpx softmc_top_drc_routed.rpx
 | Design       : softmc_top
@@ -36,9 +36,7 @@ Table of Contents
 -----------------
 RTSTAT-10#1 Warning
 No routable loads  
-126 net(s) have no routable loads. The problem bus(es) and/or net(s) are frontend/FSM_onehot_state_r[3]_rep__3_i_1_n_0,
-frontend/FSM_onehot_state_r_reg[3]_0[1],
-phy_ddr4_i/inst/u_ddr_cal_top/u_ddr_cal/u_xsdb_arbiter/Q[12],
+129 net(s) have no routable loads. The problem bus(es) and/or net(s) are phy_ddr4_i/inst/u_ddr_cal_top/u_ddr_cal/u_xsdb_arbiter/Q[12],
 phy_ddr4_i/inst/u_ddr_cal_top/u_ddr_cal/u_xsdb_arbiter/Q[13],
 phy_ddr4_i/inst/u_ddr_cal_top/u_ddr_cal/u_xsdb_arbiter/Q[14],
 phy_ddr4_i/inst/u_ddr_cal_top/u_ddr_cal/u_xsdb_arbiter/Q[15],
@@ -48,10 +46,12 @@ phy_ddr4_i/inst/u_phy2clb_fixdly_rdy_upp/SYNC[0].sync_reg[1],
 phy_ddr4_i/inst/u_phy2clb_fixdly_rdy_upp/SYNC[1].sync_reg[1],
 phy_ddr4_i/inst/u_phy2clb_phy_rdy_low/SYNC[0].sync_reg[1],
 phy_ddr4_i/inst/u_phy2clb_phy_rdy_low/SYNC[1].sync_reg[1],
+phy_ddr4_i/inst/u_phy2clb_phy_rdy_low/SYNC[2].sync_reg[1],
 phy_ddr4_i/inst/u_phy2clb_phy_rdy_upp/SYNC[0].sync_reg[1],
 phy_ddr4_i/inst/u_phy2clb_phy_rdy_upp/SYNC[1].sync_reg[1],
+phy_ddr4_i/inst/u_phy2clb_phy_rdy_upp/SYNC[2].sync_reg[1],
 xdma_i/inst/udma_wrapper/dma_top/dma_enable.vul_dma/WR/gen_rdwr_loop[0].gen_rdwr_eng.RDWR_INST/WRQ_FIFO/FifoCntrRd[2]_i_1__2_n_0
- (the first 15 of 124 listed).
+ (the first 15 of 127 listed).
 Related violations: <none>
 
 REQP-1858#1 Advisory

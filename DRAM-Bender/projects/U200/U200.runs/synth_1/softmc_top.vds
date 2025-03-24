@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Sun Mar 23 15:44:55 2025
-# Process ID: 1874776
+# Start of session at: Mon Mar 24 11:17:50 2025
+# Process ID: 16780
 # Current directory: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1
 # Command line: vivado -log softmc_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source softmc_top.tcl
 # Log file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/softmc_top.vds
@@ -16,18 +16,14 @@ WARNING: [Common 17-1361] You have specified a new message control rule that is 
 WARNING: [Common 17-1361] You have specified a new message control rule that is equivalent to an existing rule with attributes ' -id {[BD 41-1271]}  -suppress '. The existing rule will be replaced.
 Command: synth_design -top softmc_top -part xcu200-fsgd2104-2-e
 Starting synth_design
-WARNING: [Vivado_Tcl 4-393] The 'Synthesis' target of the following IPs are stale, please generate the output products using the generate_target or synth_ip command before running synth_design.
-/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.srcs/sources_1/ip/instr_blk_mem/instr_blk_mem.xci
-
 Attempting to get a license for feature 'Synthesis' and/or device 'xcu200'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xcu200'
 INFO: [Device 21-403] Loading part xcu200-fsgd2104-2-e
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 1875023
-WARNING: [Synth 8-6901] identifier 'state_r' is used before its declaration [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/frontend.v:137]
+INFO: [Synth 8-7075] Helper process launched with PID 16833
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:02 . Memory (MB): peak = 2782.117 ; gain = 210.688 ; free physical = 287 ; free virtual = 20686
+Starting RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:02 . Memory (MB): peak = 2782.191 ; gain = 213.688 ; free physical = 6386 ; free virtual = 25984
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-6157] synthesizing module 'softmc_top' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:4]
 	Parameter tCK bound to: 1500 - type: integer 
@@ -43,17 +39,17 @@ INFO: [Synth 8-6157] synthesizing module 'softmc_top' [/home/user/workspace/SiMR
 	Parameter ODTNOP bound to: 16'b0000000000000000 
 	Parameter ODTWR bound to: 16'b0000000000000001 
 	Parameter ODTRD bound to: 16'b0000000000000000 
-INFO: [Synth 8-6157] synthesizing module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/phy_ddr4_udimm_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'phy_ddr4_udimm' (1#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/phy_ddr4_udimm_stub.v:6]
-WARNING: [Synth 8-689] width (2) of port connection 'c0_ddr4_cke' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:294]
-WARNING: [Synth 8-689] width (2) of port connection 'c0_ddr4_odt' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:295]
-WARNING: [Synth 8-689] width (2) of port connection 'c0_ddr4_cs_n' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:296]
-WARNING: [Synth 8-689] width (16) of port connection 'mc_CS_n' does not match port width (8) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:324]
-WARNING: [Synth 8-689] width (16) of port connection 'mc_ODT' does not match port width (8) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:325]
-WARNING: [Synth 8-689] width (32) of port connection 'mcCasSlot' does not match port width (2) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:327]
-WARNING: [Synth 8-689] width (32) of port connection 'mcCasSlot2' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:330]
-WARNING: [Synth 8-689] width (32) of port connection 'mcRdCAS' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:331]
-WARNING: [Synth 8-689] width (32) of port connection 'mcWrCAS' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:332]
+INFO: [Synth 8-6157] synthesizing module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/phy_ddr4_udimm_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'phy_ddr4_udimm' (1#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/phy_ddr4_udimm_stub.v:6]
+WARNING: [Synth 8-689] width (2) of port connection 'c0_ddr4_cke' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:285]
+WARNING: [Synth 8-689] width (2) of port connection 'c0_ddr4_odt' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:286]
+WARNING: [Synth 8-689] width (2) of port connection 'c0_ddr4_cs_n' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:287]
+WARNING: [Synth 8-689] width (16) of port connection 'mc_CS_n' does not match port width (8) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:315]
+WARNING: [Synth 8-689] width (16) of port connection 'mc_ODT' does not match port width (8) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:316]
+WARNING: [Synth 8-689] width (32) of port connection 'mcCasSlot' does not match port width (2) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:318]
+WARNING: [Synth 8-689] width (32) of port connection 'mcCasSlot2' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:321]
+WARNING: [Synth 8-689] width (32) of port connection 'mcRdCAS' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:322]
+WARNING: [Synth 8-689] width (32) of port connection 'mcWrCAS' does not match port width (1) of module 'phy_ddr4_udimm' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:323]
 INFO: [Synth 8-6157] synthesizing module 'softmc_pipeline' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/softmc_pipeline.v:3]
 INFO: [Synth 8-6157] synthesizing module 'fetch_stage' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/fetch_stage.v:3]
 	Parameter WAIT_RESOLVE_S bound to: 0 - type: integer 
@@ -84,8 +80,8 @@ INFO: [Synth 8-6157] synthesizing module 'ddr_pipeline' [/home/user/workspace/Si
 INFO: [Synth 8-6155] done synthesizing module 'ddr_pipeline' (5#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/ddr_pipeline.v:4]
 INFO: [Synth 8-6157] synthesizing module 'exe_pipeline' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/exe_pipeline.v:4]
 INFO: [Synth 8-6155] done synthesizing module 'exe_pipeline' (6#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/exe_pipeline.v:4]
-INFO: [Synth 8-6157] synthesizing module 'scratchpad' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/scratchpad_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'scratchpad' (7#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/scratchpad_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'scratchpad' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/scratchpad_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'scratchpad' (7#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/scratchpad_stub.v:6]
 INFO: [Synth 8-6155] done synthesizing module 'execute_stage' (8#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/execute_stage.v:3]
 INFO: [Synth 8-6157] synthesizing module 'register_file' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/register_file.v:7]
 
@@ -113,23 +109,21 @@ Reason is one or more of the following :
 RAM "reg_file_reg" dissolved into registers
 INFO: [Synth 8-6155] done synthesizing module 'register_file' (9#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/register_file.v:7]
 INFO: [Synth 8-6155] done synthesizing module 'softmc_pipeline' (10#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/softmc_pipeline.v:3]
-WARNING: [Synth 8-7071] port 'ddr_sre' of module 'softmc_pipeline' is unconnected for instance 'pipeline' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:422]
-WARNING: [Synth 8-7071] port 'ddr_srx' of module 'softmc_pipeline' is unconnected for instance 'pipeline' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:422]
-WARNING: [Synth 8-7023] instance 'pipeline' of module 'softmc_pipeline' has 29 connections declared, but only 27 given [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:422]
+WARNING: [Synth 8-7071] port 'ddr_sre' of module 'softmc_pipeline' is unconnected for instance 'pipeline' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:413]
+WARNING: [Synth 8-7071] port 'ddr_srx' of module 'softmc_pipeline' is unconnected for instance 'pipeline' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:413]
+WARNING: [Synth 8-7023] instance 'pipeline' of module 'softmc_pipeline' has 29 connections declared, but only 27 given [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:413]
 INFO: [Synth 8-6157] synthesizing module 'frontend' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/frontend.v:8]
 	Parameter SIM_MEM bound to: false - type: string 
 	Parameter IDLE_S bound to: 2'b00 
 	Parameter INIT_MEM_S bound to: 2'b01 
 	Parameter EXECUTE_S bound to: 2'b10 
-	Parameter LOOPBACK_S bound to: 2'b11 
 	Parameter RST_FLAG bound to: 64 - type: integer 
 	Parameter RB_MODE_FLAG bound to: 65 - type: integer 
 	Parameter DLL_TOG_FLAG bound to: 66 - type: integer 
 	Parameter AUTO_REF_FLAG bound to: 67 - type: integer 
 	Parameter ACTIVATE_FLAG bound to: 68 - type: integer 
-	Parameter LOOPBACK_FLAG bound to: 69 - type: integer 
-INFO: [Synth 8-6157] synthesizing module 'instr_blk_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/instr_blk_mem_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'instr_blk_mem' (11#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/instr_blk_mem_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'instr_blk_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/instr_blk_mem_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'instr_blk_mem' (11#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/instr_blk_mem_stub.v:6]
 INFO: [Synth 8-6157] synthesizing module 'maintenance_controller' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/maintenance_controller.v:3]
 	Parameter tCK bound to: 1500 - type: integer 
 	Parameter MAINT_PRESCALER_PERIOD bound to: 500000 - type: integer 
@@ -147,14 +141,15 @@ INFO: [Synth 8-6157] synthesizing module 'maintenance_controller' [/home/user/wo
 	Parameter PERIODIC_REF_TIMER_DIV bound to: 15 - type: integer 
 	Parameter PERIODIC_REF_TIMER_WIDTH bound to: 4 - type: integer 
 WARNING: [Synth 8-567] referenced signal 'zq_cntrl.zq_tick' should be on the sensitivity list [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/maintenance_controller.v:200]
-INFO: [Synth 8-6157] synthesizing module 'pr_read_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/pr_read_mem_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'pr_read_mem' (12#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/pr_read_mem_stub.v:6]
-INFO: [Synth 8-6157] synthesizing module 'zq_calib_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/zq_calib_mem_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'zq_calib_mem' (13#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/zq_calib_mem_stub.v:6]
-INFO: [Synth 8-6157] synthesizing module 'pr_ref_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/pr_ref_mem_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'pr_ref_mem' (14#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/pr_ref_mem_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'pr_read_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/pr_read_mem_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'pr_read_mem' (12#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/pr_read_mem_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'zq_calib_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/zq_calib_mem_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'zq_calib_mem' (13#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/zq_calib_mem_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'pr_ref_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/pr_ref_mem_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'pr_ref_mem' (14#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/pr_ref_mem_stub.v:6]
 WARNING: [Synth 8-689] width (7) of port connection 'addra' does not match port width (6) of module 'pr_ref_mem' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/maintenance_controller.v:71]
 INFO: [Synth 8-6155] done synthesizing module 'maintenance_controller' (15#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/maintenance_controller.v:3]
+INFO: [Synth 8-155] case statement is not full and has no default [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/frontend.v:168]
 INFO: [Synth 8-6155] done synthesizing module 'frontend' (16#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/frontend.v:8]
 INFO: [Synth 8-6157] synthesizing module 'ddr4_adapter' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/ddr4_adapter.v:11]
 	Parameter CKE_WIDTH bound to: 1 - type: integer 
@@ -165,8 +160,8 @@ INFO: [Synth 8-6157] synthesizing module 'ddr4_adapter' [/home/user/workspace/Si
 	Parameter DBUF_WIDTH bound to: 4 - type: integer 
 	Parameter DQ_BURST bound to: 8 - type: integer 
 INFO: [Synth 8-6155] done synthesizing module 'ddr4_adapter' (17#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/ddr4_adapter.v:11]
-WARNING: [Synth 8-7071] port 'iss_dummy_read' of module 'ddr4_adapter' is unconnected for instance 'ddr4_adapter' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:512]
-WARNING: [Synth 8-7023] instance 'ddr4_adapter' of module 'ddr4_adapter' has 38 connections declared, but only 37 given [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:512]
+WARNING: [Synth 8-7071] port 'iss_dummy_read' of module 'ddr4_adapter' is unconnected for instance 'ddr4_adapter' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:499]
+WARNING: [Synth 8-7023] instance 'ddr4_adapter' of module 'ddr4_adapter' has 38 connections declared, but only 37 given [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:499]
 INFO: [Synth 8-6157] synthesizing module 'ddr4_mc_odt' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/ddr4_mc_odt.v:3]
 	Parameter ODTWR bound to: 16'b0000000000000001 
 	Parameter ODTWRDEL bound to: 5'b01001 
@@ -187,10 +182,10 @@ INFO: [Synth 8-6157] synthesizing module 'IBUFDS_GTE4' [/home/user/Xilinx/Vivado
 	Parameter REFCLK_HROW_CK_SEL bound to: 2'b00 
 	Parameter REFCLK_ICNTL_RX bound to: 2'b00 
 INFO: [Synth 8-6155] done synthesizing module 'IBUFDS_GTE4' (19#1) [/home/user/Xilinx/Vivado/2020.2/scripts/rt/data/unisim_comp.v:33175]
-INFO: [Synth 8-6157] synthesizing module 'xdma' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/xdma_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'xdma' (20#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/xdma_stub.v:6]
-INFO: [Synth 8-6157] synthesizing module 'axis_clock_converter' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/axis_clock_converter_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'axis_clock_converter' (21#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/axis_clock_converter_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'xdma' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/xdma_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'xdma' (20#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/xdma_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'axis_clock_converter' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/axis_clock_converter_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'axis_clock_converter' (21#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/axis_clock_converter_stub.v:6]
 INFO: [Synth 8-6157] synthesizing module 'readback_engine' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/readback_engine.v:4]
 	Parameter READ_MODE bound to: 0 - type: integer 
 	Parameter DIFF_MODE bound to: 1 - type: integer 
@@ -199,8 +194,8 @@ INFO: [Synth 8-155] case statement is not full and has no default [/home/user/wo
 INFO: [Synth 8-6155] done synthesizing module 'pop_count4' (22#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/pop_count4.v:23]
 INFO: [Synth 8-6157] synthesizing module 'diff_shift_reg' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/diff_shift_reg.v:23]
 INFO: [Synth 8-6155] done synthesizing module 'diff_shift_reg' (23#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/diff_shift_reg.v:23]
-INFO: [Synth 8-6157] synthesizing module 'rdback_fifo' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/rdback_fifo_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'rdback_fifo' (24#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-1874776-u200-station/realtime/rdback_fifo_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'rdback_fifo' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/rdback_fifo_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'rdback_fifo' (24#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/.Xil/Vivado-16780-u200-station/realtime/rdback_fifo_stub.v:6]
 WARNING: [Synth 8-7071] port 'prog_empty' of module 'rdback_fifo' is unconnected for instance 'rbf' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/readback_engine.v:137]
 WARNING: [Synth 8-7071] port 'wr_rst_busy' of module 'rdback_fifo' is unconnected for instance 'rbf' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/readback_engine.v:137]
 WARNING: [Synth 8-7071] port 'rd_rst_busy' of module 'rdback_fifo' is unconnected for instance 'rbf' [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/sources/hdl/verilog/readback_engine.v:137]
@@ -211,18 +206,18 @@ CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin /home/user/workspace/Si
 CRITICAL WARNING: [Synth 8-6858] multi-driven net /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v-4.7 is connected to at least one constant driver which has been preserved, other driver is ignored [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:4]
 INFO: [Synth 8-6155] done synthesizing module 'softmc_top' (26#1) [/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/verilog/softmc_top.v:4]
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 2868.023 ; gain = 296.594 ; free physical = 1098 ; free virtual = 21436
+Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 2868.098 ; gain = 299.594 ; free physical = 7135 ; free virtual = 26735
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 2881.898 ; gain = 310.469 ; free physical = 1104 ; free virtual = 21443
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 2881.973 ; gain = 313.469 ; free physical = 7142 ; free virtual = 26742
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 2881.898 ; gain = 310.469 ; free physical = 1104 ; free virtual = 21443
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 2881.973 ; gain = 313.469 ; free physical = 7142 ; free virtual = 26742
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00.07 ; elapsed = 00:00:00.07 . Memory (MB): peak = 2894.773 ; gain = 0.000 ; free physical = 1083 ; free virtual = 21421
+Netlist sorting complete. Time (s): cpu = 00:00:00.07 ; elapsed = 00:00:00.07 . Memory (MB): peak = 2893.879 ; gain = 0.000 ; free physical = 7129 ; free virtual = 26728
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
@@ -254,11 +249,11 @@ INFO: [Project 1-236] Implementation specific constraints were found while readi
 Resolution: To avoid this warning, move constraints listed in [.Xil/softmc_top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 3099.211 ; gain = 0.000 ; free physical = 929 ; free virtual = 21267
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 3096.348 ; gain = 0.000 ; free physical = 6980 ; free virtual = 26581
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 3099.211 ; gain = 0.000 ; free physical = 929 ; free virtual = 21267
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 3096.348 ; gain = 0.000 ; free physical = 6980 ; free virtual = 26581
 WARNING: [Timing 38-316] Clock period '100.000' specified during out-of-context synthesis of instance 'axis_clk_conv_i0' at clock pin 'm_axis_aclk' is different from the actual clock period '4.000', this can lead to different synthesis results.
 WARNING: [Timing 38-316] Clock period '100.000' specified during out-of-context synthesis of instance 'axis_clk_conv_i1' at clock pin 'm_axis_aclk' is different from the actual clock period '5.999', this can lead to different synthesis results.
 WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'frontend/imem' at clock pin 'clka' is different from the actual clock period '5.999', this can lead to different synthesis results.
@@ -268,7 +263,7 @@ WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context s
 WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'pipeline/es/data_mem' at clock pin 'clka' is different from the actual clock period '5.999', this can lead to different synthesis results.
 WARNING: [Timing 38-316] Clock period '10.000' specified during out-of-context synthesis of instance 'rbe/rbf' at clock pin 'clk' is different from the actual clock period '5.999', this can lead to different synthesis results.
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 3102.180 ; gain = 530.750 ; free physical = 1029 ; free virtual = 21369
+Finished Constraint Validation : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 3102.285 ; gain = 533.781 ; free physical = 7123 ; free virtual = 26721
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
@@ -276,7 +271,7 @@ Start Loading Part and Timing Information
 Loading part: xcu200-fsgd2104-2-e
 INFO: [Synth 8-6742] Reading net delay rules and data
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 3102.180 ; gain = 530.750 ; free physical = 1029 ; free virtual = 21368
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 3102.285 ; gain = 533.781 ; free physical = 7123 ; free virtual = 26721
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
@@ -592,7 +587,7 @@ Applied set_property KEEP_HIERARCHY = SOFT for rbe/rbf. (constraint file  auto g
 Applied set_property KEEP_HIERARCHY = SOFT for phy_ddr4_i. (constraint file  auto generated constraint).
 Applied set_property KEEP_HIERARCHY = SOFT for xdma_i. (constraint file  auto generated constraint).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 3102.180 ; gain = 530.750 ; free physical = 1028 ; free virtual = 21367
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 3102.285 ; gain = 533.781 ; free physical = 7123 ; free virtual = 26721
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'state_r_reg' in module 'fetch_stage'
 INFO: [Synth 8-802] inferred FSM for state register 'state_r_reg' in module 'frontend'
@@ -609,14 +604,13 @@ WARNING: [Synth 8-327] inferring latch for variable 's2_mem_wdata_reg' [/home/us
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
-                  IDLE_S |                             0010 |                               00
-              INIT_MEM_S |                             0100 |                               01
-              LOOPBACK_S |                             1000 |                               11
-               EXECUTE_S |                             0001 |                               10
+                  IDLE_S |                              010 |                               00
+              INIT_MEM_S |                              100 |                               01
+               EXECUTE_S |                              001 |                               10
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'state_r_reg' using encoding 'one-hot' in module 'frontend'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 3102.180 ; gain = 530.750 ; free physical = 989 ; free virtual = 21330
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 3102.285 ; gain = 533.781 ; free physical = 7075 ; free virtual = 26675
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -664,7 +658,7 @@ Detailed RTL Component Info :
 +---Muxes : 
 	   4 Input 1024 Bit        Muxes := 1     
 	   2 Input 1024 Bit        Muxes := 7     
-	   2 Input  512 Bit        Muxes := 11    
+	   2 Input  512 Bit        Muxes := 10    
 	   2 Input  256 Bit        Muxes := 1     
 	   2 Input  136 Bit        Muxes := 5     
 	   2 Input   64 Bit        Muxes := 4     
@@ -687,18 +681,21 @@ Detailed RTL Component Info :
 	   2 Input    8 Bit        Muxes := 12    
 	   3 Input    8 Bit        Muxes := 1     
 	  19 Input    5 Bit        Muxes := 8     
-	   4 Input    5 Bit        Muxes := 1     
+	   3 Input    5 Bit        Muxes := 1     
 	   2 Input    5 Bit        Muxes := 1     
-	   2 Input    4 Bit        Muxes := 16    
-	   4 Input    4 Bit        Muxes := 2     
+	   2 Input    4 Bit        Muxes := 12    
+	   4 Input    4 Bit        Muxes := 1     
+	   3 Input    3 Bit        Muxes := 1     
+	   2 Input    3 Bit        Muxes := 2     
 	  16 Input    3 Bit        Muxes := 128   
 	   4 Input    2 Bit        Muxes := 2     
 	   2 Input    2 Bit        Muxes := 67    
 	   3 Input    2 Bit        Muxes := 1     
 	   6 Input    2 Bit        Muxes := 7     
-	   2 Input    1 Bit        Muxes := 99    
-	   4 Input    1 Bit        Muxes := 13    
+	   2 Input    1 Bit        Muxes := 96    
+	   4 Input    1 Bit        Muxes := 6     
 	   7 Input    1 Bit        Muxes := 24    
+	   3 Input    1 Bit        Muxes := 7     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -715,26 +712,26 @@ Finished Part Resource Summary
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:33 ; elapsed = 00:00:34 . Memory (MB): peak = 3192.164 ; gain = 620.734 ; free physical = 822 ; free virtual = 21194
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:37 ; elapsed = 00:00:38 . Memory (MB): peak = 3229.270 ; gain = 660.766 ; free physical = 7055 ; free virtual = 26674
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-565] redefining clock 'c0_sys_clk_p'
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:40 ; elapsed = 00:00:45 . Memory (MB): peak = 3320.586 ; gain = 749.156 ; free physical = 1058 ; free virtual = 21417
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:44 ; elapsed = 00:00:49 . Memory (MB): peak = 3321.988 ; gain = 753.484 ; free physical = 6604 ; free virtual = 26225
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:40 ; elapsed = 00:00:45 . Memory (MB): peak = 3329.586 ; gain = 758.156 ; free physical = 1025 ; free virtual = 21384
+Finished Timing Optimization : Time (s): cpu = 00:00:45 ; elapsed = 00:00:49 . Memory (MB): peak = 3330.988 ; gain = 762.484 ; free physical = 6594 ; free virtual = 26216
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:44 ; elapsed = 00:00:48 . Memory (MB): peak = 3537.648 ; gain = 966.219 ; free physical = 901 ; free virtual = 21260
+Finished Technology Mapping : Time (s): cpu = 00:00:48 ; elapsed = 00:00:52 . Memory (MB): peak = 3537.051 ; gain = 968.547 ; free physical = 6586 ; free virtual = 26207
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -752,37 +749,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:45 ; elapsed = 00:00:50 . Memory (MB): peak = 3537.648 ; gain = 966.219 ; free physical = 903 ; free virtual = 21262
+Finished IO Insertion : Time (s): cpu = 00:00:49 ; elapsed = 00:00:54 . Memory (MB): peak = 3537.051 ; gain = 968.547 ; free physical = 6583 ; free virtual = 26205
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:45 ; elapsed = 00:00:50 . Memory (MB): peak = 3537.648 ; gain = 966.219 ; free physical = 903 ; free virtual = 21262
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:49 ; elapsed = 00:00:54 . Memory (MB): peak = 3537.051 ; gain = 968.547 ; free physical = 6584 ; free virtual = 26205
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:45 ; elapsed = 00:00:50 . Memory (MB): peak = 3537.648 ; gain = 966.219 ; free physical = 903 ; free virtual = 21262
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:49 ; elapsed = 00:00:54 . Memory (MB): peak = 3537.051 ; gain = 968.547 ; free physical = 6583 ; free virtual = 26205
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:45 ; elapsed = 00:00:50 . Memory (MB): peak = 3537.648 ; gain = 966.219 ; free physical = 903 ; free virtual = 21262
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:49 ; elapsed = 00:00:54 . Memory (MB): peak = 3537.051 ; gain = 968.547 ; free physical = 6583 ; free virtual = 26205
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:46 ; elapsed = 00:00:51 . Memory (MB): peak = 3537.648 ; gain = 966.219 ; free physical = 902 ; free virtual = 21261
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:50 ; elapsed = 00:00:54 . Memory (MB): peak = 3537.051 ; gain = 968.547 ; free physical = 6583 ; free virtual = 26204
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:46 ; elapsed = 00:00:51 . Memory (MB): peak = 3537.648 ; gain = 966.219 ; free physical = 902 ; free virtual = 21261
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:50 ; elapsed = 00:00:54 . Memory (MB): peak = 3537.051 ; gain = 968.547 ; free physical = 6583 ; free virtual = 26204
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -792,9 +789,9 @@ Report BlackBoxes:
 +------+---------------------+----------+
 |      |BlackBox name        |Instances |
 +------+---------------------+----------+
-|1     |xdma                 |         1|
-|2     |axis_clock_converter |         2|
-|3     |phy_ddr4_udimm       |         1|
+|1     |phy_ddr4_udimm       |         1|
+|2     |xdma                 |         1|
+|3     |axis_clock_converter |         2|
 |4     |instr_blk_mem        |         1|
 |5     |pr_read_mem          |         1|
 |6     |zq_calib_mem         |         1|
@@ -820,34 +817,34 @@ Report Cell Usage:
 |11    |BUFG                  |     1|
 |12    |CARRY8                |    76|
 |13    |IBUFDS_GTE4           |     1|
-|14    |LUT1                  |    70|
-|15    |LUT2                  |   215|
-|16    |LUT3                  |   982|
-|17    |LUT4                  |  1455|
-|18    |LUT5                  |  1767|
+|14    |LUT1                  |    71|
+|15    |LUT2                  |   918|
+|16    |LUT3                  |   949|
+|17    |LUT4                  |   938|
+|18    |LUT5                  |  1606|
 |19    |LUT6                  |  3752|
 |20    |MUXF7                 |   432|
 |21    |MUXF8                 |   198|
-|22    |FDRE                  |  5035|
+|22    |FDRE                  |  5029|
 |23    |FDSE                  |   104|
 |24    |LD                    |    32|
 |25    |IBUF                  |     2|
 |26    |OBUF                  |     1|
 +------+----------------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:46 ; elapsed = 00:00:51 . Memory (MB): peak = 3537.648 ; gain = 966.219 ; free physical = 901 ; free virtual = 21260
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:50 ; elapsed = 00:00:54 . Memory (MB): peak = 3537.051 ; gain = 968.547 ; free physical = 6583 ; free virtual = 26204
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 2 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:42 ; elapsed = 00:00:47 . Memory (MB): peak = 3537.648 ; gain = 745.938 ; free physical = 927 ; free virtual = 21286
-Synthesis Optimization Complete : Time (s): cpu = 00:00:46 ; elapsed = 00:00:51 . Memory (MB): peak = 3537.656 ; gain = 966.219 ; free physical = 927 ; free virtual = 21286
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:46 ; elapsed = 00:00:51 . Memory (MB): peak = 3537.051 ; gain = 748.234 ; free physical = 6608 ; free virtual = 26229
+Synthesis Optimization Complete : Time (s): cpu = 00:00:50 ; elapsed = 00:00:54 . Memory (MB): peak = 3537.059 ; gain = 968.547 ; free physical = 6608 ; free virtual = 26229
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00.06 ; elapsed = 00:00:00.06 . Memory (MB): peak = 3537.656 ; gain = 0.000 ; free physical = 1012 ; free virtual = 21371
+Netlist sorting complete. Time (s): cpu = 00:00:00.06 ; elapsed = 00:00:00.06 . Memory (MB): peak = 3537.059 ; gain = 0.000 ; free physical = 6686 ; free virtual = 26308
 INFO: [Netlist 29-17] Analyzing 741 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-141] Inserted 3 OBUFs to IO ports without IO buffers.
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 3583.977 ; gain = 0.000 ; free physical = 924 ; free virtual = 21283
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 3583.379 ; gain = 0.000 ; free physical = 6607 ; free virtual = 26228
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 35 instances were transformed.
   BUFG => BUFGCE: 1 instance 
@@ -855,10 +852,10 @@ INFO: [Project 1-111] Unisim Transformation Summary:
   LD => LDCE: 32 instances
 
 INFO: [Common 17-83] Releasing license: Synthesis
-87 Infos, 37 Warnings, 3 Critical Warnings and 0 Errors encountered.
+88 Infos, 35 Warnings, 3 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:54 ; elapsed = 00:00:58 . Memory (MB): peak = 3583.977 ; gain = 1224.516 ; free physical = 1067 ; free virtual = 21427
+synth_design: Time (s): cpu = 00:00:58 ; elapsed = 00:01:02 . Memory (MB): peak = 3583.379 ; gain = 1223.875 ; free physical = 6754 ; free virtual = 26371
 INFO: [runtcl-6] Synthesis results are not added to the cache due to CRITICAL_WARNING
 INFO: [Common 17-1381] The checkpoint '/home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/U200.runs/synth_1/softmc_top.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file softmc_top_utilization_synth.rpt -pb softmc_top_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Sun Mar 23 15:46:00 2025...
+INFO: [Common 17-206] Exiting Vivado at Mon Mar 24 11:18:59 2025...
