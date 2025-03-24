@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date             : Sun Mar 23 15:54:46 2025
+| Date             : Mon Mar 24 11:25:32 2025
 | Host             : u200-station running 64-bit Ubuntu 20.04.6 LTS
 | Command          : report_power -file softmc_top_power_routed.rpt -pb softmc_top_power_summary_routed.pb -rpx softmc_top_power_routed.rpx
 | Design           : softmc_top
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 7.481        |
+| Total On-Chip Power (W)  | 7.471        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 4.883        |
+| Dynamic (W)              | 4.873        |
 | Device Static (W)        | 2.598        |
 | Effective TJA (C/W)      | 0.5          |
 | Max Ambient (C)          | 96.1         |
@@ -52,27 +52,27 @@ Table of Contents
 +--------------------------+-----------+----------+-----------+-----------------+
 | On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
 +--------------------------+-----------+----------+-----------+-----------------+
-| Clocks                   |     0.350 |       42 |       --- |             --- |
-| CLB Logic                |     0.167 |    92656 |       --- |             --- |
-|   LUT as Logic           |     0.118 |    33921 |   1182240 |            2.87 |
-|   LUT as Distributed RAM |     0.034 |     2158 |    591840 |            0.36 |
-|   Register               |     0.013 |    42695 |   2364480 |            1.81 |
+| Clocks                   |     0.353 |       42 |       --- |             --- |
+| CLB Logic                |     0.158 |    90423 |       --- |             --- |
+|   LUT as Logic           |     0.113 |    32983 |   1182240 |            2.79 |
+|   LUT as Distributed RAM |     0.029 |     1934 |    591840 |            0.33 |
+|   Register               |     0.013 |    41917 |   2364480 |            1.77 |
 |   CARRY8                 |     0.002 |      473 |    147780 |            0.32 |
 |   LUT as Shift Register  |    <0.001 |       88 |    591840 |            0.01 |
 |   Others                 |    <0.001 |     2326 |       --- |             --- |
 |   BUFG                   |    <0.001 |        1 |       240 |            0.42 |
 |   F7/F8 Muxes            |     0.000 |     1386 |   1182240 |            0.12 |
-| Signals                  |     0.299 |    94498 |       --- |             --- |
-| Block RAM                |     0.508 |    209.5 |      2160 |            9.70 |
+| Signals                  |     0.297 |    92709 |       --- |             --- |
+| Block RAM                |     0.509 |    209.5 |      2160 |            9.70 |
 | MMCM                     |     0.114 |        0 |       --- |             --- |
 | PLL                      |     0.181 |        3 |       --- |             --- |
 | DSPs                     |    <0.001 |        3 |      6840 |            0.04 |
-| I/O                      |     0.547 |      124 |       676 |           18.34 |
+| I/O                      |     0.545 |      124 |       676 |           18.34 |
 | GTY                      |     2.406 |        8 |        24 |           33.33 |
 | Hard IPs                 |     0.309 |        1 |       --- |             --- |
 |   PCIE                   |     0.309 |        1 |       --- |             --- |
 | Static Power             |     2.598 |          |           |                 |
-| Total                    |     7.481 |          |           |                 |
+| Total                    |     7.471 |          |           |                 |
 +--------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -82,17 +82,17 @@ Table of Contents
 +------------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source     | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +------------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint     |       0.850 |     3.118 |       2.220 |      0.898 |       NA    | Unspecified | NA         |
+| Vccint     |       0.850 |     3.108 |       2.210 |      0.898 |       NA    | Unspecified | NA         |
 | Vccint_io  |       0.850 |     0.481 |       0.216 |      0.265 |       NA    | Unspecified | NA         |
 | Vccbram    |       0.850 |     0.077 |       0.060 |      0.017 |       NA    | Unspecified | NA         |
 | Vccaux     |       1.800 |     0.805 |       0.161 |      0.645 |       NA    | Unspecified | NA         |
-| Vccaux_io  |       1.800 |     0.323 |       0.138 |      0.185 |       NA    | Unspecified | NA         |
+| Vccaux_io  |       1.800 |     0.322 |       0.137 |      0.185 |       NA    | Unspecified | NA         |
 | Vcco33     |       3.300 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco25     |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco18     |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco15     |       1.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco135    |       1.350 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
-| Vcco12     |       1.200 |     0.096 |       0.096 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco12     |       1.200 |     0.095 |       0.095 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco10     |       1.000 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vccadc     |       1.800 |     0.024 |       0.000 |      0.024 |       NA    | Unspecified | NA         |
 | MGTYAVcc   |       0.900 |     0.450 |       0.413 |      0.037 |       NA    | Unspecified | NA         |
@@ -193,13 +193,13 @@ Table of Contents
 +----------------------------------------------------+-----------+
 | Name                                               | Power (W) |
 +----------------------------------------------------+-----------+
-| softmc_top                                         |     4.883 |
+| softmc_top                                         |     4.873 |
 |   axis_clk_conv_i0                                 |     0.009 |
 |     inst                                           |     0.009 |
 |       gen_async_conv.axisc_async_clock_converter_0 |     0.009 |
-|   axis_clk_conv_i1                                 |     0.012 |
-|     inst                                           |     0.012 |
-|       gen_async_conv.axisc_async_clock_converter_0 |     0.012 |
+|   axis_clk_conv_i1                                 |     0.005 |
+|     inst                                           |     0.005 |
+|       gen_async_conv.axisc_async_clock_converter_0 |     0.005 |
 |   dbg_hub                                          |     0.002 |
 |     inst                                           |     0.002 |
 |       BSCANID.u_xsdbm_id                           |     0.002 |
@@ -208,28 +208,28 @@ Table of Contents
 |     imem                                           |     0.058 |
 |       U0                                           |     0.058 |
 |     maint_ctrl                                     |     0.002 |
-|   phy_ddr4_i                                       |     0.931 |
-|     inst                                           |     0.931 |
+|   phy_ddr4_i                                       |     0.927 |
+|     inst                                           |     0.927 |
 |       u_ddr4_infrastructure                        |     0.117 |
 |       u_ddr_cal_riu                                |     0.024 |
-|       u_ddr_cal_top                                |     0.067 |
-|       u_mig_ddr4_phy                               |     0.720 |
-|   pipeline                                         |     0.066 |
+|       u_ddr_cal_top                                |     0.065 |
+|       u_mig_ddr4_phy                               |     0.718 |
+|   pipeline                                         |     0.064 |
 |     ds                                             |     0.002 |
-|     es                                             |     0.029 |
-|       dp                                           |     0.020 |
-|       ep                                           |     0.008 |
+|     es                                             |     0.030 |
+|       dp                                           |     0.021 |
+|       ep                                           |     0.009 |
 |     fs                                             |     0.001 |
-|     rf                                             |     0.034 |
+|     rf                                             |     0.030 |
 |   rbe                                              |     0.017 |
 |     dsr                                            |     0.003 |
 |     rbf                                            |     0.009 |
 |       U0                                           |     0.009 |
-|   xdma_i                                           |     3.761 |
-|     inst                                           |     3.761 |
-|       pcie4_ip_i                                   |     3.238 |
-|       ram_top                                      |     0.130 |
-|       udma_wrapper                                 |     0.393 |
+|   xdma_i                                           |     3.764 |
+|     inst                                           |     3.764 |
+|       pcie4_ip_i                                   |     3.252 |
+|       ram_top                                      |     0.137 |
+|       udma_wrapper                                 |     0.374 |
 +----------------------------------------------------+-----------+
 
 
