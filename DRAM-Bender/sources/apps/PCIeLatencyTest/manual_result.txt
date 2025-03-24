@@ -1,1 +1,12 @@
-Writing 256 rows + PCIe gives 1.91ms+-0.034ms round trip (over 40 tests; at the 44th test DRAM bender get stuck)
+Writing 256 rows + reading 1 cacheline + PCIe gives 1.8745 ms +- 0.018 ms round trip (1K tests)
+
+Reading 1 cacheline + PCIe gives 33.73 us +- 66.63 us round trip (100K tests)
+
+Reading single 64Kb row + PCIe gives 37.795 us +- 72.968 us (100K tests)
+
+
+Timing for all program: 2.25973 ms +- 0.0484518 ms
+
+Program without write: 2.25973 - 1.8745 = 0.38523 ms 
+
+
