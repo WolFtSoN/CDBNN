@@ -1,0 +1,1 @@
+Writing 256 rows + PCIe gives 1.91ms+-0.034ms round trip (over 40 tests; at the 44th test DRAM bender get stuck)

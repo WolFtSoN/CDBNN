@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xcu200-fsgd2104-2-e" LaunchTime="1742205226">
+<GenRun Id="synth_1" LaunchPart="xcu200-fsgd2104-2-e" LaunchTime="1742737494">
   <File Type="VDS-TIMING-PB" Name="softmc_top_timing_summary_synth.pb"/>
   <File Type="VDS-TIMINGSUMMARY" Name="softmc_top_timing_summary_synth.rpt"/>
   <File Type="RDS-DCP" Name="softmc_top.dcp"/>

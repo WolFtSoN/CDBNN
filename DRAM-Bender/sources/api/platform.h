@@ -18,6 +18,7 @@ namespace py = pybind11;
 class SoftMCPlatform{
   #define INSTR_BUF_SIZE 32*2048
   #define API_BUF_SIZE 1024*1024*2
+  #define IMEM_SIZE 8*65536
   public:
     SoftMCPlatform();
     SoftMCPlatform(bool);

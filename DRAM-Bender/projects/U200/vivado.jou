@@ -1,0 +1,41 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Sun Mar 23 15:19:22 2025
+# Process ID: 1862495
+# Current directory: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200
+# Command line: vivado -mode tcl
+# Log file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/vivado.log
+# Journal file: /home/user/workspace/SiMRA-DRAM/DRAM-Bender/projects/U200/vivado.jou
+#-----------------------------------------------------------
+open_project U200.xpr 
+synth_design -rtl
+synth_design -rtl
+reset_run synth_1
+launch_runs synth_1
+wait_on_run synth_1
+reset_run impl_1
+launch_runs impl_1 -to_step write_bitstream
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1
+wait_on_run synth_1
+reset_run impl_1
+launch_runs impl_1 -to_step write_bitstream
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1
+wait_on_run synth_1
+reset_run impl_1
+launch_runs impl_1 -to_step write_bitstream
+wait_on_run impl_1
+open_hw
+open_hw_manager
+connect_hw_server 
+open_hw_target 
+current_hw_device [lindex [get_hw_devices] 0]
+refresh_hw_device [current_hw_device]
+set_property PROGRAM.FILE {U200.runs/impl_1/softmc_top.bit} [current_hw_device]
+program_hw_devices [current_hw_device]
+program_hw_devices [current_hw_device] -verify

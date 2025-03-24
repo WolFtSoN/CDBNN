@@ -121,73 +121,6 @@ void SoftMCPlatform::activate()
   }
 }
 
-void SoftMCPlatform::send_prog(Program &prog)
-{
-  if(is_dummy)
-  {
-    [[maybe_unused]] uint64_t* iseq     = (uint64_t*) prog.get_inst_array();
-    int bytes          = prog.size();
-    assert (bytes <= INSTR_BUF_SIZE/4 && " too many instructions in the buffer, the limit is 2048.");
-    return;
-  }
-  else
-  {
-    int prog_size_bytes                = prog.size();
-    int prog_size_insts                = prog_size_bytes / 8;
-    int chunk_size_insts     = INSTR_BUF_SIZE/32; // /4 as we are sending 256 bits for each instruction. Then /8 to get the number of instruction
-    int chunk_size_bytes     = chunk_size_insts * 8;
-    std::cout << "DEBUG: chunk_size_insts, chunk_size_bytes: " << chunk_size_insts << ", " << chunk_size_bytes << std::endl;
-    std::cout << "DEBUG: prog_size_insts, prog_size_bytes: " << prog_size_insts << ", " << prog_size_bytes << std::endl;
-    for (size_t chunk_num = 0; chunk_num < (prog_size_insts / chunk_size_insts); chunk_num++)
-    {
-      std::cout << "DEBUG: Sending chunk " << chunk_num << " of " << (prog_size_insts / chunk_size_insts) << std::endl;
-      uint64_t* iseq     = (uint64_t*) prog.get_inst_chunk(chunk_num*chunk_size_insts, (chunk_num+1)*chunk_size_insts);
-      uint64_t* temp_ptr = (uint64_t*) instr_buf;
-      for(int i = 0 ; i < chunk_size_insts ; i++)
-        temp_ptr[i*4] = iseq[i];
-      if ((chunk_num == (prog_size_insts / chunk_size_insts) - 1) && (prog_size_insts % chunk_size_insts == 0))
-      { // Raise flag if this is the last chunk
-          if(receiver.joinable())
-            receiver.join();
-
-        std::cout << "DEBUG: Starting execution thread..." << std::endl;
-        receiver = std::thread(&SoftMCPlatform::consumeData, this);
-        ((uint8_t*) instr_buf)[(chunk_size_insts-1)*64 + 8] = ((uint8_t) 1) << 4;
-      }
-      
-      int sent = iface -> sendData(instr_buf, chunk_size_bytes*4 /*in bytes*/);
-      std::cout << "DEBUG: Sent " << chunk_size_bytes*4 << " bytes to FPGA." << std::endl;
-
-      memset(instr_buf, 0, chunk_size_bytes*4);
-      free(iseq);
-    }
-    if (prog_size_insts % chunk_size_insts != 0)
-    {
-      chunk_size_insts = prog_size_insts % chunk_size_insts;
-      chunk_size_bytes = chunk_size_insts * 8;
-      std::cout << "DEBUG: Sending last chunk" << std::endl;
-      uint64_t* iseq     = (uint64_t*) prog.get_inst_chunk(prog_size_insts - chunk_size_insts, prog_size_insts);
-      uint64_t* temp_ptr = (uint64_t*) instr_buf;
-      for(int i = 0 ; i < prog_size_insts ; i++)
-        temp_ptr[i*4] = iseq[i];
-
-      if(receiver.joinable())
-        receiver.join();
-
-      std::cout << "DEBUG: Starting execution thread..." << std::endl;
-      receiver = std::thread(&SoftMCPlatform::consumeData, this);
-      ((uint8_t*) instr_buf)[(chunk_size_insts-1)*64 + 8] = ((uint8_t) 1) << 4; // Raise flag if this is the last chunk
-      int sent = iface -> sendData(instr_buf, chunk_size_bytes*4 /*in bytes*/);
-      std::cout << "DEBUG: Sent " << chunk_size_bytes*4 << " bytes to FPGA." << std::endl;
-
-      memset(instr_buf, 0, chunk_size_bytes*4);
-      free(iseq);
-      assert(!sent && "could not send instructions");
-    }
-  }
-}
-
-
 // void SoftMCPlatform::execute(Program &prog)
 // {
 //   if(is_dummy)
@@ -222,9 +155,14 @@ void SoftMCPlatform::send_prog(Program &prog)
 //   }
 // }
 
-#define CHUNK_SIZE 2048   // Adjust as needed
+#define CHUNK_SIZE (INSTR_BUF_SIZE/32)   // Adjust as needed
 
-void SoftMCPlatform::execute(Program &prog)
+void SoftMCPlatform::execute(Program &prog){
+  this->send_prog(prog);
+  this->activate();
+}
+
+void SoftMCPlatform::send_prog(Program &prog)
 {
   if(is_dummy)
   {
@@ -236,6 +174,7 @@ void SoftMCPlatform::execute(Program &prog)
   }
   else
   {
+    assert(prog.size() <= IMEM_SIZE && "Too many instructions in the buffer"); // Current RTL includes activate() is an instruction so if prog.size() == IMEM_SIZE there won't be space left for activate()
     // Get program data and total size in bytes (if prog.size() returns words, adjust accordingly)
     uint64_t* program_data = (uint64_t*) prog.get_inst_array();
     int total_insts = prog.size() / 8;
@@ -280,11 +219,9 @@ void SoftMCPlatform::consumeData()
   {
     int xdma_read_intent = 32*1024;
     int xdma_read_size = xdma_read_intent;
-    std::cout << "Comsume Data 1" << std::endl;
     int recvd = iface -> recvData((void*)xdma_recv_buf, xdma_read_size);
     if(recvd == 0)
       break;
-    std::cout << "Received " << recvd << " bytes from FPGA" << std::endl;
     // xdma read size in words
     // If we did not read 32KBs then the program probably ended
     // and the last transfer is trash so we discard it
@@ -332,13 +269,9 @@ int SoftMCPlatform::receiveData(void* recv_buf, int size){
 
     size /= 4;
     int total_size = size;
-    std::cout << "Test 1" << std::endl;
     int rdsz = api_recv_buf.pop((int*) recv_buf, size);
-    std::cout << "Test 2" << std::endl;
-    std::cout << "rdsz: " << rdsz << std::endl;
     while (rdsz < total_size)
       rdsz += api_recv_buf.pop(((int*) recv_buf) + rdsz, size = (total_size-rdsz));
-      std::cout << "rdsz: " << rdsz << std::endl;
 
     assert(rdsz == total_size && "Unexpected amount of data popped from spsc\n");
     return total_size*4;
