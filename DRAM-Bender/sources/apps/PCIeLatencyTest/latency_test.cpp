@@ -21,6 +21,7 @@
 #include "util.h"
 #include <random>
 #include <chrono>
+#include <iomanip>
 using namespace std;
 
 enum OperandType {
@@ -118,7 +119,7 @@ Program _init(uint32_t bank_id)
   return program;
 }
 
-Program write_prog(uint32_t bank_id)
+Program write_prog(uint32_t bank_id, int amount)
 {
   std::vector<uint32_t> x_in = {ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE,
                                 ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE};
@@ -134,24 +135,29 @@ Program write_prog(uint32_t bank_id)
 
   // --------------------- Step 0 ---------------------
   // 0. Fill input-layer data into the data rows
-  for(int i = 0; i < 256; i++)
-  {
-    random = rand();
-    // program.add_below(wrRow_immediate_label(BAR, data_to_operand[OPERAND_A][i][0], x_in[i],random)); //  (bank_reg, row_immd, wr_pattern, label)
-    program.add_below(wrRow_512_label(BAR, i, x_in, random));
-    // program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][i][0], random));
-    // num_reads++;
-  }
-
+  // for(int i = 0; i < 256; i++)
+  // {
+  //   random = rand();
+  //   // program.add_below(wrRow_immediate_label(BAR, data_to_operand[OPERAND_A][i][0], x_in[i],random)); //  (bank_reg, row_immd, wr_pattern, label)
+  //   program.add_below(wrRow_512_label(BAR, i, x_in, random));
+  //   // program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][i][0], random));
+  //   // num_reads++;
+  // }
+  
   // read out 512b (cache line) from the DRAM:
   random = rand();
-  program.add_inst(SMC_LI(0/*row num*/, RAR));
-  program.add_inst(SMC_LI(0, CAR));
-  program.add_inst(SMC_LI(0, LOOP_COLS));
-  program.add_below(PRE(BAR, 0, 0));
-  program.add_below(ACT(BAR, 0, RAR, 0));
-  program.add_inst(SMC_SLEEP(6));
-  program.add_below(READ(BAR, CAR, 1));
+  program.add_below(rdRow_immediate_label(BAR, 0, random));
+  // program.add_inst(SMC_LI(0/*row num*/, RAR));
+  // program.add_inst(SMC_LI(0, CAR));
+  // program.add_inst(SMC_LI(0, LOOP_COLS));
+  // program.add_below(PRE(BAR, 0, 0));
+  // program.add_below(ACT(BAR, 0, RAR, 0));
+  // program.add_inst(SMC_SLEEP(6));
+  // for (size_t i = 0; i < amount; i++)
+  // {
+  //   program.add_below(READ(BAR, CAR, 1));
+  //   program.add_inst(SMC_SLEEP(6));
+  // }
 
   program.add_inst(all_nops());
 
@@ -233,18 +239,24 @@ int read_args_n_parse(int argc, char* argv[], uint32_t *bank_id, std::ofstream &
   return 1;
 }
 
-void init_before(SoftMCPlatform& platform, Program& program)
+void init_before(SoftMCPlatform& platform, Program& program, int amount)
 {
   platform.reset_fpga();
+  program = write_prog(0, amount);
   platform.send_prog(program);
-  // platform.enter_loopback();
 }
 
-void to_time(SoftMCPlatform& platform, Program& program, uint8_t single_bus[64])
+void to_time(SoftMCPlatform& platform, Program& program, uint8_t* single_bus)
 {
   platform.activate();
-  platform.receiveData((void*)single_bus, 64);
+  platform.receiveData((void*)single_bus, 64); //64 bytes
 }
+
+void post(SoftMCPlatform& platform, uint8_t* single_bus, int amount)
+{
+  platform.receiveData((void*)single_bus, amount);
+}
+
 
 
 int main(int argc, char*argv[])
@@ -267,20 +279,21 @@ int main(int argc, char*argv[])
   std::cout << "bank_id: " << bank_id << std::endl;
   std::cout << "out_file: " << std::string(argv[2]) << std::endl;
 
-  uint8_t single_bus[64];
+  uint8_t single_bus[8*1024];
 
-  Program program = write_prog(bank_id);
+  Program program;
 
   
-  const int runs = 40;
+  const int runs = 100000;
   std::vector<double> timings_ms;
-  // init_before(platform, program);
+  int amount = 8*1024; //amount of cachelines read
   for (int i = 0; i < runs; ++i) {
-    init_before(platform, program);
+    init_before(platform, program, amount);
     std::cout << "Run " << i << std::endl;
     auto start = std::chrono::high_resolution_clock::now();
     to_time(platform, program, single_bus);
     auto end = std::chrono::high_resolution_clock::now();
+    post(platform, single_bus, amount-64);
     std::chrono::duration<double, std::milli> elapsed = end - start;
     timings_ms.push_back(elapsed.count());
   }

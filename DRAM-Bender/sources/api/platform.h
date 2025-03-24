@@ -75,6 +75,10 @@ class SoftMCPlatform{
      * Used along with Program::dumpRegisters to read register content
      */
     void readRegisterDump();
+    /**
+     * Used with loopback bitstream to test PCIe latency
+     */
+    // void loopback_test(uint8_t payload[4]);
 
   private:
     bool is_dummy;

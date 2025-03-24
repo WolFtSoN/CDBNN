@@ -93,7 +93,8 @@ void SoftMCPlatform::reset_fpga()
     if(sent)
       std::cerr << "Could not reset the FPGA!" << std::endl;
     else
-      std::cout << "Successfully reset the FPGA!" << std::endl;
+      // std::cout << "Successfully reset the FPGA!" << std::endl;
+    return;
   }
 }
 
@@ -117,7 +118,8 @@ void SoftMCPlatform::activate()
     if(sent)
       std::cerr << "Could not activate the DRAM Bender!" << std::endl;
     else
-      std::cout << "Successfully activated the DRAM Bender!" << std::endl;
+      // std::cout << "Successfully activated the DRAM Bender!" << std::endl;
+    return;
   }
 }
 
@@ -380,3 +382,32 @@ void SoftMCPlatform::readRegisterDump()
     printf("\n");
   }
 }
+
+/*
+void SoftMCPlatform::loopback_test(uint8_t payload[4])
+{
+  if(is_dummy)
+  {
+    return;
+  }
+  else
+  {
+    if(receiver.joinable())
+    receiver.join();
+
+    uint8_t payload_sent[32];
+    for(int i = 0 ; i < 32 ; i++)
+      payload_sent[i] = payload[i%4];
+    // std::cout << "DEBUG: Starting execution thread..." << std::endl;
+    receiver = std::thread(&SoftMCPlatform::consumeData, this);
+    // ((uint8_t*) instr_buf)[8] = ((uint8_t) 1) << 4; // bit 4 (counting from 0) is flag for activation
+    int sent = iface -> sendData(payload_sent, 32); // 2nd argument - size in bytes
+    // We do not need to zero out the whole buffer
+    // memset(instr_buf, 0, 32);
+    if(sent)
+      std::cerr << "Could not send deadbeef!" << std::endl;
+    // else
+      // std::cout << "Successfully activated the DRAM Bender!" << std::endl;
+  }
+}
+*/

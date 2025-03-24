@@ -1,5 +1,6 @@
 #include "util.h"
 
+
 Inst all_nops()
 {
   return __pack_mininsts(SMC_NOP(), SMC_NOP(), SMC_NOP(), SMC_NOP());
