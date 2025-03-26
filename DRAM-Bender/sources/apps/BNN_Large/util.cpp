@@ -4,15 +4,36 @@ Inst all_nops()
 {
   return __pack_mininsts(SMC_NOP(), SMC_NOP(), SMC_NOP(), SMC_NOP());
 }
+
+Inst all_nops_t(int &timing)
+{
+  timing = timing + 1;
+  return __pack_mininsts(SMC_NOP(), SMC_NOP(), SMC_NOP(), SMC_NOP());
+}
+
 Program PRE(int bank_reg, int ibar, int pall)
 {
   Program p;
   p.add_inst(
       SMC_PRE(bank_reg, ibar, pall),
       SMC_NOP(), SMC_NOP(), SMC_NOP());
-      p.add_inst(SMC_SLEEP(4));
+  p.add_inst(SMC_SLEEP(4));
   return p;
 }
+
+Program PRE_timing(int bank_reg, int ibar, int pall, int &timing) // timing is passed by reference
+{
+  Program p;
+  p.add_inst(
+      SMC_PRE(bank_reg, ibar, pall),
+      SMC_NOP(), SMC_NOP(), SMC_NOP());
+  p.add_inst(SMC_SLEEP_timing(4, timing));
+
+  timing = timing + 3;
+  return p;
+}
+
+
 Program ACT(int bank_reg, int ibar, int row_reg, int irar)
 {
   Program p;
@@ -304,6 +325,7 @@ Program doubleACT(int t_12, int t_23, int r_first, int r_second)
   // p.add_below(PRE(BAR, 0, 0));
   return p;
 }
+
 Program doubleACT_immd_reg(int t_12, int t_23, int r_first, int r_second_reg)
 {
 
