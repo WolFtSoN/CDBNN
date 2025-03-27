@@ -86,7 +86,7 @@ enum OperandType {
 #define ASIDE_1 40
 #define ASIDE_2 48
 
-#define ROW_COPY_T12 30
+#define ROW_COPY_T12 10
 #define ROW_COPY_T23 1
 
 #define MAJ_T12 1
@@ -174,40 +174,21 @@ Program row_copy(uint32_t r_first, uint32_t r_second,uint32_t bank_id, int &timi
   // Assumes bank is precharged!
   Program program;
 
-  // Precharge
-  program.add_inst(SMC_SLEEP_timing(6, timings_copy));
-  // program.add_inst(SMC_SLEEP(6));
-  // timings_copy += 24;
-  // program.add_below(PRE(BAR, 0, 0));
-  program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
-
-  act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
-  program.add_inst(SMC_SLEEP_timing(6, timings_copy));
-  // program.add_inst(SMC_SLEEP(6));
-  // timings_copy += 24;
-
   // Copy from r_first into r_second
   program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, r_first, r_second));
-  timings_copy += 1; // extra +1 for all_nopes inside doubleACT
   act_pre_copy.push_back({timings_copy, "ACT", bank_id, true, r_first});
-  timings_copy += ROW_COPY_T12+1; // t12 = 30 cycles (its starts from 0 and ROW_COPY_T12 = 30) 
+  timings_copy += ROW_COPY_T12 + 1; // t12 = 30 cycles (its starts from 0 and ROW_COPY_T12 = 30) 
   act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
-  timings_copy += ROW_COPY_T23+1; // t23 = 2 cycle (its starts from 0 and ROW_COPY_T23 = 1)
+  timings_copy += ROW_COPY_T23 + 1; // t23 = 2 cycle (its starts from 0 and ROW_COPY_T23 = 1)
   act_pre_copy.push_back({timings_copy, "ACT", bank_id, true, r_second});
+  timings_copy += 1; // t23 = 2 cycle (its starts from 0 and ROW_COPY_T23 = 1)
 
-  // Double act has no "quite" time included at the end, so a conservative settle time here
-  // program.add_inst(SMC_SLEEP(6));
-  program.add_inst(SMC_SLEEP_timing(6, timings_copy));
-  // timings_copy += 6;
+  // Wait tRAS (21 cycles in our DIMM) for settle (ACT PRE ACT has some DRAM NOPS at the end)
+  program.add_inst(SMC_SLEEP_timing(5, timings_copy));
 
-  // re-initialize with PRE + time for PRE to settle
-  // program.add_below(PRE(BAR, 0, 0));
+  // Precharge
   program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
-
   act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
-  program.add_inst(SMC_SLEEP_timing(6, timings_copy));
-  // program.add_inst(SMC_SLEEP(6));
-  // timings_copy += 6;
 
   return program;
 }
@@ -219,52 +200,29 @@ Program maj3(uint32_t bank_id, int &timings_maj)
   // Assumes bank is precharged!
   Program program;
 
-  // Precharge
-  // program.add_inst(SMC_SLEEP(6));
-  // timings_maj += 6;
-  program.add_inst(SMC_SLEEP_timing(6, timings_maj));
-
-  // program.add_below(PRE(BAR, 0, 0));
-  program.add_below(PRE_timing(BAR, 0, 0, timings_maj));
-
-  act_pre_maj.push_back({timings_maj, "PRE", bank_id, false, 0});
-  // act_pre_copy.push_back({timings, "PRE", bank_id, false, 0});
-  // program.add_inst(SMC_SLEEP(6));
-  // timings_maj += 6;
-
-  program.add_inst(SMC_SLEEP_timing(6, timings_maj));
-
-  // Copy from r_first into r_second
+  // Open many rows for MAJ
   program.add_below(doubleACT(MAJ_T12, MAJ_T23, COMP_R1, COMP_R2));
-  timings_maj += 1; // extra +1 for all_nopes inside doubleACT
   act_pre_maj.push_back({timings_maj, "ACT", bank_id, true, COMP_R1});
   timings_maj += MAJ_T12+1; // t12 = 2 cycles (its starts from 0 and MAJ_T12 = 1)
   act_pre_maj.push_back({timings_maj, "PRE", bank_id, false, 0});
   timings_maj += MAJ_T23+1; // t23 = 1 cycle (its starts from 0 and MAJ_T23 = 0)
   act_pre_maj.push_back({timings_maj, "ACT", bank_id, true, COMP_R2});
+  timings_maj += 1; // for ACT
 
-  // Double act has no "quite" time included at the end, so a conservative settle time here
-  program.add_inst(SMC_SLEEP_timing(6, timings_maj));
-  // program.add_inst(SMC_SLEEP(6));
-  // timings_maj += 6;
-  // re-initialize with PRE + time for PRE to settle
+  // Wait tRAS (21 cycles in our DIMM) for settle (ACT PRE ACT has some DRAM NOPS at the end)
+  program.add_inst(SMC_SLEEP_timing(5, timings_maj));
 
-  // program.add_below(PRE(BAR, 0, 0));
+  // Precharge
   program.add_below(PRE_timing(BAR, 0, 0, timings_maj));
-
-  // act_pre_copy.push_back({timings, "PRE", bank_id, false, 0});
   act_pre_maj.push_back({timings_maj, "PRE", bank_id, false, 0});
-
-  program.add_inst(SMC_SLEEP_timing(6, timings_maj));
-  // program.add_inst(SMC_SLEEP(6));
-  // timings_maj += 6;
 
   return program;
 }
 
-
+// Calculate a vector*vector (64K batch) binary matrix multiplication
 Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std::vector<std::vector<uint32_t>> &weights, 
-                 const std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS], int &num_reads, std::deque<uint32_t> &padding_in)
+                 const std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS], int &num_reads, std::deque<uint32_t> &padding_in,
+                bool no_calc = false /*flag for measuring baseline time*/)
 {
   num_reads = 0;
   int timings_copy = 0;
@@ -280,17 +238,7 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
   const int input_size = x_in.size() / 2 ; // x_in is given as x and x_bar
   const int aside_offset = zero_idx + 1;   // aside rows start after the x_in rows | 2 padding rows
 
-  // PRECHARGE 
-  // program.add_inst(all_nops());
-  // program.add_inst(all_nops());
   program.add_inst(all_nops_t(timings_copy));
-  program.add_inst(all_nops_t(timings_copy));
-  
-
-  // program.add_below(PRE(BAR, 0, 0,));
-  program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
-  act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
-  // timings_copy += 19;
 
   // --------------------- Step 0 ---------------------
 
@@ -298,190 +246,168 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
   for(int i = 0; i < x_in.size(); i++)
   {
     random = rand();
-    // program.add_below(wrRow_immediate_label(BAR, data_to_operand[OPERAND_A][i][0], x_in[i],random)); //  (bank_reg, row_immd, wr_pattern, label)
     program.add_below(wrRow_512_label(BAR, data_to_operand[OPERAND_A][i][0], x_in[i],random));
-    act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][i][0]});
+    // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][i][0]});
     // timings_wr_rd += 4;
-    // program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][i][0], random));
-    // num_reads++;
   }
 
   // Write 2 rows for padding 1 is 0's and the other is 1's
   random = rand();
   program.add_below(wrRow_immediate_label(BAR, data_to_operand[OPERAND_A][one_idx][0], ONE,random)); //  (bank_reg, row_immd, wr_pattern, label)
-  act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][one_idx][0]});
+  // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][one_idx][0]});
   // timings_wr_rd += 4;
 
   random = rand();
   program.add_below(wrRow_immediate_label(BAR, data_to_operand[OPERAND_A][zero_idx][0], ZERO,random)); //  (bank_reg, row_immd, wr_pattern, label)
-  act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][zero_idx][0]});
+  // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][zero_idx][0]});
   // timings_wr_rd += 4;
 
-  // PRECHARGE
-  // program.add_inst(SMC_SLEEP(6));
-  // timings_copy += 6;
-  program.add_inst(SMC_SLEEP_timing(6, timings_copy));
-  program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
-  // program.add_below(PRE(BAR, 0, 0));
-  act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
-  program.add_inst(SMC_SLEEP_timing(6, timings_copy));
-  // program.add_inst(SMC_SLEEP(6));
-  // timings_copy += 19;
-
-  // --------------------- Step 1 ---------------------
-  // std::cout << "--------------------- Step 1 ---------------------" << std::endl;
-  // 1. XNOR and COPY into MAJ3
-  for (int col_i = 0; col_i < input_size; col_i++)
-  { 
-    // XNOR by taking x or x_bar based on the W value
-    int x_in_index;
-    if (weights[0][col_i] == 1) {
-      x_in_index = col_i*2;
-    } else {
-      x_in_index =  col_i*2 + 1;
-    }
-
-    int operand_idx = col_i % 3; // Choose the operand based on the column index (A,B,C) in the computation rows
-
-    // ============ Hop through the data rows to copy the data to the computation rows ============
-    for (size_t hop = 0; hop < data_to_operand[operand_idx][x_in_index].size() - 1; hop++) 
-    {
-      program.add_below(row_copy(data_to_operand[operand_idx][x_in_index][hop], data_to_operand[operand_idx][x_in_index][hop+1],bank_id , timings_copy));
-    }
-
-    // ============ MAJ3 operation + save aside - once in 3 ============
-
-    if (operand_idx == 2) 
-    {
-      program.add_below(maj3(bank_id ,timings_maj));
-      int aside_row_i = aside_offset + (col_i / 3); // aside row index
-
-      // Copy the result of the MAJ3 operation to the aside row
-      for (size_t hop = data_to_operand[OPERAND_A][aside_row_i].size() - 2; hop > 0; hop--)
+  if (no_calc == false) {
+    // PRECHARGE - as all OPs are assuming precharge before starting
+    program.add_inst(SMC_SLEEP_timing(3, timings_copy));
+    program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
+    act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
+  
+    // --------------------- Step 1 ---------------------
+    // 1. XNOR and COPY into MAJ3
+    for (int col_i = 0; col_i < input_size; col_i++)
+    { 
+      // XNOR by taking x or x_bar based on the W value
+      int x_in_index;
+      if (weights[0][col_i] == 1) {
+        x_in_index = col_i*2;
+      } else {
+        x_in_index =  col_i*2 + 1;
+      }
+      int operand_idx = col_i % 3; // Choose the operand based on the column index (A,B,C) in the computation rows
+      // ============ Hop through the data rows to copy the data to the computation rows ============
+      for (size_t hop = 0; hop < data_to_operand[operand_idx][x_in_index].size() - 1; hop++) 
       {
-        program.add_below(row_copy(data_to_operand[OPERAND_A][aside_row_i][hop], data_to_operand[OPERAND_A][aside_row_i][hop-1],bank_id ,timings_copy));
-      }
-    }
-  }
-
-  // Padding the aside rows to be multiple of 3
-  for (int pad = 0; pad < (3 - input_size % 3) % 3; pad++)
-  {
-    // std::cout << "added padding = " << pad << std::endl;
-    // std::cout << "padding with = " << padding_in.front() << std::endl;
-    int pad_row_idx = padding_in.front() == 1 ? one_idx : zero_idx;
-    // std::cout << "pad_row_idx = " << (pad_row_idx == one_idx) << std::endl;
-    padding_in.pop_front();
-    int operand_idx = (input_size + pad) % 3;
-    for (size_t hop = 0; hop < data_to_operand[operand_idx][pad_row_idx].size() - 1; hop++) 
-    {
-      program.add_below(row_copy(data_to_operand[operand_idx][pad_row_idx][hop], data_to_operand[operand_idx][pad_row_idx][hop+1],bank_id ,timings_copy));
-    }
-    if (operand_idx == 2) 
-    {
-      program.add_below(maj3(bank_id ,timings_maj));
-      int aside_result_row_i = aside_offset + (input_size / 3); 
-      for (size_t hop = data_to_operand[OPERAND_A][aside_result_row_i].size() - 2; hop > 0; hop--) {
-        program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1],bank_id ,timings_copy));
-      }
-    }
-  }
-
-  // read out the aside rows for validation:
-  /*
-  for (size_t i = 0; i < ceil_div(input_size, 3); i++) // We run (x_in.size()/3) times 
-  { 
-    random = rand();
-    program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][aside_offset+i][0], random));
-    num_reads++;
-  }
-  */
-  // --------------------- Step 2 ---------------------
-  // std::cout << "--------------------- Step 2 ---------------------" << std::endl;
-  // 2. Iterate MAJ3(MAJ3) until aside is exhausted
-  int aside_size = ceil_div(input_size, 3); // aside size is 1/3 of the input size
-  // std::cout << "input_size =  " << input_size << std::endl;
-  // std::cout << "aside_size =  " << aside_size << std::endl;
-  while (aside_size != 1) 
-  {
-    // std::cout << "aside_size =  " << aside_size << std::endl;
-    for (int i = 0; i < aside_size; i++) // We through the aside rows
-    {
-      int operand_idx = i % 3;
-      int aside_idx = aside_offset + i;
-      // Copy the data from the aside rows to the computation rows
-      for (size_t hop = 0; hop < data_to_operand[operand_idx][aside_idx].size() - 1; hop++)
-      {
-        program.add_below(row_copy(data_to_operand[operand_idx][aside_idx][hop], data_to_operand[operand_idx][aside_idx][hop+1],bank_id ,timings_copy));
+        program.add_below(row_copy(data_to_operand[operand_idx][x_in_index][hop], data_to_operand[operand_idx][x_in_index][hop+1],bank_id , timings_copy));
       }
 
-      // MAJ3 operation + save from computation to aside rows - once in 3
+      // ============ MAJ3 operation + save aside - once in 3 ============
       if (operand_idx == 2) 
       {
         program.add_below(maj3(bank_id ,timings_maj));
-        int aside_result_row_i = aside_offset + (i / 3); 
-        for (size_t hop = data_to_operand[OPERAND_A][aside_result_row_i].size() - 2; hop > 0; hop--) {
-          program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1],bank_id ,timings_copy));
+        int aside_row_i = aside_offset + (col_i / 3); // aside row index
+
+        // Copy the result of the MAJ3 operation to the aside row
+        for (size_t hop = data_to_operand[OPERAND_A][aside_row_i].size() - 2; hop > 0; hop--)
+        {
+          program.add_below(row_copy(data_to_operand[OPERAND_A][aside_row_i][hop], data_to_operand[OPERAND_A][aside_row_i][hop-1],bank_id ,timings_copy));
         }
       }
     }
 
     // Padding the aside rows to be multiple of 3
-    for (int pad = 0; pad < (3 - aside_size % 3) % 3; pad++)
+    for (int pad = 0; pad < (3 - input_size % 3) % 3; pad++)
     {
-      // std::cout << "added padding" << pad << std::endl;
+      // std::cout << "added padding = " << pad << std::endl;
+      // std::cout << "padding with = " << padding_in.front() << std::endl;
       int pad_row_idx = padding_in.front() == 1 ? one_idx : zero_idx;
+      // std::cout << "pad_row_idx = " << (pad_row_idx == one_idx) << std::endl;
       padding_in.pop_front();
-      int operand_idx = (aside_size + pad) % 3;
+      int operand_idx = (input_size + pad) % 3;
       for (size_t hop = 0; hop < data_to_operand[operand_idx][pad_row_idx].size() - 1; hop++) 
       {
         program.add_below(row_copy(data_to_operand[operand_idx][pad_row_idx][hop], data_to_operand[operand_idx][pad_row_idx][hop+1],bank_id ,timings_copy));
       }
-      // MAJ3 operation + save from computation to aside rows - once in 3
       if (operand_idx == 2) 
       {
         program.add_below(maj3(bank_id ,timings_maj));
-        int aside_result_row_i = aside_offset + (aside_size / 3); // If we have input_size of 9 we have 3 aside rows, for input_size of 8 we have 3 aside rows
-        // std::cout << "aside_result_row_i =  " << aside_result_row_i << std::endl;
+        int aside_result_row_i = aside_offset + (input_size / 3); 
         for (size_t hop = data_to_operand[OPERAND_A][aside_result_row_i].size() - 2; hop > 0; hop--) {
           program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1],bank_id ,timings_copy));
         }
       }
     }
-    aside_size = ceil_div(aside_size, 3); // aside size gets smaller by 3 each iteration
 
     // read out the aside rows for validation:
     /*
-    for (size_t i = 0; i < aside_size; i++)
-    {
+    for (size_t i = 0; i < ceil_div(input_size, 3); i++) // We run (x_in.size()/3) times 
+    { 
       random = rand();
-      program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][aside_offset+i][0], random)); 
+      program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][aside_offset+i][0], random));
       num_reads++;
     }
     */
+
+    // --------------------- Step 2 ---------------------
+    // std::cout << "--------------------- Step 2 ---------------------" << std::endl;
+    // 2. Iterate MAJ3(MAJ3) until aside is exhausted
+    int aside_size = ceil_div(input_size, 3); // aside size is 1/3 of the input size
+    // std::cout << "input_size =  " << input_size << std::endl;
+    // std::cout << "aside_size =  " << aside_size << std::endl;
+    while (aside_size != 1) 
+    {
+      // std::cout << "aside_size =  " << aside_size << std::endl;
+      for (int i = 0; i < aside_size; i++) // We through the aside rows
+      {
+        int operand_idx = i % 3;
+        int aside_idx = aside_offset + i;
+        // Copy the data from the aside rows to the computation rows
+        for (size_t hop = 0; hop < data_to_operand[operand_idx][aside_idx].size() - 1; hop++)
+        {
+          program.add_below(row_copy(data_to_operand[operand_idx][aside_idx][hop], data_to_operand[operand_idx][aside_idx][hop+1],bank_id ,timings_copy));
+        }
+
+        // MAJ3 operation + save from computation to aside rows - once in 3
+        if (operand_idx == 2) 
+        {
+          program.add_below(maj3(bank_id ,timings_maj));
+          int aside_result_row_i = aside_offset + (i / 3); 
+          for (size_t hop = data_to_operand[OPERAND_A][aside_result_row_i].size() - 2; hop > 0; hop--) {
+            program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1],bank_id ,timings_copy));
+          }
+        }
+      }
+
+      // Padding the aside rows to be multiple of 3
+      for (int pad = 0; pad < (3 - aside_size % 3) % 3; pad++)
+      {
+        // std::cout << "added padding" << pad << std::endl;
+        int pad_row_idx = padding_in.front() == 1 ? one_idx : zero_idx;
+        padding_in.pop_front();
+        int operand_idx = (aside_size + pad) % 3;
+        for (size_t hop = 0; hop < data_to_operand[operand_idx][pad_row_idx].size() - 1; hop++) 
+        {
+          program.add_below(row_copy(data_to_operand[operand_idx][pad_row_idx][hop], data_to_operand[operand_idx][pad_row_idx][hop+1],bank_id ,timings_copy));
+        }
+        // MAJ3 operation + save from computation to aside rows - once in 3
+        if (operand_idx == 2) 
+        {
+          program.add_below(maj3(bank_id ,timings_maj));
+          int aside_result_row_i = aside_offset + (aside_size / 3); // If we have input_size of 9 we have 3 aside rows, for input_size of 8 we have 3 aside rows
+          // std::cout << "aside_result_row_i =  " << aside_result_row_i << std::endl;
+          for (size_t hop = data_to_operand[OPERAND_A][aside_result_row_i].size() - 2; hop > 0; hop--) {
+            program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1],bank_id ,timings_copy));
+          }
+        }
+      }
+      aside_size = ceil_div(aside_size, 3); // aside size gets smaller by 3 each iteration
+
+      // read out the aside rows for validation:
+      /*
+      for (size_t i = 0; i < aside_size; i++)
+      {
+        random = rand();
+        program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][aside_offset+i][0], random)); 
+        num_reads++;
+      }
+      */
+    }
   }
 
-  // read out the aside rows for validation:
+  // Read out the result (from aside row 0) - output neuron:
   random = rand();
   program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][aside_offset][0], random));
-  act_pre_wr_rd.push_back({timings_wr_rd, "RD", bank_id, true, data_to_operand[OPERAND_A][aside_offset][0]});
-  num_reads++;
-  timings_wr_rd += 8;
+  // act_pre_wr_rd.push_back({timings_wr_rd, "RD", bank_id, true, data_to_operand[OPERAND_A][aside_offset][0]});
+  // num_reads++;
+  // timings_wr_rd += 8;
 
   // Extra buffer time to be sure
-  // program.add_inst(all_nops());
-  // program.add_inst(all_nops());
-  program.add_inst(all_nops_t(timings_copy));
-  program.add_inst(all_nops_t(timings_copy));
-  // program.add_below(PRE(BAR, 0, 0));
-
-  program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
-  act_pre_copy.push_back({timings_copy, "PRE", 0, false, 0});
-
-  // program.add_inst(all_nops());
-  // program.add_inst(all_nops());
-  program.add_inst(all_nops_t(timings_copy));
-  program.add_inst(all_nops_t(timings_copy));
+  program.add_inst(SMC_SLEEP(3));
 
   program.add_inst(SMC_END());
   return program;
@@ -674,27 +600,14 @@ void init_before(SoftMCPlatform& platform, Program& program, uint32_t bank_id, s
                  const std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS], int &num_reads, std::deque<uint32_t> &padding_in)
 {
   platform.reset_fpga();
-  program = bnn_prog(bank_id, x_in, weights, data_to_operand, num_reads, padding_in);
+  program = bnn_prog(bank_id, x_in, weights, data_to_operand, num_reads, padding_in, false);
   platform.send_prog(program);
 }
 
-void to_time(SoftMCPlatform& platform, Program& program, int num_reads, std::ofstream &out_file)
+void to_time(SoftMCPlatform& platform, Program& program, int num_reads, uint8_t row[8192])
 {
   platform.activate();
-      // Read out data
-    uint8_t row[8192];
-    // Retrieve 8192 bytes from the FPGA buffer (which is filled with content read from DRAM
-    for (int i = 0; i < num_reads; i++)
-    {
-      platform.receiveData((void*)row, 8192);
-      for (int j = 0; j < 64 / 4; j++)
-      { // 64 bytes = 512 bits = 16 32-bit integers
-        uint32_t result_32b = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
-        int ones_count = __builtin_popcount(result_32b); // Count the number of 1's in the 32-bit integer | GCC - Clang built-in function
-        out_file << ones_count << std::endl;
-      }
-    }
-    // out_file.close();
+  platform.receiveData((void*)row, 8192);
 }
 
 void post(SoftMCPlatform& platform, int num_reads, std::ofstream &out_file)
@@ -749,11 +662,11 @@ std::vector<std::vector<int>> x_bin;  // binary input
 std::deque<uint32_t> padding_in;
 std::deque<uint32_t> padding_in_temp;
 std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS];
-// parse_matrix("./weights_matrix.txt", weights_matrix); // Read from the single file
-// parse_matrix("./input_layer.txt", x_in); // Read from the single file
+parse_matrix("./weights_matrix.txt", weights_matrix); // Read from the single file
+parse_matrix("./input_layer.txt", x_in); // Read from the single file
 
-parse_binary_matrix("./input.txt", x_bin); // Read matrix of 0's and 1's 128x16
-parse_matrix("./weights_first_row.txt", weights_bin_matrix); // Read matrix of 0's and 1's 128x3
+// parse_binary_matrix("./input.txt", x_bin); // Read matrix of 0's and 1's 128x16
+// parse_matrix("./weights_first_row.txt", weights_bin_matrix); // Read matrix of 0's and 1's 128x3
 
 parse_path_map("./data_to_operand.txt", data_to_operand); // Read from the single file
 parse_file_fifo("./padding.txt", padding_in); // Read from the single file
@@ -761,9 +674,9 @@ parse_file_fifo("./padding.txt", padding_in); // Read from the single file
 // std::cout << "DEBUG: enter DRAM Bender program" << std::endl;
 int num_reads = 1;
 
-auto x_augmented = augment_flip(x_bin, 32, 0.35);
+// auto x_augmented = augment_flip(x_bin, 32, 0.35);
 
-save_matrix("augmented_input.txt", x_augmented);
+// save_matrix("augmented_input.txt", x_augmented);
 
 // std::cout << "DEBUG: x_augmented size is " << x_augmented.size() << std::endl;
 // std::cout << "DEBUG: x_in size is " << x_in.size() << std::endl;
@@ -777,18 +690,26 @@ Program program;
 
   const int runs = 1; //100000;
   std::vector<double> timings_ms;
-  int amount = 8*1024; //amount of cachelines read
+  uint8_t row[8192];
   for (int i = 0; i < runs; ++i) {
     padding_in_temp = padding_in;
-    init_before(platform, program, bank_id, x_augmented, weights_bin_matrix, data_to_operand, num_reads, padding_in_temp);
+    // init_before(platform, program, bank_id, x_augmented, weights_bin_matrix, data_to_operand, num_reads, padding_in_temp);
+    init_before(platform, program, bank_id, x_in, weights_matrix, data_to_operand, num_reads, padding_in_temp);
     std::cout << "Run " << i << std::endl;
     auto start = std::chrono::high_resolution_clock::now();
-    to_time(platform, program, num_reads, out_file);
+    to_time(platform, program, num_reads, row);
     auto end = std::chrono::high_resolution_clock::now();
-    // post(platform, num_reads, out_file);
     std::chrono::duration<double, std::milli> elapsed = end - start;
     timings_ms.push_back(elapsed.count());
+    for (int j = 0; j < 64 / 4; j++) { // 64 bytes = 512 bits = 16 32-bit integers
+      uint32_t result_32b = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
+      // int ones_count = __builtin_popcount(result_32b); // Count the number of 1's in the 32-bit integer | GCC - Clang built-in function
+      // out_file << ones_count << std::endl;
+      out_file << result_32b << std::endl;
+    }
   }
+
+  // Output command trace
   std::cout << "Size of act_pre_copy = " << act_pre_copy.size() << "\n";
   std::cout << "Size of act_pre_maj = " << act_pre_maj.size() << "\n";
   std::cout << "Size of act_pre_wr_rd = " << act_pre_wr_rd.size() << "\n";
@@ -797,6 +718,7 @@ Program program;
   save_pre_act("pre_act_maj.txt", act_pre_maj);
   save_pre_act("pre_act_wr_rd.txt", act_pre_wr_rd);
 
+  // Output time benchmark data
   // Calculate average
   double sum = std::accumulate(timings_ms.begin(), timings_ms.end(), 0.0);
   double avg = sum / timings_ms.size();

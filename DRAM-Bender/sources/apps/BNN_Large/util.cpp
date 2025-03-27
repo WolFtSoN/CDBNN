@@ -7,7 +7,7 @@ Inst all_nops()
 
 Inst all_nops_t(int &timing)
 {
-  timing = timing + 1;
+  timing = timing + 4;
   return __pack_mininsts(SMC_NOP(), SMC_NOP(), SMC_NOP(), SMC_NOP());
 }
 
@@ -24,12 +24,14 @@ Program PRE(int bank_reg, int ibar, int pall)
 Program PRE_timing(int bank_reg, int ibar, int pall, int &timing) // timing is passed by reference
 {
   Program p;
+  // for our DIMM we need 10 DRAM cycles after PRE (tRP = 10 @ 666MHz)
   p.add_inst(
       SMC_PRE(bank_reg, ibar, pall),
       SMC_NOP(), SMC_NOP(), SMC_NOP());
-  p.add_inst(SMC_SLEEP_timing(4, timing));
-
-  timing = timing + 3;
+  timing = timing + 4;
+  p.add_inst(all_nops_t(timing));
+  p.add_inst(all_nops_t(timing));
+  // total of 12 cycles after PRE - to align to RISC core cycles
   return p;
 }
 
@@ -276,11 +278,11 @@ Program rdRow_base_offset(int bank_reg, uint32_t row_base, uint32_t row_offset)
 
 
 Program doubleACT(int t_12, int t_23, int r_first, int r_second)
-{
+{ // DRAM cycles for T12=10 and T23=1 are 10+1+3=14 -> Round up to 16
 
   Program p;
   int bank_reg = BAR;
-  p.add_inst(all_nops());
+  // p.add_inst(all_nops());
   p.add_inst(SMC_LI(r_first, RF_REG));
   //p.add_inst(SMC_ADDI(row_reg, r0, R0_REG));
   int RS_REG  = LOOP_COLS;

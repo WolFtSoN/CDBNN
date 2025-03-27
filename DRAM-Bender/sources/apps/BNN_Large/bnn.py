@@ -17,7 +17,8 @@ def MAJ(a, b, c):
 ## Stage 2: denser format (32b words?) for better space efficiency - if needed
 
 # Dimnesions of input layer, output layer
-in_dim = 128
+# in_dim = 128
+in_dim = 81
 out_dim = 1
 batch_size = 512
 
@@ -27,7 +28,7 @@ num_dram_same_maj = 0
 seed_list = []
 
 
-iters = 2
+iters = 100
 for k in range(0, iters):
     # Initilize seed
     np.random.seed(k)
