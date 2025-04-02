@@ -1,12 +1,158 @@
 Writing 256 rows + reading 1 cacheline + PCIe gives 1.8745 ms +- 0.018 ms round trip (1K tests)
 
-Reading 1 cacheline + PCIe gives 33.73 us +- 66.63 us round trip (100K tests)
+Reading 1 cacheline + PCIe gives 33.73 us +- 66.63 us round trip (100K tests) - procy for PCIe latency
 
 Reading single 64Kb row + PCIe gives 37.795 us +- 72.968 us (100K tests)
 
+Slow read (DEAM Bedner) of a row takes then 37.795 us - 33.73 us = 4 us
 
 Timing for all program: 2.25973 ms +- 0.0484518 ms
 
 Program without write: 2.25973 - 1.8745 = 0.38523 ms 
 
+Program without read & write: 0.38523 ms  - 4 us = 0.381 ms
 
+Timing for creating (32)duplication and flips:  0.752651 ms +- 0.0329302 ms
+
+Timing for classification and popcout for 16 inputs, 32 duplicated: 79.8 ns +- 49.5 ns
+
+
+DRAM only
+-> Latency - 381 us
+-> ~167.98 M middle layer computation in a single sub-array (64K batch)
+-> ~2.62 M last layer computation (64 dulplicates) in a single sub-array (scale previous result by amount of duplications)
+
+
+=============================== Power results: ===============================
+[2025-03-27.12:37:20] Using trace file: `pre_act_copy.trace'
+[2025-03-27.12:37:20] Printing stats...
+                               ACT count:                 1498
+                               PRE count:                 1499
+
+                              ACT cycles:                 8988
+                              PRE cycles:                 8994
+
+                         totalCycleCount:                28468     
+
+                   totalActStandbyCycles:                17976       # Total number of cycles for which the rank was in active standby mode
+                   totalPreStandbyCycles:                10492       # Total number of cycles for which the rank was in precharge standby mode
+
+                       totalPreCmdEnergy:          1.67133e+06   pJ
+                       totalActCmdEnergy:          1.67021e+06   pJ
+          total precharge standby energy:          1.24866e+06   pJ
+             total active standby energy:          2.32537e+06   pJ
+                            total energy:          6.91557e+06   pJ <------------------------
+                                avgPower:              97.1698   mW <------------------------
+                              avgCurrent:              71.9776   mA
+
+
+[2025-03-27.12:39:02] Using trace file: `pre_act_maj.trace'
+[2025-03-27.12:39:02] Printing stats...
+                               ACT count:                   80
+                               PRE count:                   80
+
+                              ACT cycles:                  480
+                              PRE cycles:                  480
+
+                         totalCycleCount:                 1114     
+
+                   totalActStandbyCycles:                  600       # Total number of cycles for which the rank was in active standby mode
+                   totalPreStandbyCycles:                  514       # Total number of cycles for which the rank was in precharge standby mode
+
+                       total read energy:                    0   pJ
+                      total write energy:                    0   pJ
+                       totalPreCmdEnergy:              89196.9   pJ
+                       totalActCmdEnergy:              89196.9   pJ
+          total precharge standby energy:              61171.7   pJ
+             total active standby energy:              77615.9   pJ
+                            total energy:               317181   pJ <------------------------
+                                avgPower:              113.889   mW <------------------------
+                              avgCurrent:              84.3623   mA
+
+
+[2025-03-27.14:54:17] Using trace file: `pre_act_wr.trace'
+[2025-03-27.14:54:17] Printing stats...
+                               ACT count:                    1
+                               PRE count:                    1
+                                WR count:                  128
+                              ACT cycles:                    6
+                              PRE cycles:                    6
+                               WR cycles:                 1280
+
+                         totalCycleCount:                  556     
+
+                   totalActStandbyCycles:                  537       # Total number of cycles for which the rank was in active standby mode
+                   totalPreStandbyCycles:                   19       # Total number of cycles for which the rank was in precharge standby mode
+
+                       total read energy:                    0   pJ
+                      total write energy:               822659   pJ
+                       totalPreCmdEnergy:              1114.96   pJ
+                       totalActCmdEnergy:              1114.96   pJ
+          total precharge standby energy:              2261.21   pJ
+             total active standby energy:              69466.2   pJ
+                            total energy:               896617   pJ <------------------------
+                                avgPower:              645.048   mW <------------------------
+                              avgCurrent:              477.813   mA
+
+
+
+
+[2025-03-27.14:56:25] Using trace file: `pre_act_rd.trace'
+[2025-03-27.14:56:25] Printing stats...
+                               ACT count:                    1
+                               PRE count:                    1
+                              PREA count:                    0
+                                RD count:                  128
+                              ACT cycles:                    6
+                              PRE cycles:                    6
+                             PREA cycles:                    0
+                               RD cycles:                 1280
+
+                         totalCycleCount:                  556     
+
+                   totalActStandbyCycles:                  537       # Total number of cycles for which the rank was in active standby mode
+                   totalPreStandbyCycles:                   19       # Total number of cycles for which the rank was in precharge standby mode
+
+                       total read energy:               546745   pJ
+                      total write energy:                    0   pJ
+                       totalPreCmdEnergy:              1114.96   pJ
+                       totalActCmdEnergy:              1114.96   pJ
+          total precharge standby energy:              2261.21   pJ
+             total active standby energy:              69466.2   pJ
+                            total energy:               620702   pJ <------------------------ 
+                                avgPower:              446.548   mW <------------------------
+                              avgCurrent:              330.776   mA
+
+
+
+Power for copy + maj: 97.1698 mW + 113.889 mW = 211.06 mW
+Power for write: 645.048 mW
+Power for read: 446.548 mW
+
+------------- Energy for one layer -------------
+Copy  : 6.91557e+06 pJ
+MAJ   : 317181 pJ
+
+Copy + MAJ: 7.24 uJ
+
+Write : 896617 pJ = 0.896 uJ
+Read  : 620702 pJ = 0.62 uJ
+
+For 1 layer single neuron: 258 * 0.896 uJ + 0.62 uJ + 7.24 uJ = 239.03 uJ = 0.239 mJ
+For 1 layer 10 neurons: 258*0.896 uJ + 10*(0.62 uJ + 7.24 uJ) = 309.768 uJ = 0.309 mJ 
+
+---------------------
+Timing Parameters
+TimeTec Module tested has maximum 2666 MHz DDR -> maximum clock rate is 1333 MHz
+DRAM Bender has 666 MHz clock (we think), so x2 scale factor for timing parameters.
+
+advertised timing params are CL=19, RCD=19, RP=19, RAS=42
+therefor, scaling /2 we have:
+CL = RCD = RP = 10 DRAM cycles, RAS = 21 DRAM cycles
+
+We assumed (wrongly) /4 scale, and tested with tRP = 5, tRAS = 13 (should be 42/4=11)
+results for row-copy were OK that way:
+                              10 because that what was empirically tested
+PRECHARGE -> WAIT tRP (5) -> ACT R0 -> WAIT tRCD (10) -> PRE -> (1) ACT R1 (quickly) -> tRAS (13 - 16 actually)
+
+We also seen SMC_SLEEP(3) instead of SMC_SLEEP(6) works with BNN. So we'll go with that- what we can explain

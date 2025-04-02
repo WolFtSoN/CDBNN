@@ -28,7 +28,7 @@ num_dram_same_maj = 0
 seed_list = []
 
 
-iters = 100
+iters = 1
 for k in range(0, iters):
     # Initilize seed
     np.random.seed(k)

@@ -124,3 +124,38 @@ DRAM Bender:
 2. Evaluate timing:
     2.1. Minimize intervals as much as Possible
     2.2. Run timing 
+
+---------
+27.3
+---------
+1. ^ Caculate Burst write time for each layer ((row switch time + single row)x2 for single inpur bit [don'ts forget const lines]) V - 430 ns
+2. ^ Measure time for random duplicates creation (input for last layer)
+3. ^ DRAM actual computation (ROW COPY + MAJ) V - 75.89 us
+4. ^ Caculate Burst read time for single output neuron (row switch time + single row) V - 430 ns
+5. V Not last layer - MAJ(MAJ) between different subarrays X
+6. ^ Last layer - popcount and classification by CPU
+7. Python script for measuring classification accuracy X
+
+How to:
+Caclulations - by hand
+Measurements - (81 input activations)
+(1) Time PCIe only - we already have (albeit skewed upwards) 33.73 us +- 66.63 us (later we might handle skew) V
+(2) Time read (1) + write (256) + PCIe by DRAM Bender - this is the base we reduce from (3) - 1.22013 ms +-0.0285575 ms V
+(3) Time bbn prog - read + write + PCIe + bnn program by DRAM Bender (After timing tightening) - 1.29602 ms +- 0.0294183 ms V
+(4) Measure CPU creation augmentation time - 0.543424 us +- 0.246 us for 32 duplicates , 16 inputs
+(5) Measure CPU classification time (popcount + classify) - 79.8 ns +- 49.5 ns for 32 duplicates and 16 inputs V for 1 neuron
+(6) Output trace and run VAMPIRE V 
+    (sperately - writing a row in a burst, reading a row in a burst, DRAM program)
+    For 1 layer single neuron: 164 * 0.896 uJ + 0.62 uJ + 7.24 uJ =  0.155 mJ
+    For 1 layer 10 neurons: 164 * 0.896 uJ + 10*(0.62 uJ + 7.24 uJ) = 0.225 mJ 
+
+Augmentation - (2048/16) * 0.54 us
+Write - 164 * 0.43 us
+DRAM Computation - 75.89 us
+Read - 10 * 0.43 us (10 neurons)
+classification - 0.08 us * (2048/16) * 10
+------------------------------------
+0.23 ms for all
+throughput - 4,347 * 2048 = 8.9M
+
+DRAM only latency (10 neurons)

@@ -10,7 +10,7 @@ Program PRE(int bank_reg, int ibar, int pall)
   p.add_inst(
       SMC_PRE(bank_reg, ibar, pall),
       SMC_NOP(), SMC_NOP(), SMC_NOP());
-      p.add_inst(SMC_SLEEP(4));
+  p.add_inst(SMC_SLEEP(4));
   return p;
 }
 Program ACT(int bank_reg, int ibar, int row_reg, int irar)
@@ -209,7 +209,7 @@ Program rdRow_base_offset(int bank_reg, uint32_t row_base, uint32_t row_offset)
 
 
 
-Program doubleACT(int t_12, int t_23, int r_first, int r_second)
+Program doubleACT(int t_12, int t_23, int r_first, int r_second, int &timing)
 {
 
   Program p;

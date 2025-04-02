@@ -187,8 +187,8 @@ Program row_copy(uint32_t r_first, uint32_t r_second,uint32_t bank_id, int &timi
   program.add_inst(SMC_SLEEP_timing(5, timings_copy));
 
   // Precharge
-  program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
   act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
+  program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
 
   return program;
 }
@@ -213,8 +213,8 @@ Program maj3(uint32_t bank_id, int &timings_maj)
   program.add_inst(SMC_SLEEP_timing(5, timings_maj));
 
   // Precharge
-  program.add_below(PRE_timing(BAR, 0, 0, timings_maj));
   act_pre_maj.push_back({timings_maj, "PRE", bank_id, false, 0});
+  program.add_below(PRE_timing(BAR, 0, 0, timings_maj));
 
   return program;
 }
@@ -228,6 +228,7 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
   int timings_copy = 0;
   int timings_maj = 0;
   int timings_wr_rd = 0;
+  unsigned int wr_col = 0;
   Program program;
   program.add_below(_init(bank_id));
   srand((unsigned) time(NULL));
@@ -238,35 +239,50 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
   const int input_size = x_in.size() / 2 ; // x_in is given as x and x_bar
   const int aside_offset = zero_idx + 1;   // aside rows start after the x_in rows | 2 padding rows
 
-  program.add_inst(all_nops_t(timings_copy));
+  program.add_inst(all_nops());
 
   // --------------------- Step 0 ---------------------
 
   // 0. Fill input-layer data into the data rows
+  act_pre_wr_rd.push_back({timings_wr_rd, "PRE", bank_id, false});
+  timings_wr_rd += 19;
+  act_pre_wr_rd.push_back({timings_wr_rd, "ACT", bank_id, true, data_to_operand[OPERAND_A][aside_offset][0]});
+  timings_wr_rd += 19;
+
+  for (unsigned int wr_col = 0; wr_col < 128; wr_col++) {
+    act_pre_wr_rd.push_back({timings_wr_rd, "RD", bank_id, true, wr_col});
+    timings_wr_rd += 4;
+  }
+
   for(int i = 0; i < x_in.size(); i++)
   {
     random = rand();
     program.add_below(wrRow_512_label(BAR, data_to_operand[OPERAND_A][i][0], x_in[i],random));
     // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][i][0]});
+    // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, wr_col});
     // timings_wr_rd += 4;
+    // wr_col++;
   }
 
   // Write 2 rows for padding 1 is 0's and the other is 1's
   random = rand();
   program.add_below(wrRow_immediate_label(BAR, data_to_operand[OPERAND_A][one_idx][0], ONE,random)); //  (bank_reg, row_immd, wr_pattern, label)
   // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][one_idx][0]});
+  // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, wr_col});
+  // wr_col++;
   // timings_wr_rd += 4;
 
   random = rand();
   program.add_below(wrRow_immediate_label(BAR, data_to_operand[OPERAND_A][zero_idx][0], ZERO,random)); //  (bank_reg, row_immd, wr_pattern, label)
   // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][zero_idx][0]});
+  // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, wr_col});
+  // wr_col++;
   // timings_wr_rd += 4;
 
   if (no_calc == false) {
     // PRECHARGE - as all OPs are assuming precharge before starting
-    program.add_inst(SMC_SLEEP_timing(3, timings_copy));
-    program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
     act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
+    program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
   
     // --------------------- Step 1 ---------------------
     // 1. XNOR and COPY into MAJ3
@@ -403,7 +419,9 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
   random = rand();
   program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][aside_offset][0], random));
   // act_pre_wr_rd.push_back({timings_wr_rd, "RD", bank_id, true, data_to_operand[OPERAND_A][aside_offset][0]});
-  // num_reads++;
+  // act_pre_wr_rd.push_back({timings_wr_rd, "RD", bank_id, true, wr_col});
+  // wr_col++;
+  // // num_reads++;
   // timings_wr_rd += 8;
 
   // Extra buffer time to be sure
@@ -426,11 +444,16 @@ void parse_file(std::string file_name, std::vector<uint32_t> &vec)
   file.close();
 }
 
+// Dup & Flip bits - efficient
+// std::vector<std::vector<uint32_t>> augment_flip(const std::vector<std::vector<int>> &x_in, int n_duplicated = 32, double flip_prob = 0.35) {
+  
+// }
+
 // Duplicate and Flip bits
 std::vector<std::vector<uint32_t>> augment_flip(const std::vector<std::vector<int>> &x_in, int n_duplicated = 32, double flip_prob = 0.35)
 {
   const int rows = x_in.size();               // Number of rows -> 16
-  const int cols = x_in[0].size();            // Number of columns -> 128
+  const int cols = x_in[0].size();            // Number of columns 
   
   // Random number generator
   std::mt19937 gen(0); // Seed is 0
@@ -633,6 +656,64 @@ void post(SoftMCPlatform& platform, int num_reads, std::ofstream &out_file)
     out_file.close();
 }
 
+// Simulates how the bits are recieved in the input layer
+std::vector<std::vector<uint8_t>> packBitsToBytes(const std::vector<std::vector<int>>& x) {
+  std::vector<std::vector<uint8_t>> packed;
+
+  for (const auto& row : x) {
+      std::vector<uint8_t> packedRow;
+      for (size_t i = 0; i < row.size(); i += 8) {
+          uint8_t byte = 0;
+          for (size_t bit = 0; bit < 8 && i + bit < row.size(); ++bit) {
+              byte |= (row[i + bit] & 1) << (7 - bit); // pack MSB first
+          }
+          packedRow.push_back(byte);
+      }
+      packed.push_back(packedRow);
+  }
+
+  return packed;
+}
+
+inline uint32_t xorshift32(uint32_t& state) {
+  // Fast PRNG: state must not be zero
+  state ^= state << 13;
+  state ^= state >> 17;
+  state ^= state << 5;
+  return state;
+}
+
+std::vector<uint32_t> performant_augment_x (const std::vector<uint8_t>& x) {
+  const size_t totalBits = x.size() * 8;
+  std::vector<uint32_t> result;
+  result.reserve(totalBits);
+
+  uint32_t rng_state = 0x12345678; // Seed value, can be anything non-zero
+
+  for (uint8_t byte : x) {
+      for (int i = 7; i >= 0; --i) {
+          uint32_t bit = (byte >> i) & 1;
+
+          // Replicate bit across all 32 bits (0 -> 0x00000000, 1 -> 0xFFFFFFFF)
+          uint32_t replicated = -bit;
+
+          // Generate mask: each bit is 1 with ~35% probability
+          // Instead of testing 32 times, generate 1 random uint32 and threshold it
+          uint32_t mask = 0;
+          for (int j = 0; j < 32; j += 8) {
+              uint32_t r = xorshift32(rng_state);
+              for (int k = 0; k < 8; ++k) {
+                  // 35% chance for each bit
+                  mask |= (((r >> (k * 4)) & 0xF) < 6) << (j + k); // 6/16 ~ 37.5%
+              }
+          }
+
+          result.push_back(replicated ^ mask);
+      }
+  }
+
+  return result;
+}
 
 
 int main(int argc, char*argv[])
@@ -662,21 +743,30 @@ std::vector<std::vector<int>> x_bin;  // binary input
 std::deque<uint32_t> padding_in;
 std::deque<uint32_t> padding_in_temp;
 std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS];
-parse_matrix("./weights_matrix.txt", weights_matrix); // Read from the single file
-parse_matrix("./input_layer.txt", x_in); // Read from the single file
 
-// parse_binary_matrix("./input.txt", x_bin); // Read matrix of 0's and 1's 128x16
-// parse_matrix("./weights_first_row.txt", weights_bin_matrix); // Read matrix of 0's and 1's 128x3
+// For bnn.py
+// parse_matrix("./weights_matrix.txt", weights_matrix); // Read from the single file
+// parse_matrix("./input_layer.txt", x_in); // Read from the single file
+
+// For bnn_ly.py
+parse_binary_matrix("./input.txt", x_bin); // Read matrix of 0's and 1's 128x16
+std::vector<std::vector<uint8_t>> packed = packBitsToBytes(x_bin);
+// print packed:
+for (const auto& row : packed) {
+  for (const auto& byte : row) {
+    std::cout << std::bitset<8>(byte) << " ";
+  }
+  std::cout << std::endl;
+}
+parse_matrix("./weights_first_row.txt", weights_bin_matrix); // Read matrix of 0's and 1's 128x3
+auto x_augmented = augment_flip(x_bin, 32, 0.35);
+save_matrix("augmented_input.txt", x_augmented);
 
 parse_path_map("./data_to_operand.txt", data_to_operand); // Read from the single file
 parse_file_fifo("./padding.txt", padding_in); // Read from the single file
  
 // std::cout << "DEBUG: enter DRAM Bender program" << std::endl;
 int num_reads = 1;
-
-// auto x_augmented = augment_flip(x_bin, 32, 0.35);
-
-// save_matrix("augmented_input.txt", x_augmented);
 
 // std::cout << "DEBUG: x_augmented size is " << x_augmented.size() << std::endl;
 // std::cout << "DEBUG: x_in size is " << x_in.size() << std::endl;
@@ -686,28 +776,47 @@ int num_reads = 1;
 Program program;
 // Program program = bnn_prog(bank_id, x_augmented, weights_bin_matrix, data_to_operand, num_reads, padding_in); // With duplication and flipping
 
-// platform.execute(program);
 
-  const int runs = 1; //100000;
-  std::vector<double> timings_ms;
-  uint8_t row[8192];
-  for (int i = 0; i < runs; ++i) {
-    padding_in_temp = padding_in;
-    // init_before(platform, program, bank_id, x_augmented, weights_bin_matrix, data_to_operand, num_reads, padding_in_temp);
-    init_before(platform, program, bank_id, x_in, weights_matrix, data_to_operand, num_reads, padding_in_temp);
-    std::cout << "Run " << i << std::endl;
-    auto start = std::chrono::high_resolution_clock::now();
-    to_time(platform, program, num_reads, row);
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double, std::milli> elapsed = end - start;
-    timings_ms.push_back(elapsed.count());
-    for (int j = 0; j < 64 / 4; j++) { // 64 bytes = 512 bits = 16 32-bit integers
-      uint32_t result_32b = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
-      // int ones_count = __builtin_popcount(result_32b); // Count the number of 1's in the 32-bit integer | GCC - Clang built-in function
-      // out_file << ones_count << std::endl;
-      out_file << result_32b << std::endl;
-    }
-  }
+
+// store maximum from every list of popcounts
+std::vector<int> max_values = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // 16 values
+std::vector<int> local_max = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // 16 values
+
+const int runs = 100000; //100000;
+std::vector<double> timings_ms;
+uint8_t row[8192];
+for (int i = 0; i < runs; ++i) {
+  padding_in_temp = padding_in;
+  // init_before(platform, program, bank_id, x_augmented, weights_bin_matrix, data_to_operand, num_reads, padding_in_temp);
+  // to_time(platform, program, num_reads, row);
+  // init_before(platform, program, bank_id, x_in, weights_matrix, data_to_operand, num_reads, padding_in_temp);
+  std::cout << "Run " << i << std::endl;
+  auto start = std::chrono::high_resolution_clock::now();
+  auto x_temp = performant_augment_x(packed[0]);
+  // to_time(platform, program, num_reads, row);
+  // auto x_augmented = augment_flip(x_bin, 32, 0.35);
+  // for (int j = 0; j < 64 / 4; j++) { // 64 bytes = 512 bits = 16 32-bit integers
+  //   uint32_t result_32b = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
+  //   int ones_count = __builtin_popcount(result_32b); // Count the number of 1's in the 32-bit integer | GCC - Clang built-in function
+  //   // Find the maximux value in popcount and print it
+  //   if (ones_count > max_values[j]) {
+  //     max_values[j] = ones_count;
+  //     local_max[j] = i;
+  //   }
+  //   // out_file << ones_count << std::endl;
+  //   // out_file << result_32b << std::endl;
+  // }
+  auto end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double, std::micro> elapsed = end - start;
+  std::cout << "x_augment " << x_temp[0] << std::endl;
+  timings_ms.push_back(elapsed.count());
+  // for (int j = 0; j < 64 / 4; j++) { // 64 bytes = 512 bits = 16 32-bit integers
+  //   uint32_t result_32b = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
+  //   int ones_count = __builtin_popcount(result_32b); // Count the number of 1's in the 32-bit integer | GCC - Clang built-in function
+  //   out_file << ones_count << std::endl;
+  //   // out_file << result_32b << std::endl;
+  // }
+}
 
   // Output command trace
   std::cout << "Size of act_pre_copy = " << act_pre_copy.size() << "\n";

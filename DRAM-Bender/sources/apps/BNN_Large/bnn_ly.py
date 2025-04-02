@@ -180,7 +180,6 @@ for r in range(0,1): # w_mat.shape[0]
     # print(f'res_cpp_out: {res_cpp_out[0][0]}')
     # res_cpp_out = res_cpp_out.flatten()
 
-    
 
     # # Unpack to bits – each uint8 becomes 8 bits (MSB first by default)
     # res_cpp_out = ((res_cpp_out[:, None] >> np.arange(31, -1, -1)) & 1).astype(np.uint8)

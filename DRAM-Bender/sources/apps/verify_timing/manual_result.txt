@@ -1,0 +1,120 @@
+Writing 256 rows + reading 1 cacheline + PCIe gives 1.8745 ms +- 0.018 ms round trip (1K tests)
+
+Reading 1 cacheline + PCIe gives 33.73 us +- 66.63 us round trip (100K tests) - procy for PCIe latency
+
+Reading single 64Kb row + PCIe gives 37.795 us +- 72.968 us (100K tests)
+
+Slow read (DEAM Bedner) of a row takes then 37.795 us - 33.73 us = 4 us
+
+Timing for all program: 2.25973 ms +- 0.0484518 ms
+
+Program without write: 2.25973 - 1.8745 = 0.38523 ms 
+
+Program without read & write: 0.38523 ms  - 4 us = 0.381 ms
+
+DRAM only
+-> Latency - 381 us
+-> ~167.98 M middle layer computation in a single sub-array (64K batch)
+-> ~2.62 M last layer computation (64 dulplicates) in a single sub-array (scale previous result by amount of duplications)
+
+
+=============================== Power results: ===============================
+
+                         ACT count:                 2508
+                         PRE count:                 3765
+
+                        ACT cycles:                15048
+                        PRE cycles:                22590
+
+                   totalCycleCount:                30136     
+
+             totalActStandbyCycles:                 7524       # Total number of cycles for which the rank was in active standby mode
+             totalPreStandbyCycles:                22612       # Total number of cycles for which the rank was in precharge standby mode
+
+                 total read energy:                    0   pJ
+                total write energy:                    0   pJ
+                 totalPreCmdEnergy:          4.19783e+06   pJ
+                 totalActCmdEnergy:          2.79632e+06   pJ
+    total precharge standby energy:         2.69108e+06   pJ
+       total active standby energy:               973303   pJ
+                      total energy:          1.06585e+07   pJ
+                          avgPower:              141.472   mW 
+                        avgCurrent:              104.794   mA
+
+-----------------------------------------------------------------
+
+[2025-03-25.13:32:06] Using trace file: `pre_act_copy.trace'
+                               ACT count:                 2376
+                               PRE count:                 3567
+
+                              ACT cycles:                14256
+                              PRE cycles:                21402
+
+                         totalCycleCount:                67756     
+
+                   totalActStandbyCycles:                43956       # Total number of cycles for which the rank was in active standby mode
+                   totalPreStandbyCycles:                23800       # Total number of cycles for which the rank was in precharge standby mode
+
+                       total read energy:                    0   pJ
+                      total write energy:                    0   pJ
+                       totalPreCmdEnergy:          3.97707e+06   pJ
+                       totalActCmdEnergy:          2.64915e+06   pJ
+          total precharge standby energy:          2.83246e+06   pJ
+             total active standby energy:          5.68614e+06   pJ
+                            total energy:          1.51448e+07   pJ
+                                avgPower:               89.408   mW
+                              avgCurrent:              66.2281   mA
+
+[2025-03-25.13:33:39] Using trace file: `pre_act_maj.trace'
+                               ACT count:                  132
+                               PRE count:                  198
+                            
+                              ACT cycles:                  792
+                              PRE cycles:                 1188
+                            
+                         totalCycleCount:                 1782     
+
+                   totalActStandbyCycles:                  528       # Total number of cycles for which the rank was in active standby mode
+                   totalPreStandbyCycles:                 1254       # Total number of cycles for which the rank was in precharge standby mode
+
+                       total read energy:                    0   pJ
+                      total write energy:                    0   pJ
+                       totalPreCmdEnergy:               220762   pJ
+                       totalActCmdEnergy:               147175   pJ
+          total precharge standby energy:               149240   pJ
+             total active standby energy:                68302   pJ
+                            total energy:               585479   pJ
+                                avgPower:              131.421   mW
+                              avgCurrent:              97.3486   mA
+
+[2025-03-25.14:10:47] Using trace file: `pre_act_wr_rd.trace'
+                                RD count:                    1
+                                WR count:                  258
+
+                               RD cycles:                   10
+                               WR cycles:                 2580
+
+                         totalCycleCount:                 1042     
+
+                   totalActStandbyCycles:                 1042       # Total number of cycles for which the rank was in active standby mode
+                   totalPreStandbyCycles:                    0       # Total number of cycles for which the rank was in precharge standby mode
+
+                       total read energy:              4271.92   pJ
+                      total write energy:          1.65959e+06   pJ
+                       totalPreCmdEnergy:                    0   pJ
+                       totalActCmdEnergy:                    0   pJ
+          total precharge standby energy:                    0   pJ
+             total active standby energy:               134793   pJ
+                            total energy:          1.79865e+06   pJ
+                                avgPower:              690.462   mW
+                              avgCurrent:              511.453   mA
+
+
+
+Power for copy + maj: 89.4 mW + 131.4 mW = 220.8 mW
+Power for wr_rd: 690.46 mW
+
+Total power for a single neuron: 690.46 mW + 220.8 mW = 911.26 mW 
+
+
+

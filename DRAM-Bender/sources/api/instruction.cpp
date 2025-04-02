@@ -162,6 +162,21 @@ Inst SMC_SLEEP(uint32_t samt)
 
   return inst;
 }
+
+Inst SMC_SLEEP_timing(uint32_t samt, int &timing)
+{
+  assert(samt > 2 && "Cannot sleep for less than 3 cycles.");
+  Inst op_code = (uint64_t)0x1 << __IS_BR;
+  Inst fu_code = (uint64_t)__SLEEP << __FU_CODE;
+
+  samt        -= 2;
+
+  Inst inst    = op_code | fu_code | samt;
+  timing = timing + samt*4; // Cycles of the DRAM | samt is the cycles of the RISC
+
+  return inst;
+}
+
 Inst SMC_LD(int rb, int offset, int rt)
 {
   Inst op_code = (uint64_t)0x1 << __IS_MEM;

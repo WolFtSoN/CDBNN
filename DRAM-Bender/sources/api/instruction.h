@@ -127,6 +127,8 @@ Inst SMC_INFO(int rdcnt);
  */
 Inst SMC_SLEEP(uint32_t samt);
 
+Inst SMC_SLEEP_timing(uint32_t samt, int &timing);
+
 /**
  * Generate a DDR-WR command
  * @param bar bank address register ID

@@ -33,6 +33,7 @@
 
 Inst all_nops();
 Program PRE(int bank_reg, int ibar, int pall);
+Program PRE_timing(int bank_reg, int ibar, int pall, int &timing);
 Program ACT(int bank_reg, int ibar, int row_reg, int irar);
 Program WRITE(int bank_reg, int col_reg, int icar);
 Program READ(int bank_reg, int col_reg, int icar);
