@@ -209,7 +209,7 @@ Program rdRow_base_offset(int bank_reg, uint32_t row_base, uint32_t row_offset)
 
 
 
-Program doubleACT(int t_12, int t_23, int r_first, int r_second, int &timing)
+Program doubleACT(int t_12, int t_23, int r_first, int r_second)
 {
 
   Program p;
