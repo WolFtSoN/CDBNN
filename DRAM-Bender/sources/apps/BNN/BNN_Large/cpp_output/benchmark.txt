@@ -1,0 +1,3 @@
+DRAM (all program): 1312.16 us
+Classification (per class): 3.4183 us
+Augmentation (per in_dim x 16 inputs): 21.6833 us

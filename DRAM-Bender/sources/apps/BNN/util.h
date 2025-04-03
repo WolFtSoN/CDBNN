@@ -43,6 +43,7 @@ Program wrRow_immediate(int bank_reg, uint32_t row_immd, uint32_t wr_pattern);
 Program wrRow_immediate_label(int bank_reg, uint32_t row_immd, uint32_t wr_pattern, int label);
 Program wrRow_base_offset(int bank_reg, uint32_t row_base, uint32_t row_offset, uint32_t wr_pattern);
 Program wrRow_512_label(int bank_reg, uint32_t row_immd, std::vector<uint32_t> wr_pattern, int label);
+Program wrRow_512_negate_label(int bank_reg, uint32_t row_immd, std::vector<uint32_t> wr_pattern, int label);
 Program rdRow_immediate(int bank_reg, uint32_t row_immd);
 Program rdRow_immediate_label(int bank_reg, uint32_t row_immd, int label);
 Program rdRow_base_offset(int bank_reg, uint32_t row_base, uint32_t row_offset);

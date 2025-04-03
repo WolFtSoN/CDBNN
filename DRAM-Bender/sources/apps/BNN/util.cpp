@@ -162,34 +162,35 @@ Program wrRow_immediate_label(int bank_reg, uint32_t row_immd, uint32_t wr_patte
   return p;
 }
 
-// Program wrRow_augmented_label(int bank_reg, uint32_t row_immd, std::vector<uint32_t> wr_pattern, int label)
-// {// wr_pattern must be 16 elements long
-//   Program p;
-
-//   p.add_inst(SMC_LI(wr_pattern, PATTERN_REG));
-//   p.add_inst(SMC_LDWD(PATTERN_REG, i));
-  
-//   p.add_inst(SMC_LI(row_immd, RAR));
-//   p.add_inst(SMC_LI(0, CAR));
-//   p.add_inst(SMC_LI(0, LOOP_COLS));
-//   p.add_inst(SMC_LI(128, NUM_COLS_REG));
-//   p.add_below(PRE(bank_reg, 0, 0));
-//   p.add_below(ACT(bank_reg, 0, RAR, 0));
-//   p.add_label("WR_ROW_IMMD_" + std::to_string(label));
-//     p.add_below(WRITE(bank_reg, CAR, 1));
-//     p.add_inst(SMC_ADDI(LOOP_COLS, 1, LOOP_COLS));
-//   p.add_branch(p.BR_TYPE::BL, LOOP_COLS, NUM_COLS_REG, "WR_ROW_IMMD_" + std::to_string(label));
-//   p.add_inst(all_nops());
-
-//   return p;
-// }
-
 Program wrRow_512_label(int bank_reg, uint32_t row_immd, std::vector<uint32_t> wr_pattern, int label)
 {// wr_pattern must be 16 elements long
   Program p;
   for (int i = 0; i < 16; i++)
   {
     p.add_inst(SMC_LI(wr_pattern[i], PATTERN_REG));
+    p.add_inst(SMC_LDWD(PATTERN_REG, i));
+  } 
+  p.add_inst(SMC_LI(row_immd, RAR));
+  p.add_inst(SMC_LI(0, CAR));
+  p.add_inst(SMC_LI(0, LOOP_COLS));
+  p.add_inst(SMC_LI(128, NUM_COLS_REG));
+  p.add_below(PRE(bank_reg, 0, 0));
+  p.add_below(ACT(bank_reg, 0, RAR, 0));
+  p.add_label("WR_ROW_IMMD_" + std::to_string(label));
+    p.add_below(WRITE(bank_reg, CAR, 1));
+    p.add_inst(SMC_ADDI(LOOP_COLS, 1, LOOP_COLS));
+  p.add_branch(p.BR_TYPE::BL, LOOP_COLS, NUM_COLS_REG, "WR_ROW_IMMD_" + std::to_string(label));
+  p.add_inst(all_nops());
+
+  return p;
+}
+
+Program wrRow_512_negate_label(int bank_reg, uint32_t row_immd, std::vector<uint32_t> wr_pattern, int label)
+{// wr_pattern must be 16 elements long
+  Program p;
+  for (int i = 0; i < 16; i++)
+  {
+    p.add_inst(SMC_LI(~wr_pattern[i], PATTERN_REG));
     p.add_inst(SMC_LDWD(PATTERN_REG, i));
   } 
   p.add_inst(SMC_LI(row_immd, RAR));

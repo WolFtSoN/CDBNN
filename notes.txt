@@ -159,3 +159,17 @@ classification - 0.08 us * (2048/16) * 10
 throughput - 4,347 * 2048 = 8.9M
 
 DRAM only latency (10 neurons)
+
+
+
+RETEST Latency:
+(no compute, 100000 runs)
+DRAM (all program): 1246.85 us
+Classification (per class): 2.94453 us
+Augmentation (per in_dim x 16 inputs): 22.0867 us
+
+(with compute, 100000 runs, DRAM + calssification has another x10 time)
+DRAM (all program): 1312.16 us
+Classification (per class): 3.4183 us
+Augmentation (per in_dim x 16 inputs): 21.6833 us
+

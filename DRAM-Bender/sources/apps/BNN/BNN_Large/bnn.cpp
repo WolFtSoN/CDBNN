@@ -60,43 +60,19 @@ enum OperandType {
 #define DAMKA 0xAAAAAAAA  // 10101010...
 #define DAMKA_BAR 0x55555555 // 0101010...
 
-// Functional computation rows
+//// Module specific parameters:
+// R1, R2 to peform MAJ3
 #define COMP_R1 408
 #define COMP_R2 665
-#define COMP_ROW_A1 152
-#define COMP_ROW_A2 408
-#define COMP_ROW_B1 153
-#define COMP_ROW_B2 409
-#define COMP_ROW_C1 664
-#define COMP_ROW_C2 665
-
-// Routing rows
-#define ROUT_ROW_0 24
-#define ROUT_ROW_1 25
-#define ROUT_ROW_2 536
-
-// Data rows - all conected currently to ROUT_ROW_0
-#define X0 0
-#define X0_NOT 8
-#define X1 16
-#define X1_NOT 26
-#define X2 28
-#define X2_NOT 30
-#define ASIDE_0 32
-#define ASIDE_1 40
-#define ASIDE_2 48
-
+// Row copy timing parameters
 #define ROW_COPY_T12 10
 #define ROW_COPY_T23 1
-
+// MAJ3 timing parameters
 #define MAJ_T12 1
 #define MAJ_T23 0
 
-#define HYTT_TIMING 1
-#define DEBUG 0
-
 // ACT and PRE array for VAMPIRE
-struct Command {    // Struct to store the commands and their timing -> [Timing, "PRE\ACT",bank_id, row_id]
+struct Command {// Struct to store the commands and their timing -> [Timing, "PRE\ACT",bank_id, row_id]
   int timing;
   std::string name;
   uint32_t bank;
@@ -104,53 +80,12 @@ struct Command {    // Struct to store the commands and their timing -> [Timing,
   unsigned int value;
 };
 
+// sperate traces for copy and maj, as each has different timing patameters
 std::vector<Command> act_pre_copy;
 std::vector<Command> act_pre_maj;
-std::vector<Command> act_pre_wr_rd;
-// std::vector<std::pair<std::string, std::optional<unsigned int>>> act_pre_copy;
-
-
-uint32_t g_comp_rows[] = {COMP_ROW_A1 , COMP_ROW_A2, COMP_ROW_B1, COMP_ROW_B2, COMP_ROW_C1, COMP_ROW_C2};
-uint32_t g_route_rows[] = {ROUT_ROW_0 , ROUT_ROW_1, ROUT_ROW_2};
-uint32_t g_aside_rows[] = {ASIDE_0 , ASIDE_1, ASIDE_2};
-// W value doesn't change the amount of assembly code
 
 int ceil_div(int a, int b) {
   return (a + b - 1) / b;
-}
-
-Program frac(int t_frac, int r_frac_addr){
-  //this function assumes you precharge beforehand
-  Program p;
-  p.add_inst(all_nops());
-  int R_FRAC_REG = RF_REG;
-  int bank_reg = BAR;
-  p.add_inst(SMC_LI(r_frac_addr, R_FRAC_REG));
-
-    /*       --Bank -> bank_reg--
-    *        |  X  -------------- |-> rfrac_reg (R_FRAC_REG)
-    *        | ... -------------- |
-    *        | ... -------------- |
-    *
-    * Cmd:        ----| ACT R_FRAC_REG |------|       PRE      |------FINISH
-    * Time:     T0----|       T1       |------|       T2       |------FINISH
-    * Interval: -----------------------|t_frac|----------------|------FINISH
-    */
-
-  int num_cmd = 2 + t_frac;
-  num_cmd += 4 - (num_cmd % 4);
-  Mininst q_inst[num_cmd];
-  for (int i = 0; i < num_cmd; i++)
-    q_inst[i] = SMC_NOP();
-  
-  q_inst[0]          = SMC_ACT(bank_reg, 0, R_FRAC_REG, 0);
-  q_inst[t_frac + 1] = SMC_PRE(bank_reg, 0, 0);
-
-  for (int i = 0; i < num_cmd; i += 4)
-    p.add_inst(q_inst[i], q_inst[i + 1], q_inst[i + 2], q_inst[i + 3]);
-
-  return p;
-  
 }
 
 Program _init(uint32_t bank_id)
@@ -164,10 +99,9 @@ Program _init(uint32_t bank_id)
   program.add_inst(SMC_LI(128, NUM_COLS_REG));        // Load COL_SIZE register
   program.add_inst(SMC_LI(bank_id, BAR));
   return program;
-
 }
 
-Program row_copy(uint32_t r_first, uint32_t r_second,uint32_t bank_id, int &timings_copy)
+Program row_copy(uint32_t r_first, uint32_t r_second,uint32_t bank_id, int &timings_copy, bool trace_power = false)
 {
   // Make sure r_first, r_second really can participate in row copy
   // (maybe no rows, or more than 2 rows will open!)
@@ -175,25 +109,29 @@ Program row_copy(uint32_t r_first, uint32_t r_second,uint32_t bank_id, int &timi
   Program program;
 
   // Copy from r_first into r_second
+  if (trace_power){
+    act_pre_copy.push_back({timings_copy, "ACT", bank_id, true, r_first});
+    timings_copy += ROW_COPY_T12 + 1; // t12 = 30 cycles (its starts from 0 and ROW_COPY_T12 = 30) 
+    act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
+    timings_copy += ROW_COPY_T23 + 1; // t23 = 2 cycle (its starts from 0 and ROW_COPY_T23 = 1)
+    act_pre_copy.push_back({timings_copy, "ACT", bank_id, true, r_second});
+    timings_copy += 1; // t23 = 2 cycle (its starts from 0 and ROW_COPY_T23 = 1)
+  }
   program.add_below(doubleACT(ROW_COPY_T12, ROW_COPY_T23, r_first, r_second));
-  act_pre_copy.push_back({timings_copy, "ACT", bank_id, true, r_first});
-  timings_copy += ROW_COPY_T12 + 1; // t12 = 30 cycles (its starts from 0 and ROW_COPY_T12 = 30) 
-  act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
-  timings_copy += ROW_COPY_T23 + 1; // t23 = 2 cycle (its starts from 0 and ROW_COPY_T23 = 1)
-  act_pre_copy.push_back({timings_copy, "ACT", bank_id, true, r_second});
-  timings_copy += 1; // t23 = 2 cycle (its starts from 0 and ROW_COPY_T23 = 1)
 
   // Wait tRAS (21 cycles in our DIMM) for settle (ACT PRE ACT has some DRAM NOPS at the end)
   program.add_inst(SMC_SLEEP_timing(5, timings_copy));
 
   // Precharge
-  act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
+  if (trace_power) {
+    act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
+  }
   program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
 
   return program;
 }
 
-Program maj3(uint32_t bank_id, int &timings_maj)
+Program maj3(uint32_t bank_id, int &timings_maj, bool trace_power = false)
 {
   // Make sure r_first, r_second really can participate in row copy
   // (maybe no rows, or more than 2 rows will open!)
@@ -201,96 +139,96 @@ Program maj3(uint32_t bank_id, int &timings_maj)
   Program program;
 
   // Open many rows for MAJ
+  if (trace_power) {
+    act_pre_maj.push_back({timings_maj, "ACT", bank_id, true, COMP_R1});
+    timings_maj += MAJ_T12+1; // t12 = 2 cycles (its starts from 0 and MAJ_T12 = 1)
+    act_pre_maj.push_back({timings_maj, "PRE", bank_id, false, 0});
+    timings_maj += MAJ_T23+1; // t23 = 1 cycle (its starts from 0 and MAJ_T23 = 0)
+    act_pre_maj.push_back({timings_maj, "ACT", bank_id, true, COMP_R2});
+    timings_maj += 1; // for ACT
+  }
   program.add_below(doubleACT(MAJ_T12, MAJ_T23, COMP_R1, COMP_R2));
-  act_pre_maj.push_back({timings_maj, "ACT", bank_id, true, COMP_R1});
-  timings_maj += MAJ_T12+1; // t12 = 2 cycles (its starts from 0 and MAJ_T12 = 1)
-  act_pre_maj.push_back({timings_maj, "PRE", bank_id, false, 0});
-  timings_maj += MAJ_T23+1; // t23 = 1 cycle (its starts from 0 and MAJ_T23 = 0)
-  act_pre_maj.push_back({timings_maj, "ACT", bank_id, true, COMP_R2});
-  timings_maj += 1; // for ACT
 
   // Wait tRAS (21 cycles in our DIMM) for settle (ACT PRE ACT has some DRAM NOPS at the end)
   program.add_inst(SMC_SLEEP_timing(5, timings_maj));
 
   // Precharge
-  act_pre_maj.push_back({timings_maj, "PRE", bank_id, false, 0});
+  if (trace_power) {
+    act_pre_maj.push_back({timings_maj, "PRE", bank_id, false, 0});
+  }
   program.add_below(PRE_timing(BAR, 0, 0, timings_maj));
-
   return program;
 }
 
 // Calculate a vector*vector (64K batch) binary matrix multiplication
-Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std::vector<std::vector<uint32_t>> &weights, 
-                 const std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS], int &num_reads, std::deque<uint32_t> &padding_in,
-                bool no_calc = false /*flag for measuring baseline time*/)
+Program bnn_prog(
+  uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, /*inputs, expected dims are in_dim x 16 (i.e. 512 activations transposed)*/
+  std::vector<uint32_t> &weights, /*weight matrix of dims output_dim x in_dim */ /* TODO - change to vector only (?)*/ 
+  const std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS], /*a trace of rows from each data row to fill each operand*/
+  int &num_reads, /*indicate amount of red rows */
+  std::deque<uint32_t> &padding_in, /*padding - pad values in case input is not power of 3. Pad values are shared for entire batch*/
+  bool skip_comp = false, /*skip compute. a flag for measuring baseline time - PCIe + Write + Read*/
+  bool trace_power = false /*trace power. a flag for tracing dram comds for measuring power consumption*/)
 {
+  // Keep track of amount of row reads
   num_reads = 0;
+  // Keep track of timing in trace (a pointer on where in time to put the next command)
   int timings_copy = 0;
   int timings_maj = 0;
-  int timings_wr_rd = 0;
-  unsigned int wr_col = 0;
+
   Program program;
   program.add_below(_init(bank_id));
+
+  // Initialize the random number generator
   srand((unsigned) time(NULL));
   int random = rand();
 
-  const int one_idx = x_in.size(); 
+  // "Memory" offsets for the data rows
+  const int one_idx = 2*x_in.size(); 
   const int zero_idx = one_idx + 1; 
-  const int input_size = x_in.size() / 2 ; // x_in is given as x and x_bar
+  const int input_size = x_in.size(); // x_in is given as x and x_bar
   const int aside_offset = zero_idx + 1;   // aside rows start after the x_in rows | 2 padding rows
 
+  // Probably not needed, but just in case
   program.add_inst(all_nops());
 
   // --------------------- Step 0 ---------------------
 
   // 0. Fill input-layer data into the data rows
-  act_pre_wr_rd.push_back({timings_wr_rd, "PRE", bank_id, false});
-  timings_wr_rd += 19;
-  act_pre_wr_rd.push_back({timings_wr_rd, "ACT", bank_id, true, data_to_operand[OPERAND_A][aside_offset][0]});
-  timings_wr_rd += 19;
-
-  for (unsigned int wr_col = 0; wr_col < 128; wr_col++) {
-    act_pre_wr_rd.push_back({timings_wr_rd, "RD", bank_id, true, wr_col});
-    timings_wr_rd += 4;
-  }
-
   for(int i = 0; i < x_in.size(); i++)
   {
     random = rand();
-    program.add_below(wrRow_512_label(BAR, data_to_operand[OPERAND_A][i][0], x_in[i],random));
-    // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][i][0]});
-    // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, wr_col});
-    // timings_wr_rd += 4;
-    // wr_col++;
+    program.add_below(wrRow_512_label(BAR, data_to_operand[OPERAND_A][2*i][0], x_in[i],random));
+    random = rand();
+    program.add_below(wrRow_512_negate_label(BAR, data_to_operand[OPERAND_A][2*i+1][0], x_in[i],random));
   }
+  // random = rand();
+  // program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][0][0], random)); 
+  // num_reads++;
+  // random = rand();
+  // program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][2*x_in.size()-1][0], random)); 
+  // num_reads++;
 
   // Write 2 rows for padding 1 is 0's and the other is 1's
   random = rand();
   program.add_below(wrRow_immediate_label(BAR, data_to_operand[OPERAND_A][one_idx][0], ONE,random)); //  (bank_reg, row_immd, wr_pattern, label)
-  // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][one_idx][0]});
-  // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, wr_col});
-  // wr_col++;
-  // timings_wr_rd += 4;
-
   random = rand();
   program.add_below(wrRow_immediate_label(BAR, data_to_operand[OPERAND_A][zero_idx][0], ZERO,random)); //  (bank_reg, row_immd, wr_pattern, label)
-  // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, data_to_operand[OPERAND_A][zero_idx][0]});
-  // act_pre_wr_rd.push_back({timings_wr_rd, "WR", bank_id, true, wr_col});
-  // wr_col++;
-  // timings_wr_rd += 4;
 
-  if (no_calc == false) {
+  if (skip_comp == false) {
     // PRECHARGE - as all OPs are assuming precharge before starting
-    act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
+    if (trace_power) {
+      act_pre_copy.push_back({timings_copy, "PRE", bank_id, false, 0});
+    }
     program.add_below(PRE_timing(BAR, 0, 0, timings_copy));
-  
+    // TODO - a lot of repetive code between sstep 1 and step 2. Think of refactor
     // --------------------- Step 1 ---------------------
     // 1. XNOR and COPY into MAJ3
     for (int col_i = 0; col_i < input_size; col_i++)
     { 
       // XNOR by taking x or x_bar based on the W value
       int x_in_index;
-      if (weights[0][col_i] == 1) {
+      if (weights[col_i] == 1) {
         x_in_index = col_i*2;
       } else {
         x_in_index =  col_i*2 + 1;
@@ -299,19 +237,18 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
       // ============ Hop through the data rows to copy the data to the computation rows ============
       for (size_t hop = 0; hop < data_to_operand[operand_idx][x_in_index].size() - 1; hop++) 
       {
-        program.add_below(row_copy(data_to_operand[operand_idx][x_in_index][hop], data_to_operand[operand_idx][x_in_index][hop+1],bank_id , timings_copy));
+        program.add_below(row_copy(data_to_operand[operand_idx][x_in_index][hop], data_to_operand[operand_idx][x_in_index][hop+1],bank_id , timings_copy , trace_power));
       }
-
       // ============ MAJ3 operation + save aside - once in 3 ============
-      if (operand_idx == 2) 
+      if (operand_idx == 2) // Filled 3 rows, oerform MAJ and save aside
       {
-        program.add_below(maj3(bank_id ,timings_maj));
+        program.add_below(maj3(bank_id ,timings_maj, trace_power));
         int aside_row_i = aside_offset + (col_i / 3); // aside row index
-
         // Copy the result of the MAJ3 operation to the aside row
+        // Can start from 2nd last row in trace, as both are in the computation rows. After MAJ3 the have the same value.
         for (size_t hop = data_to_operand[OPERAND_A][aside_row_i].size() - 2; hop > 0; hop--)
         {
-          program.add_below(row_copy(data_to_operand[OPERAND_A][aside_row_i][hop], data_to_operand[OPERAND_A][aside_row_i][hop-1],bank_id ,timings_copy));
+          program.add_below(row_copy(data_to_operand[OPERAND_A][aside_row_i][hop], data_to_operand[OPERAND_A][aside_row_i][hop-1],bank_id ,timings_copy, trace_power));
         }
       }
     }
@@ -319,27 +256,24 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
     // Padding the aside rows to be multiple of 3
     for (int pad = 0; pad < (3 - input_size % 3) % 3; pad++)
     {
-      // std::cout << "added padding = " << pad << std::endl;
-      // std::cout << "padding with = " << padding_in.front() << std::endl;
       int pad_row_idx = padding_in.front() == 1 ? one_idx : zero_idx;
-      // std::cout << "pad_row_idx = " << (pad_row_idx == one_idx) << std::endl;
       padding_in.pop_front();
       int operand_idx = (input_size + pad) % 3;
       for (size_t hop = 0; hop < data_to_operand[operand_idx][pad_row_idx].size() - 1; hop++) 
       {
-        program.add_below(row_copy(data_to_operand[operand_idx][pad_row_idx][hop], data_to_operand[operand_idx][pad_row_idx][hop+1],bank_id ,timings_copy));
+        program.add_below(row_copy(data_to_operand[operand_idx][pad_row_idx][hop], data_to_operand[operand_idx][pad_row_idx][hop+1],bank_id ,timings_copy, trace_power));
       }
       if (operand_idx == 2) 
       {
-        program.add_below(maj3(bank_id ,timings_maj));
+        program.add_below(maj3(bank_id ,timings_maj, trace_power));
         int aside_result_row_i = aside_offset + (input_size / 3); 
         for (size_t hop = data_to_operand[OPERAND_A][aside_result_row_i].size() - 2; hop > 0; hop--) {
-          program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1],bank_id ,timings_copy));
+          program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1],bank_id ,timings_copy, trace_power));
         }
       }
     }
 
-    // read out the aside rows for validation:
+    // read out the aside rows for debug:
     /*
     for (size_t i = 0; i < ceil_div(input_size, 3); i++) // We run (x_in.size()/3) times 
     { 
@@ -350,11 +284,8 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
     */
 
     // --------------------- Step 2 ---------------------
-    // std::cout << "--------------------- Step 2 ---------------------" << std::endl;
     // 2. Iterate MAJ3(MAJ3) until aside is exhausted
     int aside_size = ceil_div(input_size, 3); // aside size is 1/3 of the input size
-    // std::cout << "input_size =  " << input_size << std::endl;
-    // std::cout << "aside_size =  " << aside_size << std::endl;
     while (aside_size != 1) 
     {
       // std::cout << "aside_size =  " << aside_size << std::endl;
@@ -365,16 +296,17 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
         // Copy the data from the aside rows to the computation rows
         for (size_t hop = 0; hop < data_to_operand[operand_idx][aside_idx].size() - 1; hop++)
         {
-          program.add_below(row_copy(data_to_operand[operand_idx][aside_idx][hop], data_to_operand[operand_idx][aside_idx][hop+1],bank_id ,timings_copy));
+          program.add_below(row_copy(data_to_operand[operand_idx][aside_idx][hop], data_to_operand[operand_idx][aside_idx][hop+1],bank_id ,timings_copy, trace_power));
         }
 
         // MAJ3 operation + save from computation to aside rows - once in 3
         if (operand_idx == 2) 
         {
-          program.add_below(maj3(bank_id ,timings_maj));
+          program.add_below(maj3(bank_id ,timings_maj, trace_power));
           int aside_result_row_i = aside_offset + (i / 3); 
+          // Can start from 2nd last row in trace, as both are in the computation rows. After MAJ3 the have the same value.
           for (size_t hop = data_to_operand[OPERAND_A][aside_result_row_i].size() - 2; hop > 0; hop--) {
-            program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1],bank_id ,timings_copy));
+            program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1],bank_id ,timings_copy, trace_power));
           }
         }
       }
@@ -382,28 +314,27 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
       // Padding the aside rows to be multiple of 3
       for (int pad = 0; pad < (3 - aside_size % 3) % 3; pad++)
       {
-        // std::cout << "added padding" << pad << std::endl;
         int pad_row_idx = padding_in.front() == 1 ? one_idx : zero_idx;
         padding_in.pop_front();
         int operand_idx = (aside_size + pad) % 3;
         for (size_t hop = 0; hop < data_to_operand[operand_idx][pad_row_idx].size() - 1; hop++) 
         {
-          program.add_below(row_copy(data_to_operand[operand_idx][pad_row_idx][hop], data_to_operand[operand_idx][pad_row_idx][hop+1],bank_id ,timings_copy));
+          program.add_below(row_copy(data_to_operand[operand_idx][pad_row_idx][hop], data_to_operand[operand_idx][pad_row_idx][hop+1],bank_id ,timings_copy, trace_power));
         }
         // MAJ3 operation + save from computation to aside rows - once in 3
         if (operand_idx == 2) 
         {
-          program.add_below(maj3(bank_id ,timings_maj));
+          program.add_below(maj3(bank_id ,timings_maj, trace_power));
           int aside_result_row_i = aside_offset + (aside_size / 3); // If we have input_size of 9 we have 3 aside rows, for input_size of 8 we have 3 aside rows
           // std::cout << "aside_result_row_i =  " << aside_result_row_i << std::endl;
           for (size_t hop = data_to_operand[OPERAND_A][aside_result_row_i].size() - 2; hop > 0; hop--) {
-            program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1],bank_id ,timings_copy));
+            program.add_below(row_copy(data_to_operand[OPERAND_A][aside_result_row_i][hop], data_to_operand[OPERAND_A][aside_result_row_i][hop-1],bank_id ,timings_copy, trace_power));
           }
         }
       }
-      aside_size = ceil_div(aside_size, 3); // aside size gets smaller by 3 each iteration
+      aside_size = ceil_div(aside_size, 3); // aside size gets smaller times 3 each iteration of while loop
 
-      // read out the aside rows for validation:
+      // read out the aside rows for debug:
       /*
       for (size_t i = 0; i < aside_size; i++)
       {
@@ -418,11 +349,7 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
   // Read out the result (from aside row 0) - output neuron:
   random = rand();
   program.add_below(rdRow_immediate_label(BAR, data_to_operand[OPERAND_A][aside_offset][0], random));
-  // act_pre_wr_rd.push_back({timings_wr_rd, "RD", bank_id, true, data_to_operand[OPERAND_A][aside_offset][0]});
-  // act_pre_wr_rd.push_back({timings_wr_rd, "RD", bank_id, true, wr_col});
-  // wr_col++;
-  // // num_reads++;
-  // timings_wr_rd += 8;
+  num_reads++;
 
   // Extra buffer time to be sure
   program.add_inst(SMC_SLEEP(3));
@@ -431,7 +358,7 @@ Program bnn_prog(uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std
   return program;
 }
 
-
+// Store file data as vector
 void parse_file(std::string file_name, std::vector<uint32_t> &vec)
 {
   std::ifstream file;
@@ -444,16 +371,40 @@ void parse_file(std::string file_name, std::vector<uint32_t> &vec)
   file.close();
 }
 
-// Dup & Flip bits - efficient
-// std::vector<std::vector<uint32_t>> augment_flip(const std::vector<std::vector<int>> &x_in, int n_duplicated = 32, double flip_prob = 0.35) {
-  
-// }
+// Store file data as queu (FIFO) - useful for pads
+void parse_file_fifo(const std::string& file_name, std::deque<uint32_t>& dq)
+{
+    std::ifstream file;
+    file.open(file_name, std::ios::app);
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        dq.push_back(stol(line));  // Use stoul for unsigned integers
+    }
+    file.close();
+}
+
+void parse_matrix(const std::string& file_name, std::vector<std::vector<uint32_t>> &matrix) {
+  std::ifstream file(file_name);
+  std::string line;
+  while (std::getline(file, line)) {
+      std::vector<uint32_t> row;
+      std::stringstream ss(line);
+      std::string cell;
+      while (std::getline(ss, cell, ',')) { // Splitting by comma
+          row.push_back(std::stol(cell)); // Convert to unsigned integer
+      }
+      matrix.push_back(row);
+  }
+  file.close();
+}
 
 // Duplicate and Flip bits
 std::vector<std::vector<uint32_t>> augment_flip(const std::vector<std::vector<int>> &x_in, int n_duplicated = 32, double flip_prob = 0.35)
 {
-  const int rows = x_in.size();               // Number of rows -> 16
-  const int cols = x_in[0].size();            // Number of columns 
+  const int rows = x_in.size();    // Number of rows
+  const int cols = x_in[0].size(); // Number of columns 
   
   // Random number generator
   std::mt19937 gen(0); // Seed is 0
@@ -489,50 +440,6 @@ std::vector<std::vector<uint32_t>> augment_flip(const std::vector<std::vector<in
   }
 
   return x_augmented;
-}
-
-
-void parse_file_fifo(const std::string& file_name, std::deque<uint32_t>& dq)
-{
-    std::ifstream file;
-    file.open(file_name, std::ios::app);
-    std::string line;
-
-    while (std::getline(file, line))
-    {
-        dq.push_back(stol(line));  // Use stoul for unsigned integers
-    }
-    file.close();
-}
-
-void parse_matrix(const std::string& file_name, std::vector<std::vector<uint32_t>> &matrix) {
-  std::ifstream file(file_name);
-  std::string line;
-  while (std::getline(file, line)) {
-      std::vector<uint32_t> row;
-      std::stringstream ss(line);
-      std::string cell;
-      while (std::getline(ss, cell, ',')) { // Splitting by comma
-          row.push_back(std::stol(cell)); // Convert to unsigned integer
-      }
-      matrix.push_back(row);
-  }
-  file.close();
-}
-
-void parse_binary_matrix(const std::string& file_name, std::vector<std::vector<int>> &matrix) {
-  std::ifstream file(file_name);
-  std::string line;
-  while (std::getline(file, line)) {
-      std::vector<int> row;
-      std::stringstream ss(line);
-      std::string cell;
-      while (std::getline(ss, cell, ',')) { // Splitting by comma
-          row.push_back(std::stol(cell)); // Convert to unsigned integer
-      }
-      matrix.push_back(row);
-  }
-  file.close();
 }
 
 void save_matrix(const std::string& file_name, std::vector<std::vector<uint32_t>> &matrix) {
@@ -576,6 +483,7 @@ void save_pre_act(const std::string& file_name, const std::vector<Command> &matr
   std::cout << "Done! Output saved to " << file_name << "\n";
 }
 
+// parse data to operand trajectory file and create the relevant data structure
 void parse_path_map(const std::string& filename, std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS]) {
   std::ifstream infile(filename);
   if (!infile.is_open()) {
@@ -602,29 +510,34 @@ void parse_path_map(const std::string& filename, std::vector<std::vector<uint32_
   infile.close();
 }
 
-int read_args_n_parse(int argc, char* argv[], uint32_t *bank_id, std::ofstream &out_file)
-{
+void save_classification(const std::string& file_name, const std::vector<int> &classifications) {
+  std::ofstream file(file_name);
+  if (!file.is_open()) {
+      std::cerr << "Error: Could not open file " << file_name << " for writing.\n";
+      return;
+  }
 
-  if(argc != 3)
+  for (const auto& classification : classifications) {
+      file << classification << ",";      // add timing
+  }
+  file << "\n";
+}
+
+int read_args_n_parse(int argc, char* argv[], uint32_t &bank_id, bool &skip_comp, bool &trace_power, uint32_t &runs)
+{
+  if(argc != 5)
   {
-    printf("Usage: \n ./bnn <bank_id> <out_file>\n");
+    printf("Usage: \n ./bnn <bank_id> <skip_comp> <trace_power> <runs>\n");
     return(0); 
   }
 
   int arg_i = 1;
-  *bank_id      =  atoi(argv[arg_i++]);
-
-  out_file.open(std::string(argv[arg_i++]), std::ios::app);
+  bank_id      =  atoi(argv[arg_i++]);
+  skip_comp    = atoi(argv[arg_i++]) != 0;
+  trace_power  = atoi(argv[arg_i++]) != 0;
+  runs         = atoi(argv[arg_i++]);
 
   return 1;
-}
-
-void init_before(SoftMCPlatform& platform, Program& program, uint32_t bank_id, std::vector<std::vector<uint32_t>> &x_in, std::vector<std::vector<uint32_t>> &weights, 
-                 const std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS], int &num_reads, std::deque<uint32_t> &padding_in)
-{
-  platform.reset_fpga();
-  program = bnn_prog(bank_id, x_in, weights, data_to_operand, num_reads, padding_in, false);
-  platform.send_prog(program);
 }
 
 void to_time(SoftMCPlatform& platform, Program& program, int num_reads, uint8_t row[8192])
@@ -656,8 +569,8 @@ void post(SoftMCPlatform& platform, int num_reads, std::ofstream &out_file)
     out_file.close();
 }
 
-// Simulates how the bits are recieved in the input layer
-std::vector<std::vector<uint8_t>> packBitsToBytes(const std::vector<std::vector<int>>& x) {
+// Simulates how the bits are recieved in the input layer - packed into bytes
+std::vector<std::vector<uint8_t>> packBitsToBytes(const std::vector<std::vector<uint32_t>>& x) {
   std::vector<std::vector<uint8_t>> packed;
 
   for (const auto& row : x) {
@@ -684,6 +597,7 @@ inline uint32_t xorshift32(uint32_t& state) {
 }
 
 std::vector<uint32_t> performant_augment_x (const std::vector<uint8_t>& x) {
+  // duplication x32 and flipping with 35% probability are hardcoded intp code
   const size_t totalBits = x.size() * 8;
   std::vector<uint32_t> result;
   result.reserve(totalBits);
@@ -693,10 +607,8 @@ std::vector<uint32_t> performant_augment_x (const std::vector<uint8_t>& x) {
   for (uint8_t byte : x) {
       for (int i = 7; i >= 0; --i) {
           uint32_t bit = (byte >> i) & 1;
-
           // Replicate bit across all 32 bits (0 -> 0x00000000, 1 -> 0xFFFFFFFF)
           uint32_t replicated = -bit;
-
           // Generate mask: each bit is 1 with ~35% probability
           // Instead of testing 32 times, generate 1 random uint32 and threshold it
           uint32_t mask = 0;
@@ -707,23 +619,33 @@ std::vector<uint32_t> performant_augment_x (const std::vector<uint8_t>& x) {
                   mask |= (((r >> (k * 4)) & 0xF) < 6) << (j + k); // 6/16 ~ 37.5%
               }
           }
-
           result.push_back(replicated ^ mask);
+          // result.push_back(replicated);
       }
   }
-
   return result;
 }
 
+std::vector<std::vector<uint32_t>> performant_augment_x_vector(const std::vector<std::vector<uint8_t>>& x) {
+  std::vector<std::vector<uint32_t>> result;
+  result.reserve(x.size());
+  for (const auto& row : x) {
+      result.push_back(performant_augment_x(row));
+  }
+  return result;
+}
 
 int main(int argc, char*argv[])
 {
   SoftMCPlatform platform;
   int err;
   uint32_t bank_id;
-  std::ofstream   out_file;
+  bool skip_comp;
+  bool trace_power;
+  uint32_t runs;
 
-  if(!read_args_n_parse(argc, argv, &bank_id, out_file))
+  // Handle input arguments
+  if(!read_args_n_parse(argc, argv, bank_id, skip_comp, trace_power, runs))
     exit(0);
 
   if ((err = platform.init()) != SOFTMC_SUCCESS)
@@ -732,130 +654,154 @@ int main(int argc, char*argv[])
   }
   platform.reset_fpga();
 
-  // std::cout << "------------DEBUG------------" << std::endl;
-  // std::cout << "bank_id: " << bank_id << std::endl;
-  // std::cout << "out_file: " << std::string(argv[2]) << std::endl;
+  std::cout << "------------DEBUG------------" << std::endl;
+  std::cout << "bank_id: " << bank_id << std::endl;
+  std::cout << "skip_comp: " << skip_comp << std::endl;
+  std::cout << "trace_power: " << trace_power << std::endl;
+  std::cout << "runs: " << runs << std::endl;
 
-std::vector<std::vector<uint32_t>> weights_matrix;
-std::vector<std::vector<uint32_t>> weights_bin_matrix;
-std::vector<std::vector<uint32_t>> x_in;
-std::vector<std::vector<int>> x_bin;  // binary input
-std::deque<uint32_t> padding_in;
-std::deque<uint32_t> padding_in_temp;
-std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS];
+  // Handle input files (hardcoded paths)
+  std::vector<std::vector<uint32_t>> weights_matrix; // weights matrix. binary format
+  std::vector<std::vector<uint32_t>> x_in; // input activations, binary format (expects 16 different activation vectors, transposed)
+  std::deque<uint32_t> padding_in; // padding values, feeder's responsibilty to make sure there are enough values
+  std::vector<std::vector<uint32_t>> data_to_operand[OPERANDS]; // holds trajectories of the data rows to the operands
 
-// For bnn.py
-// parse_matrix("./weights_matrix.txt", weights_matrix); // Read from the single file
-// parse_matrix("./input_layer.txt", x_in); // Read from the single file
+  // For bnn_ly.py
+  parse_matrix("./input.txt", x_in); // Read matrix of 0's and 1's Input Size x 16
+  std::vector<std::vector<uint8_t>> x_in_packed = packBitsToBytes(x_in); // now packed to bytes (like it is supposed to be recieved from DRAM)
+  parse_matrix("./weights_matrix.txt", weights_matrix); // Read matrix of 0's and 1's Input Size x Output Size
+  // save_matrix("augmented_input.txt", x_augmented);
 
-// For bnn_ly.py
-parse_binary_matrix("./input.txt", x_bin); // Read matrix of 0's and 1's 128x16
-std::vector<std::vector<uint8_t>> packed = packBitsToBytes(x_bin);
-// print packed:
-for (const auto& row : packed) {
-  for (const auto& byte : row) {
-    std::cout << std::bitset<8>(byte) << " ";
-  }
-  std::cout << std::endl;
-}
-parse_matrix("./weights_first_row.txt", weights_bin_matrix); // Read matrix of 0's and 1's 128x3
-auto x_augmented = augment_flip(x_bin, 32, 0.35);
-save_matrix("augmented_input.txt", x_augmented);
+  parse_path_map("./data_to_operand.txt", data_to_operand); // Read from the single file
+  parse_file_fifo("./padding.txt", padding_in); // Read from the single file
+  
+  int num_reads;
 
-parse_path_map("./data_to_operand.txt", data_to_operand); // Read from the single file
-parse_file_fifo("./padding.txt", padding_in); // Read from the single file
- 
-// std::cout << "DEBUG: enter DRAM Bender program" << std::endl;
-int num_reads = 1;
+  // uint8_t zero = 0;
+  // uint8_t one = 255;
+  // std::cout << "DEBUG: x_in size is " << x_in.size() << std::endl;
+  // std::cout << "DEBUG: x_in[0][0] is " << x_in[0][0] << std::endl;
+  // std::cout << "DEBUG: x_in[0][15] is " << x_in[0][15] << std::endl;
+  // std::cout << "DEBUG: x_in_packed size is " << x_in_packed.size() << std::endl;
+  // std::cout << "DEBUG: x_in_packed[0][0] " << static_cast<int>(x_in_packed[0][0]) << std::endl;
+  // std::cout << "DEBUG: x_in_packed[0][1] " << static_cast<int>(x_in_packed[0][1]) << std::endl;
+  // std::cout << "DEBUG: W[0][0] " << static_cast<int>(weights_matrix[0][0]) << std::endl;
+  // std::cout << "DEBUG: W[1][0] " << static_cast<int>(weights_matrix[1][0]) << std::endl;
 
-// std::cout << "DEBUG: x_augmented size is " << x_augmented.size() << std::endl;
-// std::cout << "DEBUG: x_in size is " << x_in.size() << std::endl;
-// std::cout << "========================================================================================= "<< std::endl;
+std::chrono::high_resolution_clock::time_point start, end;
 
-// Program program = bnn_prog(bank_id, x_in, weights_matrix, data_to_operand, num_reads, padding_in);
-Program program;
-// Program program = bnn_prog(bank_id, x_augmented, weights_bin_matrix, data_to_operand, num_reads, padding_in); // With duplication and flipping
+std::vector<double> dram_timings_us;
+std::vector<double> cpu_classification_us;
+std::vector<double> cpu_augmentation_us;
 
-
-
-// store maximum from every list of popcounts
-std::vector<int> max_values = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // 16 values
-std::vector<int> local_max = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // 16 values
-
-const int runs = 100000; //100000;
-std::vector<double> timings_ms;
 uint8_t row[8192];
-for (int i = 0; i < runs; ++i) {
-  padding_in_temp = padding_in;
-  // init_before(platform, program, bank_id, x_augmented, weights_bin_matrix, data_to_operand, num_reads, padding_in_temp);
-  // to_time(platform, program, num_reads, row);
-  // init_before(platform, program, bank_id, x_in, weights_matrix, data_to_operand, num_reads, padding_in_temp);
-  std::cout << "Run " << i << std::endl;
-  auto start = std::chrono::high_resolution_clock::now();
-  auto x_temp = performant_augment_x(packed[0]);
-  // to_time(platform, program, num_reads, row);
-  // auto x_augmented = augment_flip(x_bin, 32, 0.35);
-  // for (int j = 0; j < 64 / 4; j++) { // 64 bytes = 512 bits = 16 32-bit integers
-  //   uint32_t result_32b = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
-  //   int ones_count = __builtin_popcount(result_32b); // Count the number of 1's in the 32-bit integer | GCC - Clang built-in function
-  //   // Find the maximux value in popcount and print it
-  //   if (ones_count > max_values[j]) {
-  //     max_values[j] = ones_count;
-  //     local_max[j] = i;
-  //   }
-  //   // out_file << ones_count << std::endl;
-  //   // out_file << result_32b << std::endl;
-  // }
-  auto end = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double, std::micro> elapsed = end - start;
-  std::cout << "x_augment " << x_temp[0] << std::endl;
-  timings_ms.push_back(elapsed.count());
-  // for (int j = 0; j < 64 / 4; j++) { // 64 bytes = 512 bits = 16 32-bit integers
-  //   uint32_t result_32b = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
-  //   int ones_count = __builtin_popcount(result_32b); // Count the number of 1's in the 32-bit integer | GCC - Clang built-in function
-  //   out_file << ones_count << std::endl;
-  //   // out_file << result_32b << std::endl;
-  // }
+
+//// DEBUG
+
+// platform.reset_fpga();
+// std::deque<uint32_t> padding_in_temp = padding_in;
+// std::vector<std::vector<uint32_t>> x_augmented = performant_augment_x_vector(x_in_packed);
+// Program program = bnn_prog(bank_id, x_augmented, weights_matrix[0], data_to_operand, num_reads, padding_in_temp, skip_comp, trace_power);
+// platform.send_prog(program);
+
+// // Program execution (+PCIe, write, read)
+// platform.activate();
+// platform.receiveData((void*)row, 8192);
+// std::cout << "X0[0..7] " << static_cast<int>(row[0]) << std::endl;
+// std::cout << "X0[-7..-1] " << static_cast<int>(row[8191]) << std::endl;
+// platform.receiveData((void*)row, 8192);
+// std::cout << "X80_bar[0..7] " << static_cast<int>(row[0]) << std::endl;
+// std::cout << "X80_bar[-7..-1] " << static_cast<int>(row[8191]) << std::endl;
+
+//// DEBUG END
+
+
+// Fix back later
+for (size_t run = 0; run < runs/*runs*/; run++) {
+  // X in (augmented)
+  start = std::chrono::high_resolution_clock::now();
+  std::vector<std::vector<uint32_t>> x_augmented = performant_augment_x_vector(x_in_packed);
+  end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double, std::micro> elapsed_augmentation = end - start;
+  cpu_augmentation_us.push_back(elapsed_augmentation.count());
+
+  // store maximum popcount value + argmax (for classification)
+  // We assume strictly 16 different inputs for now
+  std::vector<int> max_values(65536 / 32, 0); // 16 values
+  std::vector<int> argmax(65536 / 32, 0); // 16 values
+
+  // Repeat for each row of W
+  for (size_t i = 0; i < weights_matrix.size(); i++)
+  {
+    platform.reset_fpga();
+    std::deque<uint32_t> padding_in_temp = padding_in;
+    bool trace_power_i = trace_power && (i == 0); // Only trace power for the first run
+    Program program = bnn_prog(bank_id, x_augmented, weights_matrix[i], data_to_operand, num_reads, padding_in_temp, skip_comp, trace_power_i);
+    platform.send_prog(program);
+
+    // Program execution (+PCIe, write, read)
+    start = std::chrono::high_resolution_clock::now();
+    platform.activate();
+    platform.receiveData((void*)row, 8192);
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::micro> elapsed_dram = end - start;
+    dram_timings_us.push_back(elapsed_dram.count());
+
+    start = std::chrono::high_resolution_clock::now();
+    //TODO - look at entire row 64B -> 8192B
+    for (int j = 0; j < 65536 / 32; j++) { // 8192 bytes = 65536 bits = 2048 32-bit integers
+      uint32_t result_32b = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
+      int ones_count = __builtin_popcount(result_32b); // Count the number of 1's in the 32-bit integer | GCC - Clang built-in function
+      // Find the maximux value in popcount and print it
+      if (ones_count > max_values[j]) {
+        max_values[j] = ones_count;
+        argmax[j] = i;
+      }
+    }
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::micro> elapsed_classification = end - start;
+    cpu_classification_us.push_back(elapsed_classification.count());
+  }
+  save_classification("./cpp_output/classification.txt", argmax); // Save classification results
 }
 
-  // Output command trace
-  std::cout << "Size of act_pre_copy = " << act_pre_copy.size() << "\n";
-  std::cout << "Size of act_pre_maj = " << act_pre_maj.size() << "\n";
-  std::cout << "Size of act_pre_wr_rd = " << act_pre_wr_rd.size() << "\n";
+  if(trace_power) {
+    // Output command trace
+    std::cout << "Size of act_pre_copy = " << act_pre_copy.size() << "\n";
+    std::cout << "Size of act_pre_maj = " << act_pre_maj.size() << "\n";
 
-  save_pre_act("pre_act_copy.txt", act_pre_copy);
-  save_pre_act("pre_act_maj.txt", act_pre_maj);
-  save_pre_act("pre_act_wr_rd.txt", act_pre_wr_rd);
+    save_pre_act("./cpp_output/trace_pre_act_copy.txt", act_pre_copy);
+    save_pre_act("./cpp_output/trace_pre_act_maj.txt", act_pre_maj);
+  }
 
   // Output time benchmark data
   // Calculate average
-  double sum = std::accumulate(timings_ms.begin(), timings_ms.end(), 0.0);
-  double avg = sum / timings_ms.size();
+  double sum_dram = std::accumulate(dram_timings_us.begin(), dram_timings_us.end(), 0.0);
+  double avg_dram = sum_dram / dram_timings_us.size();
+  double sum_aug = std::accumulate(cpu_augmentation_us.begin(), cpu_augmentation_us.end(), 0.0);
+  double avg_aug = sum_aug / cpu_augmentation_us.size();
+  double sum_class = std::accumulate(cpu_classification_us.begin(), cpu_classification_us.end(), 0.0);
+  double avg_class = sum_class / cpu_classification_us.size();
+
 
   // Optionally calculate stddev
-  double sq_sum = std::inner_product(timings_ms.begin(), timings_ms.end(), timings_ms.begin(), 0.0);
-  double stddev = std::sqrt(sq_sum / runs - avg * avg);
+  // double sq_sum = std::inner_product(timings_ms.begin(), timings_ms.end(), timings_ms.begin(), 0.0);
+  // double stddev = std::sqrt(sq_sum / runs - avg * avg);
 
-  std::cout << "Average time: " << avg << " ms\n";
-  std::cout << "Standard deviation: " << stddev << " ms\n";
+  // std::cout << "Average time dram: " << avg_dram << " us" << endl;
+  // std::cout << "Average time class: " << avg_class << " us" << endl;
+  // std::cout << "Average time aug: " << avg_aug << " us" << endl;
+  // std::cout << "Standard deviation: " << stddev << " ms\n";
 
+  std::ofstream benchmark_file("./cpp_output/benchmark.txt");
+  if (!benchmark_file.is_open()) {
+      std::cerr << "Error: Could not open file " << "./cpp_output/benchmark.txt" << " for writing.\n";
+  } else {
+    benchmark_file << "DRAM (all program): " << avg_dram << " us" << endl;
+    benchmark_file << "Classification (per class): " << avg_class << " us" << endl;
+    benchmark_file << "Augmentation (per in_dim x 16 inputs): " << avg_aug << " us" << endl;
+  }
 
-// // Read out data
-// uint8_t row[8192];
-// // Retrieve 8192 bytes from the FPGA buffer (which is filled with content read from DRAM
-// for (int i = 0; i < num_reads; i++)
-// // for (int i = 0; i < 4; i++)
-// {
-//   platform.receiveData((void*)row, 8192);
-//   for (int j = 0; j < 64 / 4; j++)
-//   { // 64 bytes = 512 bits = 16 32-bit integers
-//     uint32_t result_32b = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
-//     int ones_count = __builtin_popcount(result_32b); // Count the number of 1's in the 32-bit integer | GCC - Clang built-in function
-//     out_file << ones_count << std::endl;
-//   }
-// }
-
-out_file.close();
 return 0;
 
 }
