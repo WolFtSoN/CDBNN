@@ -173,3 +173,7 @@ DRAM (all program): 1312.16 us
 Classification (per class): 3.4183 us
 Augmentation (per in_dim x 16 inputs): 21.6833 us
 
+DRAM compute time (81->1 RMAJ, i.e. 40 MAJ3) = 65.31 us (1M tests) (Theory (27 + 9 +3 +1)*(4*5*(35) + 25)*1.5ns = 43.5 us)
+Classification = 3.18 us (2M tests) per class / output neuron
+Augmentation (per 81 x 16 input) (200K tests): 21.885 us
+Read / Write a single row in burst: 0.43 us
