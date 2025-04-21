@@ -20,7 +20,7 @@ def read_from_file(file_name):
     try:
         with open(file_name, 'r') as fp:
             for line in fp:
-                arr.append(int(line.strip()))  # Convert to int and remove whitespace
+                arr.append(line.strip().split(" "))
     except Exception as e:
         print(f"Error reading file {file_name}: {e}")
     return arr

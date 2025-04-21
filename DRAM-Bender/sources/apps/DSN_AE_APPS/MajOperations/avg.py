@@ -10,15 +10,17 @@ warnings.simplefilter(action='ignore')
 
 clk_ns = 1.5
 rows = 32
+majX = 9
 # Iterate over t_12 and t_23 values
 for t_12 in range(1, 4):
     for t_23 in range(0, 4):
-        file_path = f"maj9_strong_coverage_{rows}_{t_12}_{t_23}.csv"  # Construct file name
+        file_path = f"maj5_strong_coverage_{rows}_{t_12}_{t_23}.csv"  # Construct file name
         
         # Check if the file exists before trying to read it
         if os.path.exists(file_path):
             df = pd.read_csv(file_path)
-
+            # Filter majority arity:
+            df = df.loc[df['majX'] == majX]
             # Ensure column exists
             if "avg_stability" in df.columns:
                 # Convert column to numeric, coercing errors to NaN
@@ -36,7 +38,11 @@ for t_12 in range(1, 4):
                 arg_maxvalue = df["avg_stability"].idxmax()
                 arg_maxvalue_cov = df["avg_coverage"].idxmax()
 
-                print(f"File: {file_path} | Rows open: {rows} | Tras: {(t_12+1)*1.5} ns, Trp: {(t_23+1)*1.5} ns | Average-Stab: {avg_value:.4f}% | Max-Stab: {max_value:.4f}% | Argmax-Stab: {arg_maxvalue} | Average-cov: {avg_value_cov:.4f}% | Max-Cov: {max_value_cov:.4f} | Argmax-Cov: {arg_maxvalue_cov}")
+                # Compute highest value while ignoring NaN values
+                min_value = df["avg_stability"].min()
+                min_value_cov = df["avg_coverage"].min()
+
+                print(f"File: {file_path} | Rows open: {rows} | Tras: {(t_12+1)*1.5} ns, Trp: {(t_23+1)*1.5} ns | Average-Stab: {avg_value:.4f}% | Max-Stab: {max_value:.4f}% | Argmax-Stab: {arg_maxvalue} | Average-cov: {avg_value_cov:.4f}% | Max-Cov: {max_value_cov:.4f} | Argmax-Cov: {arg_maxvalue_cov} | Min-stab: {min_value:.4f}% | Min-cov: {min_value_cov:.4f}")
             else:
                 print(f"File: {file_path} | Column 'avg_stability' not found.")
         else:

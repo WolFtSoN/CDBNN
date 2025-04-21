@@ -523,11 +523,11 @@ void save_classification(const std::string& file_name, const std::vector<int> &c
   file << "\n";
 }
 
-int read_args_n_parse(int argc, char* argv[], uint32_t &bank_id, bool &skip_comp, bool &trace_power, uint32_t &runs)
+int read_args_n_parse(int argc, char* argv[], uint32_t &bank_id, bool &skip_comp, bool &trace_power, bool &dll, uint32_t &runs)
 {
-  if(argc != 5)
+  if(argc != 6)
   {
-    printf("Usage: \n ./bnn <bank_id> <skip_comp> <trace_power> <runs>\n");
+    printf("Usage: \n ./bnn <bank_id> <skip_comp> <trace_power> <dll> <runs>\n");
     return(0); 
   }
 
@@ -535,6 +535,7 @@ int read_args_n_parse(int argc, char* argv[], uint32_t &bank_id, bool &skip_comp
   bank_id      =  atoi(argv[arg_i++]);
   skip_comp    = atoi(argv[arg_i++]) != 0;
   trace_power  = atoi(argv[arg_i++]) != 0;
+  dll          = atoi(argv[arg_i++]) != 0;
   runs         = atoi(argv[arg_i++]);
 
   return 1;
@@ -581,6 +582,24 @@ std::vector<std::vector<uint8_t>> packBitsToBytes(const std::vector<std::vector<
               byte |= (row[i + bit] & 1) << (7 - bit); // pack MSB first
           }
           packedRow.push_back(byte);
+      }
+      packed.push_back(packedRow);
+  }
+
+  return packed;
+}
+
+std::vector<std::vector<uint32_t>> packBitsToUint(const std::vector<std::vector<uint32_t>>& x) {
+  std::vector<std::vector<uint32_t>> packed;
+
+  for (const auto& row : x) {
+      std::vector<uint32_t> packedRow;
+      for (size_t i = 0; i < row.size(); i += 32) {
+          uint32_t uint = 0;
+          for (size_t bit = 0; bit < 32 && i + bit < row.size(); ++bit) {
+            uint |= (row[i + bit] & 1) << (31 - bit); // pack MSB first
+          }
+          packedRow.push_back(uint);
       }
       packed.push_back(packedRow);
   }
@@ -642,10 +661,11 @@ int main(int argc, char*argv[])
   uint32_t bank_id;
   bool skip_comp;
   bool trace_power;
+  bool dll;
   uint32_t runs;
 
   // Handle input arguments
-  if(!read_args_n_parse(argc, argv, bank_id, skip_comp, trace_power, runs))
+  if(!read_args_n_parse(argc, argv, bank_id, skip_comp, trace_power, dll, runs))
     exit(0);
 
   if ((err = platform.init()) != SOFTMC_SUCCESS)
@@ -669,24 +689,16 @@ int main(int argc, char*argv[])
   // For bnn_ly.py
   parse_matrix("./input.txt", x_in); // Read matrix of 0's and 1's Input Size x 16
   std::vector<std::vector<uint8_t>> x_in_packed = packBitsToBytes(x_in); // now packed to bytes (like it is supposed to be recieved from DRAM)
+  std::vector<std::vector<uint32_t>> x_in_packed_32 = packBitsToUint(x_in); // now packed to uint32_t (like it is supposed to be sent to bnn_prog)
   parse_matrix("./weights_matrix.txt", weights_matrix); // Read matrix of 0's and 1's Input Size x Output Size
   // save_matrix("augmented_input.txt", x_augmented);
 
   parse_path_map("./data_to_operand.txt", data_to_operand); // Read from the single file
   parse_file_fifo("./padding.txt", padding_in); // Read from the single file
+
+  std::ofstream output_layer("./cpp_output/output.txt");
   
   int num_reads;
-
-  // uint8_t zero = 0;
-  // uint8_t one = 255;
-  // std::cout << "DEBUG: x_in size is " << x_in.size() << std::endl;
-  // std::cout << "DEBUG: x_in[0][0] is " << x_in[0][0] << std::endl;
-  // std::cout << "DEBUG: x_in[0][15] is " << x_in[0][15] << std::endl;
-  // std::cout << "DEBUG: x_in_packed size is " << x_in_packed.size() << std::endl;
-  // std::cout << "DEBUG: x_in_packed[0][0] " << static_cast<int>(x_in_packed[0][0]) << std::endl;
-  // std::cout << "DEBUG: x_in_packed[0][1] " << static_cast<int>(x_in_packed[0][1]) << std::endl;
-  // std::cout << "DEBUG: W[0][0] " << static_cast<int>(weights_matrix[0][0]) << std::endl;
-  // std::cout << "DEBUG: W[1][0] " << static_cast<int>(weights_matrix[1][0]) << std::endl;
 
 std::chrono::high_resolution_clock::time_point start, end;
 
@@ -696,31 +708,12 @@ std::vector<double> cpu_augmentation_us;
 
 uint8_t row[8192];
 
-//// DEBUG
-
-// platform.reset_fpga();
-// std::deque<uint32_t> padding_in_temp = padding_in;
-// std::vector<std::vector<uint32_t>> x_augmented = performant_augment_x_vector(x_in_packed);
-// Program program = bnn_prog(bank_id, x_augmented, weights_matrix[0], data_to_operand, num_reads, padding_in_temp, skip_comp, trace_power);
-// platform.send_prog(program);
-
-// // Program execution (+PCIe, write, read)
-// platform.activate();
-// platform.receiveData((void*)row, 8192);
-// std::cout << "X0[0..7] " << static_cast<int>(row[0]) << std::endl;
-// std::cout << "X0[-7..-1] " << static_cast<int>(row[8191]) << std::endl;
-// platform.receiveData((void*)row, 8192);
-// std::cout << "X80_bar[0..7] " << static_cast<int>(row[0]) << std::endl;
-// std::cout << "X80_bar[-7..-1] " << static_cast<int>(row[8191]) << std::endl;
-
-//// DEBUG END
-
-
-// Fix back later
-for (size_t run = 0; run < runs/*runs*/; run++) {
+for (size_t run = 0; run < runs; run++) {
   // X in (augmented)
   start = std::chrono::high_resolution_clock::now();
-  std::vector<std::vector<uint32_t>> x_augmented = performant_augment_x_vector(x_in_packed);
+  if (dll) { // If augemnt - create augmentation. Else, use the original input
+    x_in_packed_32 = performant_augment_x_vector(x_in_packed);
+  }
   end = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double, std::micro> elapsed_augmentation = end - start;
   cpu_augmentation_us.push_back(elapsed_augmentation.count());
@@ -736,7 +729,7 @@ for (size_t run = 0; run < runs/*runs*/; run++) {
     platform.reset_fpga();
     std::deque<uint32_t> padding_in_temp = padding_in;
     bool trace_power_i = trace_power && (i == 0); // Only trace power for the first run
-    Program program = bnn_prog(bank_id, x_augmented, weights_matrix[i], data_to_operand, num_reads, padding_in_temp, skip_comp, trace_power_i);
+    Program program = bnn_prog(bank_id, x_in_packed_32, weights_matrix[i], data_to_operand, num_reads, padding_in_temp, skip_comp, trace_power_i);
     platform.send_prog(program);
 
     // Program execution (+PCIe, write, read)
@@ -747,21 +740,36 @@ for (size_t run = 0; run < runs/*runs*/; run++) {
     std::chrono::duration<double, std::micro> elapsed_dram = end - start;
     dram_timings_us.push_back(elapsed_dram.count());
 
+    // Classification
     start = std::chrono::high_resolution_clock::now();
-    //TODO - look at entire row 64B -> 8192B
-    for (int j = 0; j < 65536 / 32; j++) { // 8192 bytes = 65536 bits = 2048 32-bit integers
-      uint32_t result_32b = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
-      int ones_count = __builtin_popcount(result_32b); // Count the number of 1's in the 32-bit integer | GCC - Clang built-in function
-      // Find the maximux value in popcount and print it
-      if (ones_count > max_values[j]) {
-        max_values[j] = ones_count;
-        argmax[j] = i;
+    if (dll)
+    {
+      for (int j = 0; j < 65536 / 32; j++) { // 8192 bytes = 65536 bits = 2048 32-bit integers
+        uint32_t result_32b = row[j*4] | (row[j*4+1] << 8) | (row[j*4+2] << 16) | (row[j*4+3] << 24);
+        int ones_count = __builtin_popcount(result_32b); // Count the number of 1's in the 32-bit integer | GCC - Clang built-in function
+        // Find the maximux value in popcount and print it
+        if (ones_count > max_values[j]) {
+          max_values[j] = ones_count;
+          argmax[j] = i;
+        }
       }
     }
     end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::micro> elapsed_classification = end - start;
     cpu_classification_us.push_back(elapsed_classification.count());
+
+    // Save output layer:
+    for (size_t byte = 0; byte < 8192; byte+=4) { // 8192 bytes = 65536 bits
+      for (size_t in_byte = 0; in_byte < 4; in_byte++)
+      {
+        for (int bit = 7; bit > -1; bit--) {
+          output_layer << uint32_t((row[byte + 3 - in_byte] >> bit) & 1) << " ";
+        }
+      }
+    }
+    output_layer << "\n";
   }
+
   save_classification("./cpp_output/classification.txt", argmax); // Save classification results
 }
 

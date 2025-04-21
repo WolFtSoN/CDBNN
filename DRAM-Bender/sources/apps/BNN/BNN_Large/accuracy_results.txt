@@ -1,0 +1,3 @@
+RMAJ3 vs MAJ - 75%
+RMAJ3 vs DRAM - 99% (98.9996%)
+MAJ vs DRAM - 74.67% (74.666%)

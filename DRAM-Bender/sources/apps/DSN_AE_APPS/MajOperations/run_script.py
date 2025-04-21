@@ -42,9 +42,9 @@ os.system(f'{apps_path}../ResetBoard/full_reset.sh')
 
 stability_iter_count = 1000
 n_frac_times = 3
-t_frac = 0
+t_frac = 1
 
-for rows in [12,16,24,32]: # [4,8,16,32]
+for rows in [4]:#[6,8,12,16,32]:#[6,8,12,16]: # [4,8,16,32]
     # if temperature == '50':
     #     t_12_lst = [0,1,2,3]
     #     t_23_lst = [0,1,2,3]
@@ -79,9 +79,9 @@ for rows in [12,16,24,32]: # [4,8,16,32]
             #send_cmd = f'cp {sample_csv} {main_dir_path}/experimental_data/{module}/'  
             #sp = subprocess.run([send_cmd], shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
             lst = pd.DataFrame(columns=['t_12','t_23','n_frac_times','t_frac','bank_id','r_first','r_second','s_id','majX','avg_coverage','full_coverage_cells','avg_stability','full_stable_cells'])
-            csv_file = f'maj9_strong_coverage_{rows}_{t_12}_{t_23}.csv'
+            csv_file = f'maj5_strong_coverage_{rows}_{t_12}_{t_23}.csv'
             lst.to_csv(csv_file)
-            for majX in [9]: # Instead of checking for [3,5,7,9] we only need to check for 3
+            for majX in [3]:#[3,5,7,9]: # Instead of checking for [3,5,7,9] we only need to check for 3
                 if (majX > rows):
                     break
                 r_frac_idx = [i for i in range(rows%majX)] # The index of the frac row
