@@ -1,4 +1,4 @@
-# CDBNN: Commodity Off-The-Shelf DRAM based Binary Neural Network Accelerator
+# BinDRAM: Binary Neural Network on Unmodified Commodity DRAM
 
 ## Prerequisite
 Our real DRAM chip characterization is based on the open-source FPGA-based DRAM characterization infrastructure [DRAM Bender](https://github.com/CMU-SAFARI/DRAM-Bender). Please check out and follow the installation instructions of [DRAM Bender](https://github.com/CMU-SAFARI/DRAM-Bender).
@@ -28,7 +28,7 @@ DRAM-Bender           # A fork of DRAM Bender that contains the characterization
 Clone the repo in your home directory
 
 ```
-  $ git clone https://github.com/WolFtSoN/CDBNN
+  $ git clone https://github.com/WolFtSoN/BinDRAM
 ```
 
 Go to the program folder
