@@ -28,7 +28,7 @@ DRAM-Bender           # A fork of DRAM Bender that contains the characterization
 Clone the repo in your home directory
 
 ```
-  $ git clone https://github.com/WolFtSoN/CDBNN
+  $ git clone https://github.com/WolFtSoN/BinDRAM
 ```
 
 Go to the program folder
